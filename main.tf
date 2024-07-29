@@ -6,14 +6,19 @@
 # }
 
 resource "azapi_resource" "cluster" {
-  type      = "Microsoft.AzureStackHCI/clusters@2023-08-01-preview"
-  parent_id = var.resourceGroup.id
-  name      = var.clusterName
-  depends_on = [ azurerm_role_assignment.ServicePrincipalRoleAssign ]
-
+  type = "Microsoft.AzureStackHCI/clusters@2023-08-01-preview"
   body = {
     properties = {}
   }
+  location  = var.resourceGroup.location
+  name      = var.clusterName
+  parent_id = var.resourceGroup.id
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  depends_on = [azurerm_role_assignment.ServicePrincipalRoleAssign]
 
   lifecycle {
     ignore_changes = [
@@ -21,17 +26,12 @@ resource "azapi_resource" "cluster" {
       identity[0]
     ]
   }
-  identity {
-    type = "SystemAssigned"
-  }
-  
-  location = var.resourceGroup.location
 }
 
 # Generate random integer suffix for storage account and key vault
 resource "random_integer" "random_suffix" {
-  min = 10
   max = 99
+  min = 10
 }
 
 # required AVM resources interfaces

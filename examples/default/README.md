@@ -47,10 +47,8 @@ module "naming" {
   version = "~> 0.3"
 }
 
-# This is required for resource modules
-resource "azurerm_resource_group" "this" {
-  location = module.regions.regions[random_integer.region_index.result].name
-  name     = module.naming.resource_group.name_unique
+data "azurerm_resource_group" "rg" {
+  name = var.resourceGroupName
 }
 
 # This is the module call
@@ -61,11 +59,59 @@ module "test" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  location            = azurerm_resource_group.this.location
+  location            = data.azurerm_resource_group.rg.location
   name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
-  resource_group_name = azurerm_resource_group.this.name
+  resource_group_name = data.azurerm_resource_group.rg.name
 
   enable_telemetry = var.enable_telemetry # see variables.tf
+
+  resourceGroup   = data.azurerm_resource_group.rg
+  siteId          = var.siteId
+  domainFqdn      = "jumpstart.local"
+  startingAddress = "192.168.1.55"
+  endingAddress   = "192.168.1.65"
+  subnetMask      = var.subnetMask
+  defaultGateway  = "192.168.1.1"
+  dnsServers      = ["192.168.1.254"]
+  adouPath        = local.adou_path
+  servers = [
+    {
+      name        = "AzSHOST1",
+      ipv4Address = "192.168.1.12"
+    },
+    {
+      name        = "AzSHOST2",
+      ipv4Address = "192.168.1.13"
+    }
+  ]
+  managementAdapters = ["FABRIC", "FABRIC2"]
+  storageNetworks = [
+    {
+      name               = "Storage1Network",
+      networkAdapterName = "StorageA",
+      vlanId             = "711"
+    },
+    {
+      name               = "Storage2Network",
+      networkAdapterName = "StorageB",
+      vlanId             = "712"
+    }
+  ]
+  rdmaEnabled                   = false
+  storageConnectivitySwitchless = false
+  clusterName                   = local.clusterName
+  customLocationName            = local.customLocationName
+  witnessStorageAccountName     = local.witnessStorageAccountName
+  keyvaultName                  = local.keyvaultName
+  randomSuffix                  = true
+  subscriptionId                = var.subscriptionId
+  deploymentUser                = var.deployment_user
+  deploymentUserPassword        = var.deploymentUserPassword
+  localAdminUser                = var.localAdminUser
+  localAdminPassword            = var.localAdminPassword
+  servicePrincipalId            = var.servicePrincipalId
+  servicePrincipalSecret        = var.servicePrincipalSecret
+  rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
 }
 ```
 
@@ -82,29 +128,85 @@ The following requirements are needed by this module:
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
 
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.74)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
-
 ## Resources
 
 The following resources are used by this module:
 
-- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
+- [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
 
-No required inputs.
+The following input variables are required:
+
+### <a name="input_deploymentUserPassword"></a> [deploymentUserPassword](#input\_deploymentUserPassword)
+
+Description: The password for deployment user.
+
+Type: `string`
+
+### <a name="input_localAdminPassword"></a> [localAdminPassword](#input\_localAdminPassword)
+
+Description: The password for the local administrator account.
+
+Type: `string`
+
+### <a name="input_localAdminUser"></a> [localAdminUser](#input\_localAdminUser)
+
+Description: The username for the local administrator account.
+
+Type: `string`
+
+### <a name="input_resourceGroupName"></a> [resourceGroupName](#input\_resourceGroupName)
+
+Description: The resource group where the resources will be deployed.
+
+Type: `string`
+
+### <a name="input_servicePrincipalId"></a> [servicePrincipalId](#input\_servicePrincipalId)
+
+Description: The service principal ID for ARB.
+
+Type: `string`
+
+### <a name="input_servicePrincipalSecret"></a> [servicePrincipalSecret](#input\_servicePrincipalSecret)
+
+Description: The service principal secret.
+
+Type: `string`
+
+### <a name="input_siteId"></a> [siteId](#input\_siteId)
+
+Description: A unique identifier for the site.
+
+Type: `string`
+
+### <a name="input_subscriptionId"></a> [subscriptionId](#input\_subscriptionId)
+
+Description: The subscription ID for resources.
+
+Type: `string`
 
 ## Optional Inputs
 
 The following input variables are optional (have default values):
+
+### <a name="input_adouSuffix"></a> [adouSuffix](#input\_adouSuffix)
+
+Description: The suffix of Active Directory OU path.
+
+Type: `string`
+
+Default: `"DC=jumpstart,DC=local"`
+
+### <a name="input_deployment_user"></a> [deployment\_user](#input\_deployment\_user)
+
+Description: The username for deployment user.
+
+Type: `string`
+
+Default: `"avmdeploy"`
 
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
@@ -115,6 +217,22 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_rpServicePrincipalObjectId"></a> [rpServicePrincipalObjectId](#input\_rpServicePrincipalObjectId)
+
+Description: The object ID of the HCI resource provider service principal.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_subnetMask"></a> [subnetMask](#input\_subnetMask)
+
+Description: The subnet mask for the network.
+
+Type: `string`
+
+Default: `"255.255.255.0"`
 
 ## Outputs
 

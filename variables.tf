@@ -330,7 +330,7 @@ variable "servicePrincipalSecret" {
 }
 
 variable "managementAdapters" {
-  type    = list(string)
+  type = list(string)
 }
 
 variable "storageNetworks" {
@@ -352,7 +352,7 @@ variable "storageConnectivitySwitchless" {
 }
 
 variable "clusterName" {
-  type = string
+  type        = string
   description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
   validation {
     condition     = length(var.clusterName) < 16 && length(var.clusterName) > 0
@@ -361,7 +361,7 @@ variable "clusterName" {
 }
 
 variable "customLocationName" {
-  type = string
+  type        = string
   description = "The name of the custom location."
 }
 

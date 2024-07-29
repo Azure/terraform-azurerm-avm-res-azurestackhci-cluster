@@ -1,13 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
-# terraform-azurerm-avm-template
+# terraform-azapi-avm-ptn-hci
 
-This is a template repo for Terraform Azure Verified Modules.
-
-Things to do:
-
-1. Set up a GitHub repo environment called `test`.
-1. Configure environment protection rule to ensure that approval is required before deploying to this environment.
-1. Install Docker Desktop to run tests
+Module to provision azure stack hci.
 
 > [!IMPORTANT]
 > As the overall AVM framework is not GA (generally available) yet - the CI framework and test automation is not fully functional and implemented across all supported languages yet - breaking changes are expected, and additional customer feedback is yet to be gathered and incorporated. Hence, modules **MUST NOT** be published at version `1.0.0` or higher at this time.
@@ -23,34 +17,43 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 1.14)
+
+- <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) (~> 2.50.0)
+
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.71)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
 
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.71)
-
-- <a name="provider_modtm"></a> [modtm](#provider\_modtm) (~> 0.3)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
-
 ## Resources
 
 The following resources are used by this module:
 
+- [azapi_resource.cluster](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.validatedeploymentsetting](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.validatedeploymentsetting_seperate](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_update_resource.deploymentsetting](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/update_resource) (resource)
+- [azurerm_key_vault.DeploymentKeyVault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault) (resource)
+- [azurerm_key_vault_secret.AzureStackLCMUserCredential](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
+- [azurerm_key_vault_secret.DefaultARBApplication](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
+- [azurerm_key_vault_secret.LocalAdminCredential](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
+- [azurerm_key_vault_secret.WitnessStorageKey](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
 - [azurerm_management_lock.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) (resource)
-- [azurerm_private_endpoint.this_managed_dns_zone_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) (resource)
-- [azurerm_private_endpoint.this_unmanaged_dns_zone_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) (resource)
-- [azurerm_private_endpoint_application_security_group_association.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint_application_security_group_association) (resource)
-- [azurerm_resource_group.TODO](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [azurerm_role_assignment.ServicePrincipalRoleAssign](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
 - [azurerm_role_assignment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
+- [azurerm_storage_account.witness](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
 - [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
+- [random_integer.random_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
+- [azapi_resource.arcSettings](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource.arcbridge](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource.customlocation](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource_list.userStorages](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource_list) (data source)
+- [azuread_service_principal.hci_rp](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/service_principal) (data source)
+- [azurerm_arc_machine.arcservers](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/arc_machine) (data source)
+- [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 - [azurerm_client_config.telemetry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 - [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
 
@@ -59,11 +62,89 @@ The following resources are used by this module:
 
 The following input variables are required:
 
+### <a name="input_adouPath"></a> [adouPath](#input\_adouPath)
+
+Description: The Active Directory OU path.
+
+Type: `string`
+
+### <a name="input_clusterName"></a> [clusterName](#input\_clusterName)
+
+Description: The name of the HCI cluster. Must be the same as the name when preparing AD.
+
+Type: `string`
+
+### <a name="input_customLocationName"></a> [customLocationName](#input\_customLocationName)
+
+Description: The name of the custom location.
+
+Type: `string`
+
+### <a name="input_defaultGateway"></a> [defaultGateway](#input\_defaultGateway)
+
+Description: The default gateway for the network.
+
+Type: `string`
+
+### <a name="input_deploymentUser"></a> [deploymentUser](#input\_deploymentUser)
+
+Description: The username for the domain administrator account.
+
+Type: `string`
+
+### <a name="input_deploymentUserPassword"></a> [deploymentUserPassword](#input\_deploymentUserPassword)
+
+Description: The password for the domain administrator account.
+
+Type: `string`
+
+### <a name="input_dnsServers"></a> [dnsServers](#input\_dnsServers)
+
+Description: A list of DNS server IP addresses.
+
+Type: `list(string)`
+
+### <a name="input_domainFqdn"></a> [domainFqdn](#input\_domainFqdn)
+
+Description: The domain FQDN.
+
+Type: `string`
+
+### <a name="input_endingAddress"></a> [endingAddress](#input\_endingAddress)
+
+Description: The ending IP address of the IP address range.
+
+Type: `string`
+
+### <a name="input_keyvaultName"></a> [keyvaultName](#input\_keyvaultName)
+
+Description: The name of the key vault.
+
+Type: `string`
+
+### <a name="input_localAdminPassword"></a> [localAdminPassword](#input\_localAdminPassword)
+
+Description: The password for the local administrator account.
+
+Type: `string`
+
+### <a name="input_localAdminUser"></a> [localAdminUser](#input\_localAdminUser)
+
+Description: The username for the local administrator account.
+
+Type: `string`
+
 ### <a name="input_location"></a> [location](#input\_location)
 
 Description: Azure region where the resource should be deployed.
 
 Type: `string`
+
+### <a name="input_managementAdapters"></a> [managementAdapters](#input\_managementAdapters)
+
+Description: n/a
+
+Type: `list(string)`
 
 ### <a name="input_name"></a> [name](#input\_name)
 
@@ -71,9 +152,90 @@ Description: The name of the this resource.
 
 Type: `string`
 
+### <a name="input_rdmaEnabled"></a> [rdmaEnabled](#input\_rdmaEnabled)
+
+Description: Indicates whether RDMA is enabled.
+
+Type: `bool`
+
+### <a name="input_resourceGroup"></a> [resourceGroup](#input\_resourceGroup)
+
+Description: The resource group where the resources will be deployed.
+
+Type: `any`
+
 ### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
 
 Description: The resource group where the resources will be deployed.
+
+Type: `string`
+
+### <a name="input_servers"></a> [servers](#input\_servers)
+
+Description: A list of servers with their names and IPv4 addresses.
+
+Type:
+
+```hcl
+list(object({
+    name        = string
+    ipv4Address = string
+  }))
+```
+
+### <a name="input_servicePrincipalId"></a> [servicePrincipalId](#input\_servicePrincipalId)
+
+Description: The service principal ID for the Azure account.
+
+Type: `string`
+
+### <a name="input_servicePrincipalSecret"></a> [servicePrincipalSecret](#input\_servicePrincipalSecret)
+
+Description: The service principal secret for the Azure account.
+
+Type: `string`
+
+### <a name="input_siteId"></a> [siteId](#input\_siteId)
+
+Description: A unique identifier for the site.
+
+Type: `string`
+
+### <a name="input_startingAddress"></a> [startingAddress](#input\_startingAddress)
+
+Description: The starting IP address of the IP address range.
+
+Type: `string`
+
+### <a name="input_storageConnectivitySwitchless"></a> [storageConnectivitySwitchless](#input\_storageConnectivitySwitchless)
+
+Description: Indicates whether storage connectivity is switchless.
+
+Type: `bool`
+
+### <a name="input_storageNetworks"></a> [storageNetworks](#input\_storageNetworks)
+
+Description: n/a
+
+Type:
+
+```hcl
+list(object({
+    name               = string
+    networkAdapterName = string
+    vlanId             = string
+  }))
+```
+
+### <a name="input_subscriptionId"></a> [subscriptionId](#input\_subscriptionId)
+
+Description: The subscription ID for the Azure account.
+
+Type: `string`
+
+### <a name="input_witnessStorageAccountName"></a> [witnessStorageAccountName](#input\_witnessStorageAccountName)
+
+Description: The name of the witness storage account.
 
 Type: `string`
 
@@ -148,6 +310,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_isExported"></a> [isExported](#input\_isExported)
+
+Description: n/a
+
+Type: `bool`
+
+Default: `false`
 
 ### <a name="input_lock"></a> [lock](#input\_lock)
 
@@ -249,6 +419,14 @@ Type: `bool`
 
 Default: `true`
 
+### <a name="input_randomSuffix"></a> [randomSuffix](#input\_randomSuffix)
+
+Description: n/a
+
+Type: `bool`
+
+Default: `true`
+
 ### <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments)
 
 Description: A map of role assignments to create on this resource. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
@@ -278,6 +456,22 @@ map(object({
 
 Default: `{}`
 
+### <a name="input_rpServicePrincipalObjectId"></a> [rpServicePrincipalObjectId](#input\_rpServicePrincipalObjectId)
+
+Description: The object ID of the HCI resource provider service principal.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_subnetMask"></a> [subnetMask](#input\_subnetMask)
+
+Description: The subnet mask for the network.
+
+Type: `string`
+
+Default: `"255.255.255.0"`
+
 ### <a name="input_tags"></a> [tags](#input\_tags)
 
 Description: (Optional) Tags of the resource.
@@ -290,13 +484,37 @@ Default: `null`
 
 The following outputs are exported:
 
-### <a name="output_private_endpoints"></a> [private\_endpoints](#output\_private\_endpoints)
+### <a name="output_arcSettings"></a> [arcSettings](#output\_arcSettings)
 
-Description:   A map of the private endpoints created.
+Description: Arc settings instance after HCI connected.
 
-### <a name="output_resource"></a> [resource](#output\_resource)
+### <a name="output_arcbridge"></a> [arcbridge](#output\_arcbridge)
+
+Description: Arc resource bridge instance after HCI connected.
+
+### <a name="output_cluster"></a> [cluster](#output\_cluster)
+
+Description: HCI Cluster instance
+
+### <a name="output_customlocation"></a> [customlocation](#output\_customlocation)
+
+Description: Custom location instance after HCI connected.
+
+### <a name="output_keyvault"></a> [keyvault](#output\_keyvault)
+
+Description: Keyvault instance that stores deployment secrets.
+
+### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
 Description: This is the full output for the resource.
+
+### <a name="output_userStorages"></a> [userStorages](#output\_userStorages)
+
+Description: User storage instances after HCI connected.
+
+### <a name="output_vSwitchName"></a> [vSwitchName](#output\_vSwitchName)
+
+Description: The name of the virtual switch that is used by the network.
 
 ## Modules
 
