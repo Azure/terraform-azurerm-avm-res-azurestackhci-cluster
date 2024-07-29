@@ -1,7 +1,78 @@
+variable "adou_path" {
+  type        = string
+  description = "The Active Directory OU path."
+}
+
+variable "cluster_name" {
+  type        = string
+  description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
+
+  validation {
+    condition     = length(var.cluster_name) < 16 && length(var.cluster_name) > 0
+    error_message = "value of cluster_name should be less than 16 characters and greater than 0 characters"
+  }
+}
+
+variable "custom_location_name" {
+  type        = string
+  description = "The name of the custom location."
+}
+
+variable "default_gateway" {
+  type        = string
+  description = "The default gateway for the network."
+}
+
+variable "deployment_user" {
+  type        = string
+  description = "The username for the domain administrator account."
+}
+
+variable "deployment_user_password" {
+  type        = string
+  description = "The password for the domain administrator account."
+}
+
+variable "dns_servers" {
+  type        = list(string)
+  description = "A list of DNS server IP addresses."
+}
+
+# deploymentSettings related variables  
+variable "domain_fqdn" {
+  type        = string
+  description = "The domain FQDN."
+}
+
+variable "ending_address" {
+  type        = string
+  description = "The ending IP address of the IP address range."
+}
+
+variable "keyvault_name" {
+  type        = string
+  description = "The name of the key vault."
+}
+
+variable "local_admin_password" {
+  type        = string
+  description = "The password for the local administrator account."
+}
+
+variable "local_admin_user" {
+  type        = string
+  description = "The username for the local administrator account."
+}
+
 variable "location" {
   type        = string
   description = "Azure region where the resource should be deployed."
   nullable    = false
+}
+
+variable "management_adapters" {
+  type        = list(string)
+  description = "A list of management adapters."
 }
 
 variable "name" {
@@ -9,10 +80,76 @@ variable "name" {
   description = "The name of the this resource."
 }
 
+variable "rdma_enabled" {
+  type        = bool
+  description = "Indicates whether RDMA is enabled."
+}
+
+variable "resource_group" {
+  description = "The resource group where the resources will be deployed."
+}
+
 # This is required for most resource modules
 variable "resource_group_name" {
   type        = string
   description = "The resource group where the resources will be deployed."
+}
+
+variable "servers" {
+  type = list(object({
+    name        = string
+    ipv4Address = string
+  }))
+  description = "A list of servers with their names and IPv4 addresses."
+}
+
+variable "service_principal_id" {
+  type        = string
+  description = "The service principal ID for the Azure account."
+}
+
+variable "service_principal_secret" {
+  type        = string
+  description = "The service principal secret for the Azure account."
+}
+
+variable "site_id" {
+  type        = string
+  description = "A unique identifier for the site."
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-]{1,8}$", var.site_id))
+    error_message = "value of site_id should be less than 9 characters and greater than 0 characters and only contain alphanumeric characters and hyphens, this is the requirement of name prefix in hci deploymentsetting"
+  }
+}
+
+variable "starting_address" {
+  type        = string
+  description = "The starting IP address of the IP address range."
+}
+
+variable "storage_connectivity_switchless" {
+  type        = bool
+  description = "Indicates whether storage connectivity is switchless."
+}
+
+variable "storage_networks" {
+  type = list(object({
+    name               = string
+    networkAdapterName = string
+    vlanId             = string
+  }))
+  description = "A list of storage networks."
+}
+
+variable "subscription_id" {
+  type        = string
+  description = "The subscription ID for the Azure account."
+}
+
+variable "witness_storage_account_name" {
+  type        = string
+  description = "The name of the witness storage account."
 }
 
 # required AVM interfaces
@@ -92,6 +229,12 @@ For more information see <https://aka.ms/avm/telemetryinfo>.
 If it is set to false, then no telemetry will be collected.
 DESCRIPTION
   nullable    = false
+}
+
+variable "is_exported" {
+  type        = bool
+  default     = false
+  description = "Indicate whether the resource is exported"
 }
 
 variable "lock" {
@@ -182,15 +325,10 @@ DESCRIPTION
   nullable    = false
 }
 
-# This variable is used to determine if the private_dns_zone_group block should be included,
-# or if it is to be managed externally, e.g. using Azure Policy.
-# https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault/issues/32
-# Alternatively you can use AzAPI, which does not have this issue.
-variable "private_endpoints_manage_dns_zone_group" {
+variable "random_suffix" {
   type        = bool
   default     = true
-  description = "Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy."
-  nullable    = false
+  description = "Indicate whether to add random suffix"
 }
 
 variable "role_assignments" {
@@ -219,168 +357,21 @@ DESCRIPTION
   nullable    = false
 }
 
+variable "rp_service_principal_object_id" {
+  type        = string
+  default     = ""
+  description = "The object ID of the HCI resource provider service principal."
+}
+
+variable "subnet_mask" {
+  type        = string
+  default     = "255.255.255.0"
+  description = "The subnet mask for the network."
+}
+
 # tflint-ignore: terraform_unused_declarations
 variable "tags" {
   type        = map(string)
   default     = null
   description = "(Optional) Tags of the resource."
-}
-
-variable "resourceGroup" {
-  description = "The resource group where the resources will be deployed."
-}
-
-variable "rpServicePrincipalObjectId" {
-  default     = ""
-  type        = string
-  description = "The object ID of the HCI resource provider service principal."
-}
-
-variable "siteId" {
-  type        = string
-  description = "A unique identifier for the site."
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9-]{1,8}$", var.siteId))
-    error_message = "value of siteId should be less than 9 characters and greater than 0 characters and only contain alphanumeric characters and hyphens, this is the requirement of name prefix in hci deploymentsetting"
-  }
-}
-
-variable "servers" {
-  description = "A list of servers with their names and IPv4 addresses."
-  type = list(object({
-    name        = string
-    ipv4Address = string
-  }))
-}
-
-variable "deploymentUser" {
-  type        = string
-  description = "The username for the domain administrator account."
-}
-
-variable "deploymentUserPassword" {
-  sensitive   = false
-  type        = string
-  description = "The password for the domain administrator account."
-}
-
-variable "localAdminUser" {
-  type        = string
-  description = "The username for the local administrator account."
-}
-
-variable "localAdminPassword" {
-  sensitive   = false
-  type        = string
-  description = "The password for the local administrator account."
-}
-
-//deploymentSettings related variables  
-variable "domainFqdn" {
-  description = "The domain FQDN."
-  type        = string
-}
-
-variable "subnetMask" {
-  default     = "255.255.255.0"
-  type        = string
-  description = "The subnet mask for the network."
-}
-
-variable "startingAddress" {
-  description = "The starting IP address of the IP address range."
-  type        = string
-}
-
-variable "endingAddress" {
-  description = "The ending IP address of the IP address range."
-  type        = string
-}
-
-variable "defaultGateway" {
-  description = "The default gateway for the network."
-  type        = string
-}
-
-variable "dnsServers" {
-  type        = list(string)
-  description = "A list of DNS server IP addresses."
-}
-
-variable "adouPath" {
-  type        = string
-  description = "The Active Directory OU path."
-}
-
-variable "subscriptionId" {
-  type        = string
-  description = "The subscription ID for the Azure account."
-}
-
-variable "servicePrincipalId" {
-  type        = string
-  sensitive   = false
-  description = "The service principal ID for the Azure account."
-}
-
-variable "servicePrincipalSecret" {
-  type        = string
-  sensitive   = false
-  description = "The service principal secret for the Azure account."
-}
-
-variable "managementAdapters" {
-  type = list(string)
-}
-
-variable "storageNetworks" {
-  type = list(object({
-    name               = string
-    networkAdapterName = string
-    vlanId             = string
-  }))
-}
-
-variable "rdmaEnabled" {
-  type        = bool
-  description = "Indicates whether RDMA is enabled."
-}
-
-variable "storageConnectivitySwitchless" {
-  type        = bool
-  description = "Indicates whether storage connectivity is switchless."
-}
-
-variable "clusterName" {
-  type        = string
-  description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
-  validation {
-    condition     = length(var.clusterName) < 16 && length(var.clusterName) > 0
-    error_message = "value of clusterName should be less than 16 characters and greater than 0 characters"
-  }
-}
-
-variable "customLocationName" {
-  type        = string
-  description = "The name of the custom location."
-}
-
-variable "keyvaultName" {
-  type        = string
-  description = "The name of the key vault."
-}
-
-variable "witnessStorageAccountName" {
-  type        = string
-  description = "The name of the witness storage account."
-}
-
-variable "randomSuffix" {
-  type    = bool
-  default = true
-}
-
-variable "isExported" {
-  type    = bool
-  default = false
 }

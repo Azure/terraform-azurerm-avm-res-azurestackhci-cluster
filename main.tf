@@ -5,20 +5,52 @@
 #   tags     = var.tags
 # }
 
+data "azapi_resource" "arcbridge" {
+  type      = "Microsoft.ResourceConnector/appliances@2022-10-27"
+  name      = "${var.cluster_name}-arcbridge"
+  parent_id = var.resource_group.id
+
+  depends_on = [azapi_update_resource.deploymentsetting]
+}
+
+data "azapi_resource" "customlocation" {
+  type      = "Microsoft.ExtendedLocation/customLocations@2021-08-15"
+  name      = var.custom_location_name
+  parent_id = var.resource_group.id
+
+  depends_on = [azapi_update_resource.deploymentsetting]
+}
+
+data "azapi_resource_list" "user_storages" {
+  parent_id              = var.resource_group.id
+  type                   = "Microsoft.AzureStackHCI/storagecontainers@2022-12-15-preview"
+  response_export_values = ["*"]
+
+  depends_on = [azapi_update_resource.deploymentsetting]
+}
+
+data "azapi_resource" "arc_settings" {
+  type      = "Microsoft.AzureStackHCI/clusters/arc_settings@2023-08-01"
+  name      = "default"
+  parent_id = azapi_resource.cluster.id
+
+  depends_on = [azapi_update_resource.deploymentsetting]
+}
+
 resource "azapi_resource" "cluster" {
   type = "Microsoft.AzureStackHCI/clusters@2023-08-01-preview"
   body = {
     properties = {}
   }
-  location  = var.resourceGroup.location
-  name      = var.clusterName
-  parent_id = var.resourceGroup.id
+  location  = var.resource_group.location
+  name      = var.cluster_name
+  parent_id = var.resource_group.id
 
   identity {
     type = "SystemAssigned"
   }
 
-  depends_on = [azurerm_role_assignment.ServicePrincipalRoleAssign]
+  depends_on = [azurerm_role_assignment.service_principal_role_assign]
 
   lifecycle {
     ignore_changes = [

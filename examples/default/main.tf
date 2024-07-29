@@ -5,10 +5,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.74"
     }
-    modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
-    }
     random = {
       source  = "hashicorp/random"
       version = "~> 3.5"
@@ -59,15 +55,15 @@ module "test" {
 
   enable_telemetry = var.enable_telemetry # see variables.tf
 
-  resourceGroup   = data.azurerm_resource_group.rg
-  siteId          = var.siteId
-  domainFqdn      = "jumpstart.local"
-  startingAddress = "192.168.1.55"
-  endingAddress   = "192.168.1.65"
-  subnetMask      = var.subnetMask
-  defaultGateway  = "192.168.1.1"
-  dnsServers      = ["192.168.1.254"]
-  adouPath        = local.adou_path
+  resource_group   = data.azurerm_resource_group.rg
+  site_id          = var.site_id
+  domain_fqdn      = "jumpstart.local"
+  starting_address = "192.168.1.55"
+  ending_address   = "192.168.1.65"
+  subnet_mask      = var.subnet_mask
+  default_gateway  = "192.168.1.1"
+  dns_servers      = ["192.168.1.254"]
+  adou_path        = local.adou_path
   servers = [
     {
       name        = "AzSHOST1",
@@ -78,8 +74,8 @@ module "test" {
       ipv4Address = "192.168.1.13"
     }
   ]
-  managementAdapters = ["FABRIC", "FABRIC2"]
-  storageNetworks = [
+  management_adapters = ["FABRIC", "FABRIC2"]
+  storage_networks = [
     {
       name               = "Storage1Network",
       networkAdapterName = "StorageA",
@@ -91,19 +87,19 @@ module "test" {
       vlanId             = "712"
     }
   ]
-  rdmaEnabled                   = false
-  storageConnectivitySwitchless = false
-  clusterName                   = local.clusterName
-  customLocationName            = local.customLocationName
-  witnessStorageAccountName     = local.witnessStorageAccountName
-  keyvaultName                  = local.keyvaultName
-  randomSuffix                  = true
-  subscriptionId                = var.subscriptionId
-  deploymentUser                = var.deployment_user
-  deploymentUserPassword        = var.deploymentUserPassword
-  localAdminUser                = var.localAdminUser
-  localAdminPassword            = var.localAdminPassword
-  servicePrincipalId            = var.servicePrincipalId
-  servicePrincipalSecret        = var.servicePrincipalSecret
-  rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
+  rdma_enabled                    = false
+  storage_connectivity_switchless = false
+  cluster_name                    = local.cluster_name
+  custom_location_name            = local.custom_location_name
+  witness_storage_account_name    = local.witness_storage_account_name
+  keyvault_name                   = local.keyvault_name
+  random_suffix                   = true
+  subscription_id                 = var.subscription_id
+  deployment_user                 = var.deployment_user
+  deployment_user_password        = var.deployment_user_password
+  local_admin_user                = var.local_admin_user
+  local_admin_password            = var.local_admin_password
+  service_principal_id            = var.service_principal_id
+  service_principal_secret        = var.service_principal_secret
+  rp_service_principal_object_id  = var.rp_service_principal_object_id
 }

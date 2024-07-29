@@ -1,14 +1,14 @@
-variable "deploymentUserPassword" {
+variable "deployment_user_password" {
   type        = string
   description = "The password for deployment user."
 }
 
-variable "localAdminPassword" {
+variable "local_admin_password" {
   type        = string
   description = "The password for the local administrator account."
 }
 
-variable "localAdminUser" {
+variable "local_admin_user" {
   type        = string
   description = "The username for the local administrator account."
 }
@@ -18,22 +18,22 @@ variable "resourceGroupName" {
   description = "The resource group where the resources will be deployed."
 }
 
-variable "servicePrincipalId" {
+variable "service_principal_id" {
   type        = string
   description = "The service principal ID for ARB."
 }
 
-variable "servicePrincipalSecret" {
+variable "service_principal_secret" {
   type        = string
   description = "The service principal secret."
 }
 
-variable "siteId" {
+variable "site_id" {
   type        = string
   description = "A unique identifier for the site."
 }
 
-variable "subscriptionId" {
+variable "subscription_id" {
   type        = string
   description = "The subscription ID for resources."
 }
@@ -60,13 +60,13 @@ If it is set to false, then no telemetry will be collected.
 DESCRIPTION
 }
 
-variable "rpServicePrincipalObjectId" {
+variable "rp_service_principal_object_id" {
   type        = string
   default     = ""
   description = "The object ID of the HCI resource provider service principal."
 }
 
-variable "subnetMask" {
+variable "subnet_mask" {
   type        = string
   default     = "255.255.255.0"
   description = "The subnet mask for the network."

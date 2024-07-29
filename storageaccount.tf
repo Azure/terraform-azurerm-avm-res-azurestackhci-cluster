@@ -1,7 +1,7 @@
 resource "azurerm_storage_account" "witness" {
-  name                     = var.randomSuffix ? "${var.witnessStorageAccountName}${random_integer.random_suffix.result}" : var.witnessStorageAccountName
-  location                 = var.resourceGroup.location
-  resource_group_name      = var.resourceGroup.name
-  account_tier             = "Standard"
   account_replication_type = "LRS"
+  account_tier             = "Standard"
+  location                 = var.resource_group.location
+  name                     = var.random_suffix ? "${var.witness_storage_account_name}${random_integer.random_suffix.result}" : var.witness_storage_account_name
+  resource_group_name      = var.resource_group.name
 }

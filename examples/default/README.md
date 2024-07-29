@@ -11,10 +11,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.74"
     }
-    modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
-    }
     random = {
       source  = "hashicorp/random"
       version = "~> 3.5"
@@ -65,15 +61,15 @@ module "test" {
 
   enable_telemetry = var.enable_telemetry # see variables.tf
 
-  resourceGroup   = data.azurerm_resource_group.rg
-  siteId          = var.siteId
-  domainFqdn      = "jumpstart.local"
-  startingAddress = "192.168.1.55"
-  endingAddress   = "192.168.1.65"
-  subnetMask      = var.subnetMask
-  defaultGateway  = "192.168.1.1"
-  dnsServers      = ["192.168.1.254"]
-  adouPath        = local.adou_path
+  resource_group   = data.azurerm_resource_group.rg
+  site_id          = var.site_id
+  domain_fqdn      = "jumpstart.local"
+  starting_address = "192.168.1.55"
+  ending_address   = "192.168.1.65"
+  subnet_mask      = var.subnet_mask
+  default_gateway  = "192.168.1.1"
+  dns_servers      = ["192.168.1.254"]
+  adou_path        = local.adou_path
   servers = [
     {
       name        = "AzSHOST1",
@@ -84,8 +80,8 @@ module "test" {
       ipv4Address = "192.168.1.13"
     }
   ]
-  managementAdapters = ["FABRIC", "FABRIC2"]
-  storageNetworks = [
+  management_adapters = ["FABRIC", "FABRIC2"]
+  storage_networks = [
     {
       name               = "Storage1Network",
       networkAdapterName = "StorageA",
@@ -97,21 +93,21 @@ module "test" {
       vlanId             = "712"
     }
   ]
-  rdmaEnabled                   = false
-  storageConnectivitySwitchless = false
-  clusterName                   = local.clusterName
-  customLocationName            = local.customLocationName
-  witnessStorageAccountName     = local.witnessStorageAccountName
-  keyvaultName                  = local.keyvaultName
-  randomSuffix                  = true
-  subscriptionId                = var.subscriptionId
-  deploymentUser                = var.deployment_user
-  deploymentUserPassword        = var.deploymentUserPassword
-  localAdminUser                = var.localAdminUser
-  localAdminPassword            = var.localAdminPassword
-  servicePrincipalId            = var.servicePrincipalId
-  servicePrincipalSecret        = var.servicePrincipalSecret
-  rpServicePrincipalObjectId    = var.rpServicePrincipalObjectId
+  rdma_enabled                    = false
+  storage_connectivity_switchless = false
+  cluster_name                    = local.cluster_name
+  custom_location_name            = local.custom_location_name
+  witness_storage_account_name    = local.witness_storage_account_name
+  keyvault_name                   = local.keyvault_name
+  random_suffix                   = true
+  subscription_id                 = var.subscription_id
+  deployment_user                 = var.deployment_user
+  deployment_user_password        = var.deployment_user_password
+  local_admin_user                = var.local_admin_user
+  local_admin_password            = var.local_admin_password
+  service_principal_id            = var.service_principal_id
+  service_principal_secret        = var.service_principal_secret
+  rp_service_principal_object_id  = var.rp_service_principal_object_id
 }
 ```
 
@@ -123,8 +119,6 @@ The following requirements are needed by this module:
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.74)
-
-- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
 
@@ -140,19 +134,19 @@ The following resources are used by this module:
 
 The following input variables are required:
 
-### <a name="input_deploymentUserPassword"></a> [deploymentUserPassword](#input\_deploymentUserPassword)
+### <a name="input_deployment_user_password"></a> [deployment\_user\_password](#input\_deployment\_user\_password)
 
 Description: The password for deployment user.
 
 Type: `string`
 
-### <a name="input_localAdminPassword"></a> [localAdminPassword](#input\_localAdminPassword)
+### <a name="input_local_admin_password"></a> [local\_admin\_password](#input\_local\_admin\_password)
 
 Description: The password for the local administrator account.
 
 Type: `string`
 
-### <a name="input_localAdminUser"></a> [localAdminUser](#input\_localAdminUser)
+### <a name="input_local_admin_user"></a> [local\_admin\_user](#input\_local\_admin\_user)
 
 Description: The username for the local administrator account.
 
@@ -164,25 +158,25 @@ Description: The resource group where the resources will be deployed.
 
 Type: `string`
 
-### <a name="input_servicePrincipalId"></a> [servicePrincipalId](#input\_servicePrincipalId)
+### <a name="input_service_principal_id"></a> [service\_principal\_id](#input\_service\_principal\_id)
 
 Description: The service principal ID for ARB.
 
 Type: `string`
 
-### <a name="input_servicePrincipalSecret"></a> [servicePrincipalSecret](#input\_servicePrincipalSecret)
+### <a name="input_service_principal_secret"></a> [service\_principal\_secret](#input\_service\_principal\_secret)
 
 Description: The service principal secret.
 
 Type: `string`
 
-### <a name="input_siteId"></a> [siteId](#input\_siteId)
+### <a name="input_site_id"></a> [site\_id](#input\_site\_id)
 
 Description: A unique identifier for the site.
 
 Type: `string`
 
-### <a name="input_subscriptionId"></a> [subscriptionId](#input\_subscriptionId)
+### <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id)
 
 Description: The subscription ID for resources.
 
@@ -218,7 +212,7 @@ Type: `bool`
 
 Default: `true`
 
-### <a name="input_rpServicePrincipalObjectId"></a> [rpServicePrincipalObjectId](#input\_rpServicePrincipalObjectId)
+### <a name="input_rp_service_principal_object_id"></a> [rp\_service\_principal\_object\_id](#input\_rp\_service\_principal\_object\_id)
 
 Description: The object ID of the HCI resource provider service principal.
 
@@ -226,7 +220,7 @@ Type: `string`
 
 Default: `""`
 
-### <a name="input_subnetMask"></a> [subnetMask](#input\_subnetMask)
+### <a name="input_subnet_mask"></a> [subnet\_mask](#input\_subnet\_mask)
 
 Description: The subnet mask for the network.
 
