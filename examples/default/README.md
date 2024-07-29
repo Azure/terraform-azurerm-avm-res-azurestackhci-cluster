@@ -44,7 +44,7 @@ module "naming" {
 }
 
 data "azurerm_resource_group" "rg" {
-  name = var.resourceGroupName
+  name = var.resource_group_name
 }
 
 # This is the module call
@@ -152,7 +152,7 @@ Description: The username for the local administrator account.
 
 Type: `string`
 
-### <a name="input_resourceGroupName"></a> [resourceGroupName](#input\_resourceGroupName)
+### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
 
 Description: The resource group where the resources will be deployed.
 
@@ -186,7 +186,7 @@ Type: `string`
 
 The following input variables are optional (have default values):
 
-### <a name="input_adouSuffix"></a> [adouSuffix](#input\_adouSuffix)
+### <a name="input_adou_suffix"></a> [adou\_suffix](#input\_adou\_suffix)
 
 Description: The suffix of Active Directory OU path.
 

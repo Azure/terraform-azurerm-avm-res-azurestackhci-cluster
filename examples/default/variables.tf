@@ -13,7 +13,7 @@ variable "local_admin_user" {
   description = "The username for the local administrator account."
 }
 
-variable "resourceGroupName" {
+variable "resource_group_name" {
   type        = string
   description = "The resource group where the resources will be deployed."
 }
@@ -38,7 +38,7 @@ variable "subscription_id" {
   description = "The subscription ID for resources."
 }
 
-variable "adouSuffix" {
+variable "adou_suffix" {
   type        = string
   default     = "DC=jumpstart,DC=local"
   description = "The suffix of Active Directory OU path."

@@ -138,7 +138,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 configurationMode = "Express"
               }
               namingPrefix = var.site_id
-              domain_fqdn  = "${var.domain_fqdn}"
+              domain_fqdn  = var.domain_fqdn
               infrastructureNetwork = [{
                 useDhcp     = false
                 subnet_mask = var.subnet_mask
@@ -230,7 +230,7 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
                 configurationMode = "Express"
               }
               namingPrefix = var.site_id
-              domain_fqdn  = "${var.domain_fqdn}"
+              domain_fqdn  = var.domain_fqdn
               infrastructureNetwork = [{
                 useDhcp     = false
                 subnet_mask = var.subnet_mask
