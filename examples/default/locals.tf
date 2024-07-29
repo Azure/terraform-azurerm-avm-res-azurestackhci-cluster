@@ -1,7 +1,7 @@
 locals {
   witnessStorageAccountName = "${lower(var.siteId)}wit"
-  keyvaultName              = "${var.siteId}-kv"
+  keyvaultName              = "kv${var.siteId}"
   adou_path                 = "OU=${var.resourceGroupName},${var.adouSuffix}"
-  clusterName               = "${var.siteId}-cl"
-  customLocationName        = "${var.siteId}-customlocation"
+  clusterName               = "cl${var.siteId}"
+  customLocationName        = "customlocation-${var.siteId}"
 }

@@ -1,14 +1,15 @@
 # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
-resource "azurerm_resource_group" "TODO" {
-  location = var.location
-  name     = var.name # calling code must supply the name
-  tags     = var.tags
-}
+# resource "azurerm_resource_group" "TODO" {
+#   location = var.location
+#   name     = var.name # calling code must supply the name
+#   tags     = var.tags
+# }
 
 resource "azapi_resource" "cluster" {
   type      = "Microsoft.AzureStackHCI/clusters@2023-08-01-preview"
   parent_id = var.resourceGroup.id
   name      = var.clusterName
+  depends_on = [ azurerm_role_assignment.ServicePrincipalRoleAssign ]
 
   body = {
     properties = {}

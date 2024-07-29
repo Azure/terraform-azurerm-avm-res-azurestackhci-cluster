@@ -111,7 +111,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
     azurerm_key_vault_secret.LocalAdminCredential,
     azurerm_key_vault_secret.WitnessStorageKey,
     azapi_resource.cluster,
-    module.serverRoleBindings,
+    azurerm_role_assignment.ServicePrincipalRoleAssign,
   ]
 
   lifecycle {
