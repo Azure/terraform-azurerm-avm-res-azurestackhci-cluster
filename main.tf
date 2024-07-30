@@ -40,7 +40,7 @@ resource "azapi_resource" "cluster" {
   body = {
     properties = {}
   }
-  location  = data.azurerm_resource_group.rg.location
+  location  = var.location
   name      = var.name
   parent_id = data.azurerm_resource_group.rg.id
 
