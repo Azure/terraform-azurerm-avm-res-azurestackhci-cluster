@@ -56,12 +56,11 @@ module "test" {
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
   location            = data.azurerm_resource_group.rg.location
-  name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  name                = local.name # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = data.azurerm_resource_group.rg.name
 
   enable_telemetry = var.enable_telemetry # see variables.tf
 
-  resource_group   = data.azurerm_resource_group.rg
   site_id          = var.site_id
   domain_fqdn      = "jumpstart.local"
   starting_address = "192.168.1.55"
@@ -95,12 +94,10 @@ module "test" {
   ]
   rdma_enabled                    = false
   storage_connectivity_switchless = false
-  cluster_name                    = local.cluster_name
   custom_location_name            = local.custom_location_name
   witness_storage_account_name    = local.witness_storage_account_name
   keyvault_name                   = local.keyvault_name
   random_suffix                   = true
-  subscription_id                 = var.subscription_id
   deployment_user                 = var.deployment_user
   deployment_user_password        = var.deployment_user_password
   local_admin_user                = var.local_admin_user
@@ -173,12 +170,6 @@ Type: `string`
 ### <a name="input_site_id"></a> [site\_id](#input\_site\_id)
 
 Description: A unique identifier for the site.
-
-Type: `string`
-
-### <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id)
-
-Description: The subscription ID for resources.
 
 Type: `string`
 

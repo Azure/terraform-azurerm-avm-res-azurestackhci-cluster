@@ -5,7 +5,7 @@ data "azurerm_arc_machine" "arcservers" {
   }
 
   name                = each.key
-  resource_group_name = var.resource_group.name
+  resource_group_name = var.resource_group_name
 }
 
 locals {
@@ -138,27 +138,27 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 configurationMode = "Express"
               }
               namingPrefix = var.site_id
-              domain_fqdn  = var.domain_fqdn
+              domainFqdn   = var.domain_fqdn
               infrastructureNetwork = [{
-                useDhcp     = false
-                subnet_mask = var.subnet_mask
-                gateway     = var.default_gateway
+                useDhcp    = false
+                subnetMask = var.subnet_mask
+                gateway    = var.default_gateway
                 ipPools = [
                   {
-                    starting_address = var.starting_address
-                    ending_address   = var.ending_address
+                    startingAddress = var.starting_address
+                    endingEddress   = var.ending_address
                   }
                 ]
-                dns_servers = flatten(var.dns_servers)
+                dnsServers = flatten(var.dns_servers)
               }]
               physicalNodes = flatten(var.servers)
               hostNetwork = {
-                enableStorageAutoIp             = true
-                intents                         = local.converged_intents
-                storage_networks                = flatten(var.storage_networks)
-                storage_connectivity_switchless = false
+                enableStorageAutoIp           = true
+                intents                       = local.converged_intents
+                storageNetworks               = flatten(var.storage_networks)
+                storageConnectivitySwitchless = false
               }
-              adou_path       = var.adou_path
+              adouPath        = var.adou_path
               secretsLocation = azurerm_key_vault.deployment_keyvault.vault_uri
               optionalServices = {
                 customLocation = var.custom_location_name
@@ -230,27 +230,27 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
                 configurationMode = "Express"
               }
               namingPrefix = var.site_id
-              domain_fqdn  = var.domain_fqdn
+              domainFqdn   = var.domain_fqdn
               infrastructureNetwork = [{
-                useDhcp     = false
-                subnet_mask = var.subnet_mask
-                gateway     = var.default_gateway
+                useDhcp    = false
+                subnetMask = var.subnet_mask
+                gateway    = var.default_gateway
                 ipPools = [
                   {
-                    starting_address = var.starting_address
-                    ending_address   = var.ending_address
+                    startingAddress = var.starting_address
+                    endingAddress   = var.ending_address
                   }
                 ]
-                dns_servers = flatten(var.dns_servers)
+                dnsServers = flatten(var.dns_servers)
               }]
               physicalNodes = flatten(var.servers)
               hostNetwork = {
-                enableStorageAutoIp             = true
-                intents                         = local.seperate_intents
-                storage_networks                = flatten(var.storage_networks)
-                storage_connectivity_switchless = false
+                enableStorageAutoIp           = true
+                intents                       = local.seperate_intents
+                storageNetworks               = flatten(var.storage_networks)
+                storageConnectivitySwitchless = false
               }
-              adou_path       = var.adou_path
+              adouPath        = var.adou_path
               secretsLocation = azurerm_key_vault.deployment_keyvault.vault_uri
               optionalServices = {
                 customLocation = var.custom_location_name

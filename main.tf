@@ -1,14 +1,12 @@
 # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
-# resource "azurerm_resource_group" "TODO" {
-#   location = var.location
-#   name     = var.name # calling code must supply the name
-#   tags     = var.tags
-# }
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
+}
 
 data "azapi_resource" "arcbridge" {
   type      = "Microsoft.ResourceConnector/appliances@2022-10-27"
-  name      = "${var.cluster_name}-arcbridge"
-  parent_id = var.resource_group.id
+  name      = "${var.name}-arcbridge"
+  parent_id = data.azurerm_resource_group.rg.id
 
   depends_on = [azapi_update_resource.deploymentsetting]
 }
@@ -16,13 +14,13 @@ data "azapi_resource" "arcbridge" {
 data "azapi_resource" "customlocation" {
   type      = "Microsoft.ExtendedLocation/customLocations@2021-08-15"
   name      = var.custom_location_name
-  parent_id = var.resource_group.id
+  parent_id = data.azurerm_resource_group.rg.id
 
   depends_on = [azapi_update_resource.deploymentsetting]
 }
 
 data "azapi_resource_list" "user_storages" {
-  parent_id              = var.resource_group.id
+  parent_id              = data.azurerm_resource_group.rg.id
   type                   = "Microsoft.AzureStackHCI/storagecontainers@2022-12-15-preview"
   response_export_values = ["*"]
 
@@ -30,7 +28,7 @@ data "azapi_resource_list" "user_storages" {
 }
 
 data "azapi_resource" "arc_settings" {
-  type      = "Microsoft.AzureStackHCI/clusters/arc_settings@2023-08-01"
+  type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2023-08-01"
   name      = "default"
   parent_id = azapi_resource.cluster.id
 
@@ -42,9 +40,9 @@ resource "azapi_resource" "cluster" {
   body = {
     properties = {}
   }
-  location  = var.resource_group.location
-  name      = var.cluster_name
-  parent_id = var.resource_group.id
+  location  = data.azurerm_resource_group.rg.location
+  name      = var.name
+  parent_id = data.azurerm_resource_group.rg.id
 
   identity {
     type = "SystemAssigned"

@@ -33,11 +33,6 @@ variable "site_id" {
   description = "A unique identifier for the site."
 }
 
-variable "subscription_id" {
-  type        = string
-  description = "The subscription ID for resources."
-}
-
 variable "adou_suffix" {
   type        = string
   default     = "DC=jumpstart,DC=local"

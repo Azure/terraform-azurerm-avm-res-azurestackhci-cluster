@@ -3,16 +3,6 @@ variable "adou_path" {
   description = "The Active Directory OU path."
 }
 
-variable "cluster_name" {
-  type        = string
-  description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
-
-  validation {
-    condition     = length(var.cluster_name) < 16 && length(var.cluster_name) > 0
-    error_message = "value of cluster_name should be less than 16 characters and greater than 0 characters"
-  }
-}
-
 variable "custom_location_name" {
   type        = string
   description = "The name of the custom location."
@@ -77,16 +67,17 @@ variable "management_adapters" {
 
 variable "name" {
   type        = string
-  description = "The name of the this resource."
+  description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
+
+  validation {
+    condition     = length(var.name) < 16 && length(var.name) > 0
+    error_message = "value of name should be less than 16 characters and greater than 0 characters"
+  }
 }
 
 variable "rdma_enabled" {
   type        = bool
   description = "Indicates whether RDMA is enabled."
-}
-
-variable "resource_group" {
-  description = "The resource group where the resources will be deployed."
 }
 
 # This is required for most resource modules
@@ -140,11 +131,6 @@ variable "storage_networks" {
     vlanId             = string
   }))
   description = "A list of storage networks."
-}
-
-variable "subscription_id" {
-  type        = string
-  description = "The subscription ID for the Azure account."
 }
 
 variable "witness_storage_account_name" {

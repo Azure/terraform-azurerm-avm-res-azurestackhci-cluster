@@ -55,6 +55,7 @@ The following resources are used by this module:
 - [azurerm_arc_machine.arcservers](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/arc_machine) (data source)
 - [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 - [azurerm_client_config.telemetry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
+- [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 - [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
 
 <!-- markdownlint-disable MD013 -->
@@ -65,12 +66,6 @@ The following input variables are required:
 ### <a name="input_adou_path"></a> [adou\_path](#input\_adou\_path)
 
 Description: The Active Directory OU path.
-
-Type: `string`
-
-### <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name)
-
-Description: The name of the HCI cluster. Must be the same as the name when preparing AD.
 
 Type: `string`
 
@@ -148,7 +143,7 @@ Type: `list(string)`
 
 ### <a name="input_name"></a> [name](#input\_name)
 
-Description: The name of the this resource.
+Description: The name of the HCI cluster. Must be the same as the name when preparing AD.
 
 Type: `string`
 
@@ -157,12 +152,6 @@ Type: `string`
 Description: Indicates whether RDMA is enabled.
 
 Type: `bool`
-
-### <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group)
-
-Description: The resource group where the resources will be deployed.
-
-Type: `any`
 
 ### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
 
@@ -226,12 +215,6 @@ list(object({
     vlanId             = string
   }))
 ```
-
-### <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id)
-
-Description: The subscription ID for the Azure account.
-
-Type: `string`
 
 ### <a name="input_witness_storage_account_name"></a> [witness\_storage\_account\_name](#input\_witness\_storage\_account\_name)
 
