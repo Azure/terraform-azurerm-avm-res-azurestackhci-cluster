@@ -1,4 +1,4 @@
-# terraform-azapi-avm-ptn-hci
+# avm-res-azurestackhci-cluster
 
 Module to provision azure stack hci.
 
