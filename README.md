@@ -1,5 +1,5 @@
 <!-- BEGIN_TF_DOCS -->
-# avm-res-azurestackhci-cluster
+# terraform-azurerm-avm-res-azurestackhci-cluster
 
 Module to provision azure stack hci.
 
