@@ -1,11 +1,13 @@
 variable "deployment_user_password" {
   type        = string
   description = "The password for deployment user."
+  sensitive   = true
 }
 
 variable "local_admin_password" {
   type        = string
   description = "The password for the local administrator account."
+  sensitive   = true
 }
 
 variable "local_admin_user" {

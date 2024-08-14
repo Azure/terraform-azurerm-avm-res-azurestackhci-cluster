@@ -21,6 +21,7 @@ variable "deployment_user" {
 variable "deployment_user_password" {
   type        = string
   description = "The password for the domain administrator account."
+  sensitive   = true
 }
 
 variable "dns_servers" {
@@ -47,6 +48,7 @@ variable "keyvault_name" {
 variable "local_admin_password" {
   type        = string
   description = "The password for the local administrator account."
+  sensitive   = true
 }
 
 variable "local_admin_user" {
