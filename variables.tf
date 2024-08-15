@@ -27,6 +27,7 @@ variable "deployment_user_password" {
 variable "dns_servers" {
   type        = list(string)
   description = "A list of DNS server IP addresses."
+  nullable    = false
 }
 
 # deploymentSettings related variables  
@@ -65,6 +66,7 @@ variable "location" {
 variable "management_adapters" {
   type        = list(string)
   description = "A list of management adapters."
+  nullable    = false
 }
 
 variable "name" {
