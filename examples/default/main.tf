@@ -51,7 +51,7 @@ data "azurerm_resource_group" "rg" {
 # with a data source.
 module "test" {
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
+  # source             = "Azure/avm-res-azurestackhci-cluster/azurerm"
   # ...
   location            = data.azurerm_resource_group.rg.location
   name                = local.name # TODO update with module.naming.<RESOURCE_TYPE>.name_unique

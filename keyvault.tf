@@ -13,7 +13,7 @@ resource "azurerm_key_vault" "deployment_keyvault" {
   public_network_access_enabled   = true
   # arm template has enableSoftDelete": false, but terraform can't disable it after version 2.42.
   soft_delete_retention_days = 30
-  tags                       = {}
+  tags                       = var.tags
 }
 
 resource "azurerm_key_vault_secret" "azure_stack_lcm_user_credential" {
@@ -21,7 +21,7 @@ resource "azurerm_key_vault_secret" "azure_stack_lcm_user_credential" {
   name         = "AzureStackLCMUserCredential"
   value        = base64encode("${var.deployment_user}:${var.deployment_user_password}")
   content_type = "Secret"
-  tags         = {}
+  tags         = var.tags
 
   depends_on = [azurerm_key_vault.deployment_keyvault]
 }
@@ -31,7 +31,7 @@ resource "azurerm_key_vault_secret" "local_admin_credential" {
   name         = "LocalAdminCredential"
   value        = base64encode("${var.local_admin_user}:${var.local_admin_password}")
   content_type = "Secret"
-  tags         = {}
+  tags         = var.tags
 
   depends_on = [azurerm_key_vault.deployment_keyvault]
 }
@@ -41,7 +41,7 @@ resource "azurerm_key_vault_secret" "default_arb_application" {
   name         = "DefaultARBApplication"
   value        = base64encode("${var.service_principal_id}:${var.service_principal_secret}")
   content_type = "Secret"
-  tags         = {}
+  tags         = var.tags
 
   depends_on = [azurerm_key_vault.deployment_keyvault]
 }
@@ -51,7 +51,7 @@ resource "azurerm_key_vault_secret" "witness_storage_key" {
   name         = "WitnessStorageKey"
   value        = base64encode(azurerm_storage_account.witness.primary_access_key)
   content_type = "Secret"
-  tags         = {}
+  tags         = var.tags
 
   depends_on = [azurerm_key_vault.deployment_keyvault]
 }
