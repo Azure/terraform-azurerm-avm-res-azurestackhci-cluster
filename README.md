@@ -1,13 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
-# terraform-azurerm-avm-template
+# terraform-azurerm-avm-res-azurestackhci-cluster
 
-This is a template repo for Terraform Azure Verified Modules.
-
-Things to do:
-
-1. Set up a GitHub repo environment called `test`.
-1. Configure environment protection rule to ensure that approval is required before deploying to this environment.
-1. Install Docker Desktop to run tests
+Module to provision azure stack hci.
 
 > [!IMPORTANT]
 > As the overall AVM framework is not GA (generally available) yet - the CI framework and test automation is not fully functional and implemented across all supported languages yet - breaking changes are expected, and additional customer feedback is yet to be gathered and incorporated. Hence, modules **MUST NOT** be published at version `1.0.0` or higher at this time.
@@ -23,35 +17,45 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 1.14)
+
+- <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) (~> 2.50.0)
+
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.71)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
 
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.71)
-
-- <a name="provider_modtm"></a> [modtm](#provider\_modtm) (~> 0.3)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
-
 ## Resources
 
 The following resources are used by this module:
 
+- [azapi_resource.cluster](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.validatedeploymentsetting](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.validatedeploymentsetting_seperate](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_update_resource.deploymentsetting](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/update_resource) (resource)
+- [azurerm_key_vault.deployment_keyvault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault) (resource)
+- [azurerm_key_vault_secret.azure_stack_lcm_user_credential](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
+- [azurerm_key_vault_secret.default_arb_application](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
+- [azurerm_key_vault_secret.local_admin_credential](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
+- [azurerm_key_vault_secret.witness_storage_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
 - [azurerm_management_lock.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) (resource)
-- [azurerm_private_endpoint.this_managed_dns_zone_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) (resource)
-- [azurerm_private_endpoint.this_unmanaged_dns_zone_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) (resource)
-- [azurerm_private_endpoint_application_security_group_association.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint_application_security_group_association) (resource)
-- [azurerm_resource_group.TODO](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [azurerm_role_assignment.service_principal_role_assign](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
 - [azurerm_role_assignment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
+- [azurerm_storage_account.witness](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
 - [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
+- [random_integer.random_suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
+- [azapi_resource.arc_settings](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource.arcbridge](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource.customlocation](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource) (data source)
+- [azapi_resource_list.user_storages](https://registry.terraform.io/providers/azure/azapi/latest/docs/data-sources/resource_list) (data source)
+- [azuread_service_principal.hci_rp](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/service_principal) (data source)
+- [azurerm_arc_machine.arcservers](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/arc_machine) (data source)
+- [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 - [azurerm_client_config.telemetry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
+- [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 - [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
 
 <!-- markdownlint-disable MD013 -->
@@ -59,17 +63,95 @@ The following resources are used by this module:
 
 The following input variables are required:
 
+### <a name="input_adou_path"></a> [adou\_path](#input\_adou\_path)
+
+Description: The Active Directory OU path.
+
+Type: `string`
+
+### <a name="input_custom_location_name"></a> [custom\_location\_name](#input\_custom\_location\_name)
+
+Description: The name of the custom location.
+
+Type: `string`
+
+### <a name="input_default_gateway"></a> [default\_gateway](#input\_default\_gateway)
+
+Description: The default gateway for the network.
+
+Type: `string`
+
+### <a name="input_deployment_user"></a> [deployment\_user](#input\_deployment\_user)
+
+Description: The username for the domain administrator account.
+
+Type: `string`
+
+### <a name="input_deployment_user_password"></a> [deployment\_user\_password](#input\_deployment\_user\_password)
+
+Description: The password for the domain administrator account.
+
+Type: `string`
+
+### <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers)
+
+Description: A list of DNS server IP addresses.
+
+Type: `list(string)`
+
+### <a name="input_domain_fqdn"></a> [domain\_fqdn](#input\_domain\_fqdn)
+
+Description: The domain FQDN.
+
+Type: `string`
+
+### <a name="input_ending_address"></a> [ending\_address](#input\_ending\_address)
+
+Description: The ending IP address of the IP address range.
+
+Type: `string`
+
+### <a name="input_keyvault_name"></a> [keyvault\_name](#input\_keyvault\_name)
+
+Description: The name of the key vault.
+
+Type: `string`
+
+### <a name="input_local_admin_password"></a> [local\_admin\_password](#input\_local\_admin\_password)
+
+Description: The password for the local administrator account.
+
+Type: `string`
+
+### <a name="input_local_admin_user"></a> [local\_admin\_user](#input\_local\_admin\_user)
+
+Description: The username for the local administrator account.
+
+Type: `string`
+
 ### <a name="input_location"></a> [location](#input\_location)
 
 Description: Azure region where the resource should be deployed.
 
 Type: `string`
 
+### <a name="input_management_adapters"></a> [management\_adapters](#input\_management\_adapters)
+
+Description: A list of management adapters.
+
+Type: `list(string)`
+
 ### <a name="input_name"></a> [name](#input\_name)
 
-Description: The name of the this resource.
+Description: The name of the HCI cluster. Must be the same as the name when preparing AD.
 
 Type: `string`
+
+### <a name="input_rdma_enabled"></a> [rdma\_enabled](#input\_rdma\_enabled)
+
+Description: Indicates whether RDMA is enabled.
+
+Type: `bool`
 
 ### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
 
@@ -77,67 +159,72 @@ Description: The resource group where the resources will be deployed.
 
 Type: `string`
 
-## Optional Inputs
+### <a name="input_servers"></a> [servers](#input\_servers)
 
-The following input variables are optional (have default values):
-
-### <a name="input_customer_managed_key"></a> [customer\_managed\_key](#input\_customer\_managed\_key)
-
-Description: A map describing customer-managed keys to associate with the resource. This includes the following properties:
-- `key_vault_resource_id` - The resource ID of the Key Vault where the key is stored.
-- `key_name` - The name of the key.
-- `key_version` - (Optional) The version of the key. If not specified, the latest version is used.
-- `user_assigned_identity` - (Optional) An object representing a user-assigned identity with the following properties:
-  - `resource_id` - The resource ID of the user-assigned identity.
+Description: A list of servers with their names and IPv4 addresses.
 
 Type:
 
 ```hcl
-object({
-    key_vault_resource_id = string
-    key_name              = string
-    key_version           = optional(string, null)
-    user_assigned_identity = optional(object({
-      resource_id = string
-    }), null)
-  })
-```
-
-Default: `null`
-
-### <a name="input_diagnostic_settings"></a> [diagnostic\_settings](#input\_diagnostic\_settings)
-
-Description: A map of diagnostic settings to create on the Key Vault. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-
-- `name` - (Optional) The name of the diagnostic setting. One will be generated if not set, however this will not be unique if you want to create multiple diagnostic setting resources.
-- `log_categories` - (Optional) A set of log categories to send to the log analytics workspace. Defaults to `[]`.
-- `log_groups` - (Optional) A set of log groups to send to the log analytics workspace. Defaults to `["allLogs"]`.
-- `metric_categories` - (Optional) A set of metric categories to send to the log analytics workspace. Defaults to `["AllMetrics"]`.
-- `log_analytics_destination_type` - (Optional) The destination type for the diagnostic setting. Possible values are `Dedicated` and `AzureDiagnostics`. Defaults to `Dedicated`.
-- `workspace_resource_id` - (Optional) The resource ID of the log analytics workspace to send logs and metrics to.
-- `storage_account_resource_id` - (Optional) The resource ID of the storage account to send logs and metrics to.
-- `event_hub_authorization_rule_resource_id` - (Optional) The resource ID of the event hub authorization rule to send logs and metrics to.
-- `event_hub_name` - (Optional) The name of the event hub. If none is specified, the default event hub will be selected.
-- `marketplace_partner_resource_id` - (Optional) The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic LogsLogs.
-
-Type:
-
-```hcl
-map(object({
-    name                                     = optional(string, null)
-    log_categories                           = optional(set(string), [])
-    log_groups                               = optional(set(string), ["allLogs"])
-    metric_categories                        = optional(set(string), ["AllMetrics"])
-    log_analytics_destination_type           = optional(string, "Dedicated")
-    workspace_resource_id                    = optional(string, null)
-    storage_account_resource_id              = optional(string, null)
-    event_hub_authorization_rule_resource_id = optional(string, null)
-    event_hub_name                           = optional(string, null)
-    marketplace_partner_resource_id          = optional(string, null)
+list(object({
+    name        = string
+    ipv4Address = string
   }))
 ```
 
-Default: `{}`
+### <a name="input_service_principal_id"></a> [service\_principal\_id](#input\_service\_principal\_id)
+
+Description: The service principal ID for the Azure account.
+
+Type: `string`
+
+### <a name="input_service_principal_secret"></a> [service\_principal\_secret](#input\_service\_principal\_secret)
+
+Description: The service principal secret for the Azure account.
+
+Type: `string`
+
+### <a name="input_site_id"></a> [site\_id](#input\_site\_id)
+
+Description: A unique identifier for the site.
+
+Type: `string`
+
+### <a name="input_starting_address"></a> [starting\_address](#input\_starting\_address)
+
+Description: The starting IP address of the IP address range.
+
+Type: `string`
+
+### <a name="input_storage_connectivity_switchless"></a> [storage\_connectivity\_switchless](#input\_storage\_connectivity\_switchless)
+
+Description: Indicates whether storage connectivity is switchless.
+
+Type: `bool`
+
+### <a name="input_storage_networks"></a> [storage\_networks](#input\_storage\_networks)
+
+Description: A list of storage networks.
+
+Type:
+
+```hcl
+list(object({
+    name               = string
+    networkAdapterName = string
+    vlanId             = string
+  }))
+```
+
+### <a name="input_witness_storage_account_name"></a> [witness\_storage\_account\_name](#input\_witness\_storage\_account\_name)
+
+Description: The name of the witness storage account.
+
+Type: `string`
+
+## Optional Inputs
+
+The following input variables are optional (have default values):
 
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
@@ -148,6 +235,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_is_exported"></a> [is\_exported](#input\_is\_exported)
+
+Description: Indicate whether the resource is exported
+
+Type: `bool`
+
+Default: `false`
 
 ### <a name="input_lock"></a> [lock](#input\_lock)
 
@@ -167,83 +262,9 @@ object({
 
 Default: `null`
 
-### <a name="input_managed_identities"></a> [managed\_identities](#input\_managed\_identities)
+### <a name="input_random_suffix"></a> [random\_suffix](#input\_random\_suffix)
 
-Description: Controls the Managed Identity configuration on this resource. The following properties can be specified:
-
-- `system_assigned` - (Optional) Specifies if the System Assigned Managed Identity should be enabled.
-- `user_assigned_resource_ids` - (Optional) Specifies a list of User Assigned Managed Identity resource IDs to be assigned to this resource.
-
-Type:
-
-```hcl
-object({
-    system_assigned            = optional(bool, false)
-    user_assigned_resource_ids = optional(set(string), [])
-  })
-```
-
-Default: `{}`
-
-### <a name="input_private_endpoints"></a> [private\_endpoints](#input\_private\_endpoints)
-
-Description: A map of private endpoints to create on this resource. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-
-- `name` - (Optional) The name of the private endpoint. One will be generated if not set.
-- `role_assignments` - (Optional) A map of role assignments to create on the private endpoint. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time. See `var.role_assignments` for more information.
-- `lock` - (Optional) The lock level to apply to the private endpoint. Default is `None`. Possible values are `None`, `CanNotDelete`, and `ReadOnly`.
-- `tags` - (Optional) A mapping of tags to assign to the private endpoint.
-- `subnet_resource_id` - The resource ID of the subnet to deploy the private endpoint in.
-- `private_dns_zone_group_name` - (Optional) The name of the private DNS zone group. One will be generated if not set.
-- `private_dns_zone_resource_ids` - (Optional) A set of resource IDs of private DNS zones to associate with the private endpoint. If not set, no zone groups will be created and the private endpoint will not be associated with any private DNS zones. DNS records must be managed external to this module.
-- `application_security_group_resource_ids` - (Optional) A map of resource IDs of application security groups to associate with the private endpoint. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-- `private_service_connection_name` - (Optional) The name of the private service connection. One will be generated if not set.
-- `network_interface_name` - (Optional) The name of the network interface. One will be generated if not set.
-- `location` - (Optional) The Azure location where the resources will be deployed. Defaults to the location of the resource group.
-- `resource_group_name` - (Optional) The resource group where the resources will be deployed. Defaults to the resource group of this resource.
-- `ip_configurations` - (Optional) A map of IP configurations to create on the private endpoint. If not specified the platform will create one. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-  - `name` - The name of the IP configuration.
-  - `private_ip_address` - The private IP address of the IP configuration.
-
-Type:
-
-```hcl
-map(object({
-    name = optional(string, null)
-    role_assignments = optional(map(object({
-      role_definition_id_or_name             = string
-      principal_id                           = string
-      description                            = optional(string, null)
-      skip_service_principal_aad_check       = optional(bool, false)
-      condition                              = optional(string, null)
-      condition_version                      = optional(string, null)
-      delegated_managed_identity_resource_id = optional(string, null)
-    })), {})
-    lock = optional(object({
-      kind = string
-      name = optional(string, null)
-    }), null)
-    tags                                    = optional(map(string), null)
-    subnet_resource_id                      = string
-    private_dns_zone_group_name             = optional(string, "default")
-    private_dns_zone_resource_ids           = optional(set(string), [])
-    application_security_group_associations = optional(map(string), {})
-    private_service_connection_name         = optional(string, null)
-    network_interface_name                  = optional(string, null)
-    location                                = optional(string, null)
-    resource_group_name                     = optional(string, null)
-    ip_configurations = optional(map(object({
-      name               = string
-      private_ip_address = string
-    })), {})
-  }))
-```
-
-Default: `{}`
-
-### <a name="input_private_endpoints_manage_dns_zone_group"></a> [private\_endpoints\_manage\_dns\_zone\_group](#input\_private\_endpoints\_manage\_dns\_zone\_group)
-
-Description: Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy.
+Description: Indicate whether to add random suffix
 
 Type: `bool`
 
@@ -273,10 +294,27 @@ map(object({
     condition                              = optional(string, null)
     condition_version                      = optional(string, null)
     delegated_managed_identity_resource_id = optional(string, null)
+    principal_type                         = optional(string, null)
   }))
 ```
 
 Default: `{}`
+
+### <a name="input_rp_service_principal_object_id"></a> [rp\_service\_principal\_object\_id](#input\_rp\_service\_principal\_object\_id)
+
+Description: The object ID of the HCI resource provider service principal.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_subnet_mask"></a> [subnet\_mask](#input\_subnet\_mask)
+
+Description: The subnet mask for the network.
+
+Type: `string`
+
+Default: `"255.255.255.0"`
 
 ### <a name="input_tags"></a> [tags](#input\_tags)
 
@@ -290,13 +328,37 @@ Default: `null`
 
 The following outputs are exported:
 
-### <a name="output_private_endpoints"></a> [private\_endpoints](#output\_private\_endpoints)
+### <a name="output_arc_settings"></a> [arc\_settings](#output\_arc\_settings)
 
-Description:   A map of the private endpoints created.
+Description: Arc settings instance after HCI connected.
 
-### <a name="output_resource"></a> [resource](#output\_resource)
+### <a name="output_arcbridge"></a> [arcbridge](#output\_arcbridge)
+
+Description: Arc resource bridge instance after HCI connected.
+
+### <a name="output_cluster"></a> [cluster](#output\_cluster)
+
+Description: HCI Cluster instance
+
+### <a name="output_customlocation"></a> [customlocation](#output\_customlocation)
+
+Description: Custom location instance after HCI connected.
+
+### <a name="output_keyvault"></a> [keyvault](#output\_keyvault)
+
+Description: Keyvault instance that stores deployment secrets.
+
+### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
 Description: This is the full output for the resource.
+
+### <a name="output_user_storages"></a> [user\_storages](#output\_user\_storages)
+
+Description: User storage instances after HCI connected.
+
+### <a name="output_v_switch_name"></a> [v\_switch\_name](#output\_v\_switch\_name)
+
+Description: The name of the virtual switch that is used by the network.
 
 ## Modules
 

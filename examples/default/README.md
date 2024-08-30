@@ -11,10 +11,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.74"
     }
-    modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
-    }
     random = {
       source  = "hashicorp/random"
       version = "~> 3.5"
@@ -23,7 +19,11 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
 
@@ -47,10 +47,8 @@ module "naming" {
   version = "~> 0.3"
 }
 
-# This is required for resource modules
-resource "azurerm_resource_group" "this" {
-  location = module.regions.regions[random_integer.region_index.result].name
-  name     = module.naming.resource_group.name_unique
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
 }
 
 # This is the module call
@@ -59,13 +57,58 @@ resource "azurerm_resource_group" "this" {
 # with a data source.
 module "test" {
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
+  # source             = "Azure/avm-res-azurestackhci-cluster/azurerm"
   # ...
-  location            = azurerm_resource_group.this.location
-  name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
-  resource_group_name = azurerm_resource_group.this.name
+  location            = data.azurerm_resource_group.rg.location
+  name                = local.name # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  resource_group_name = data.azurerm_resource_group.rg.name
 
   enable_telemetry = var.enable_telemetry # see variables.tf
+
+  site_id          = var.site_id
+  domain_fqdn      = "jumpstart.local"
+  starting_address = "192.168.1.55"
+  ending_address   = "192.168.1.65"
+  subnet_mask      = var.subnet_mask
+  default_gateway  = "192.168.1.1"
+  dns_servers      = ["192.168.1.254"]
+  adou_path        = local.adou_path
+  servers = [
+    {
+      name        = "AzSHOST1",
+      ipv4Address = "192.168.1.12"
+    },
+    {
+      name        = "AzSHOST2",
+      ipv4Address = "192.168.1.13"
+    }
+  ]
+  management_adapters = ["FABRIC", "FABRIC2"]
+  storage_networks = [
+    {
+      name               = "Storage1Network",
+      networkAdapterName = "StorageA",
+      vlanId             = "711"
+    },
+    {
+      name               = "Storage2Network",
+      networkAdapterName = "StorageB",
+      vlanId             = "712"
+    }
+  ]
+  rdma_enabled                    = false
+  storage_connectivity_switchless = false
+  custom_location_name            = local.custom_location_name
+  witness_storage_account_name    = local.witness_storage_account_name
+  keyvault_name                   = local.keyvault_name
+  random_suffix                   = true
+  deployment_user                 = var.deployment_user
+  deployment_user_password        = var.deployment_user_password
+  local_admin_user                = var.local_admin_user
+  local_admin_password            = var.local_admin_password
+  service_principal_id            = var.service_principal_id
+  service_principal_secret        = var.service_principal_secret
+  rp_service_principal_object_id  = var.rp_service_principal_object_id
 }
 ```
 
@@ -78,33 +121,81 @@ The following requirements are needed by this module:
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.74)
 
-- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
-
 - <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
-
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.74)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
 
 ## Resources
 
 The following resources are used by this module:
 
-- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
+- [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
 
-No required inputs.
+The following input variables are required:
+
+### <a name="input_deployment_user_password"></a> [deployment\_user\_password](#input\_deployment\_user\_password)
+
+Description: The password for deployment user.
+
+Type: `string`
+
+### <a name="input_local_admin_password"></a> [local\_admin\_password](#input\_local\_admin\_password)
+
+Description: The password for the local administrator account.
+
+Type: `string`
+
+### <a name="input_local_admin_user"></a> [local\_admin\_user](#input\_local\_admin\_user)
+
+Description: The username for the local administrator account.
+
+Type: `string`
+
+### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
+
+Description: The resource group where the resources will be deployed.
+
+Type: `string`
+
+### <a name="input_service_principal_id"></a> [service\_principal\_id](#input\_service\_principal\_id)
+
+Description: The service principal ID for ARB.
+
+Type: `string`
+
+### <a name="input_service_principal_secret"></a> [service\_principal\_secret](#input\_service\_principal\_secret)
+
+Description: The service principal secret.
+
+Type: `string`
+
+### <a name="input_site_id"></a> [site\_id](#input\_site\_id)
+
+Description: A unique identifier for the site.
+
+Type: `string`
 
 ## Optional Inputs
 
 The following input variables are optional (have default values):
+
+### <a name="input_adou_suffix"></a> [adou\_suffix](#input\_adou\_suffix)
+
+Description: The suffix of Active Directory OU path.
+
+Type: `string`
+
+Default: `"DC=jumpstart,DC=local"`
+
+### <a name="input_deployment_user"></a> [deployment\_user](#input\_deployment\_user)
+
+Description: The username for deployment user.
+
+Type: `string`
+
+Default: `"avmdeploy"`
 
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
@@ -115,6 +206,22 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_rp_service_principal_object_id"></a> [rp\_service\_principal\_object\_id](#input\_rp\_service\_principal\_object\_id)
+
+Description: The object ID of the HCI resource provider service principal.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_subnet_mask"></a> [subnet\_mask](#input\_subnet\_mask)
+
+Description: The subnet mask for the network.
+
+Type: `string`
+
+Default: `"255.255.255.0"`
 
 ## Outputs
 

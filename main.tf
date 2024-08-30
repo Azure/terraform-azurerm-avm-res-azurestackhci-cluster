@@ -1,8 +1,67 @@
 # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
-resource "azurerm_resource_group" "TODO" {
-  location = var.location
-  name     = var.name # calling code must supply the name
-  tags     = var.tags
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
+}
+
+data "azapi_resource" "arcbridge" {
+  type      = "Microsoft.ResourceConnector/appliances@2022-10-27"
+  name      = "${var.name}-arcbridge"
+  parent_id = data.azurerm_resource_group.rg.id
+
+  depends_on = [azapi_update_resource.deploymentsetting]
+}
+
+data "azapi_resource" "customlocation" {
+  type      = "Microsoft.ExtendedLocation/customLocations@2021-08-15"
+  name      = var.custom_location_name
+  parent_id = data.azurerm_resource_group.rg.id
+
+  depends_on = [azapi_update_resource.deploymentsetting]
+}
+
+data "azapi_resource_list" "user_storages" {
+  parent_id              = data.azurerm_resource_group.rg.id
+  type                   = "Microsoft.AzureStackHCI/storagecontainers@2022-12-15-preview"
+  response_export_values = ["*"]
+
+  depends_on = [azapi_update_resource.deploymentsetting]
+}
+
+data "azapi_resource" "arc_settings" {
+  type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2023-08-01"
+  name      = "default"
+  parent_id = azapi_resource.cluster.id
+
+  depends_on = [azapi_update_resource.deploymentsetting]
+}
+
+resource "azapi_resource" "cluster" {
+  type = "Microsoft.AzureStackHCI/clusters@2023-08-01-preview"
+  body = {
+    properties = {}
+  }
+  location  = var.location
+  name      = var.name
+  parent_id = data.azurerm_resource_group.rg.id
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  depends_on = [azurerm_role_assignment.service_principal_role_assign]
+
+  lifecycle {
+    ignore_changes = [
+      body.properties,
+      identity[0]
+    ]
+  }
+}
+
+# Generate random integer suffix for storage account and key vault
+resource "random_integer" "random_suffix" {
+  max = 99
+  min = 10
 }
 
 # required AVM resources interfaces
@@ -11,7 +70,7 @@ resource "azurerm_management_lock" "this" {
 
   lock_level = var.lock.kind
   name       = coalesce(var.lock.name, "lock-${var.lock.kind}")
-  scope      = azurerm_MY_RESOURCE.this.id # TODO: Replace with your azurerm resource name
+  scope      = azapi_resource.cluster.id # TODO: Replace with your azurerm resource name
   notes      = var.lock.kind == "CanNotDelete" ? "Cannot delete the resource or its child resources." : "Cannot delete or modify the resource or its child resources."
 }
 
@@ -19,7 +78,7 @@ resource "azurerm_role_assignment" "this" {
   for_each = var.role_assignments
 
   principal_id                           = each.value.principal_id
-  scope                                  = azurerm_resource_group.TODO.id # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
+  scope                                  = azapi_resource.cluster.id # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
   condition                              = each.value.condition
   condition_version                      = each.value.condition_version
   delegated_managed_identity_resource_id = each.value.delegated_managed_identity_resource_id

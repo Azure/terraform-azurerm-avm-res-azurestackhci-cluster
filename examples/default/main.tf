@@ -5,10 +5,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.74"
     }
-    modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
-    }
     random = {
       source  = "hashicorp/random"
       version = "~> 3.5"
@@ -17,7 +13,11 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
 
@@ -41,10 +41,8 @@ module "naming" {
   version = "~> 0.3"
 }
 
-# This is required for resource modules
-resource "azurerm_resource_group" "this" {
-  location = module.regions.regions[random_integer.region_index.result].name
-  name     = module.naming.resource_group.name_unique
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
 }
 
 # This is the module call
@@ -53,11 +51,56 @@ resource "azurerm_resource_group" "this" {
 # with a data source.
 module "test" {
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
+  # source             = "Azure/avm-res-azurestackhci-cluster/azurerm"
   # ...
-  location            = azurerm_resource_group.this.location
-  name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
-  resource_group_name = azurerm_resource_group.this.name
+  location            = data.azurerm_resource_group.rg.location
+  name                = local.name # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  resource_group_name = data.azurerm_resource_group.rg.name
 
   enable_telemetry = var.enable_telemetry # see variables.tf
+
+  site_id          = var.site_id
+  domain_fqdn      = "jumpstart.local"
+  starting_address = "192.168.1.55"
+  ending_address   = "192.168.1.65"
+  subnet_mask      = var.subnet_mask
+  default_gateway  = "192.168.1.1"
+  dns_servers      = ["192.168.1.254"]
+  adou_path        = local.adou_path
+  servers = [
+    {
+      name        = "AzSHOST1",
+      ipv4Address = "192.168.1.12"
+    },
+    {
+      name        = "AzSHOST2",
+      ipv4Address = "192.168.1.13"
+    }
+  ]
+  management_adapters = ["FABRIC", "FABRIC2"]
+  storage_networks = [
+    {
+      name               = "Storage1Network",
+      networkAdapterName = "StorageA",
+      vlanId             = "711"
+    },
+    {
+      name               = "Storage2Network",
+      networkAdapterName = "StorageB",
+      vlanId             = "712"
+    }
+  ]
+  rdma_enabled                    = false
+  storage_connectivity_switchless = false
+  custom_location_name            = local.custom_location_name
+  witness_storage_account_name    = local.witness_storage_account_name
+  keyvault_name                   = local.keyvault_name
+  random_suffix                   = true
+  deployment_user                 = var.deployment_user
+  deployment_user_password        = var.deployment_user_password
+  local_admin_user                = var.local_admin_user
+  local_admin_password            = var.local_admin_password
+  service_principal_id            = var.service_principal_id
+  service_principal_secret        = var.service_principal_secret
+  rp_service_principal_object_id  = var.rp_service_principal_object_id
 }
