@@ -226,6 +226,126 @@ Type: `string`
 
 The following input variables are optional (have default values):
 
+### <a name="input_azure_stack_lcm_user_credential_content_type"></a> [azure\_stack\_lcm\_user\_credential\_content\_type](#input\_azure\_stack\_lcm\_user\_credential\_content\_type)
+
+Description: (Optional) Content type of the azure stack lcm user credential.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_azure_stack_lcm_user_credential_expiration_date"></a> [azure\_stack\_lcm\_user\_credential\_expiration\_date](#input\_azure\_stack\_lcm\_user\_credential\_expiration\_date)
+
+Description: (Optional) Expiration date of the azure stack lcm user credential.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_azure_stack_lcm_user_credential_tags"></a> [azure\_stack\_lcm\_user\_credential\_tags](#input\_azure\_stack\_lcm\_user\_credential\_tags)
+
+Description: (Optional) Tags of the azure stack lcm user credential.
+
+Type: `map(string)`
+
+Default: `null`
+
+### <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name)
+
+Description: The name of the HCI cluster.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_cluster_tags"></a> [cluster\_tags](#input\_cluster\_tags)
+
+Description: (Optional) Tags of the cluster.
+
+Type: `map(string)`
+
+Default: `null`
+
+### <a name="input_converged_intents_name"></a> [converged\_intents\_name](#input\_converged\_intents\_name)
+
+Description: The name of converged intents.
+
+Type: `string`
+
+Default: `"ManagementComputeStorage"`
+
+### <a name="input_converged_intents_override_adapter_property"></a> [converged\_intents\_override\_adapter\_property](#input\_converged\_intents\_override\_adapter\_property)
+
+Description: Indicates whether to override adapter property.
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_converged_intents_qos_policy_overrides"></a> [converged\_intents\_qos\_policy\_overrides](#input\_converged\_intents\_qos\_policy\_overrides)
+
+Description: QoS policy overrides for network settings with required properties.
+
+Type:
+
+```hcl
+object({
+    priorityValue8021Action_SMB     = string
+    priorityValue8021Action_Cluster = string
+    bandwidthPercentage_SMB         = string
+  })
+```
+
+Default:
+
+```json
+{
+  "bandwidthPercentage_SMB": "",
+  "priorityValue8021Action_Cluster": "",
+  "priorityValue8021Action_SMB": ""
+}
+```
+
+### <a name="input_converged_intents_traffic_type"></a> [converged\_intents\_traffic\_type](#input\_converged\_intents\_traffic\_type)
+
+Description: Traffic type of converged intents.
+
+Type: `list(string)`
+
+Default:
+
+```json
+[
+  "Management",
+  "Compute",
+  "Storage"
+]
+```
+
+### <a name="input_default_arb_application_content_type"></a> [default\_arb\_application\_content\_type](#input\_default\_arb\_application\_content\_type)
+
+Description: (Optional) Content type of the default arb application.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_default_arb_application_expiration_date"></a> [default\_arb\_application\_expiration\_date](#input\_default\_arb\_application\_expiration\_date)
+
+Description: (Optional) Expiration date of the default arb application.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_default_arb_application_tags"></a> [default\_arb\_application\_tags](#input\_default\_arb\_application\_tags)
+
+Description: (Optional) Tags of the default arb application.
+
+Type: `map(string)`
+
+Default: `null`
+
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
 Description: This variable controls whether or not telemetry is enabled for the module.  
@@ -236,6 +356,14 @@ Type: `bool`
 
 Default: `true`
 
+### <a name="input_eu_location"></a> [eu\_location](#input\_eu\_location)
+
+Description: Indicates whether the location is in EU.
+
+Type: `bool`
+
+Default: `false`
+
 ### <a name="input_is_exported"></a> [is\_exported](#input\_is\_exported)
 
 Description: Indicate whether the resource is exported
@@ -243,6 +371,46 @@ Description: Indicate whether the resource is exported
 Type: `bool`
 
 Default: `false`
+
+### <a name="input_keyvault_soft_delete_retention_days"></a> [keyvault\_soft\_delete\_retention\_days](#input\_keyvault\_soft\_delete\_retention\_days)
+
+Description: The number of days that items should be retained for soft delete.
+
+Type: `number`
+
+Default: `30`
+
+### <a name="input_keyvault_tags"></a> [keyvault\_tags](#input\_keyvault\_tags)
+
+Description: (Optional) Tags of the keyvault.
+
+Type: `map(string)`
+
+Default: `null`
+
+### <a name="input_local_admin_credential_content_type"></a> [local\_admin\_credential\_content\_type](#input\_local\_admin\_credential\_content\_type)
+
+Description: (Optional) Content type of the local admin credential.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_local_admin_credential_expiration_date"></a> [local\_admin\_credential\_expiration\_date](#input\_local\_admin\_credential\_expiration\_date)
+
+Description: (Optional) Expiration date of the local admin credential.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_local_admin_credential_tags"></a> [local\_admin\_credential\_tags](#input\_local\_admin\_credential\_tags)
+
+Description: (Optional) Tags of the local admin credential.
+
+Type: `map(string)`
+
+Default: `null`
 
 ### <a name="input_lock"></a> [lock](#input\_lock)
 
@@ -308,6 +476,22 @@ Type: `string`
 
 Default: `""`
 
+### <a name="input_secrets_location"></a> [secrets\_location](#input\_secrets\_location)
+
+Description: Secrets location for the deployment.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_storage_tags"></a> [storage\_tags](#input\_storage\_tags)
+
+Description: (Optional) Tags of the storage.
+
+Type: `map(string)`
+
+Default: `null`
+
 ### <a name="input_subnet_mask"></a> [subnet\_mask](#input\_subnet\_mask)
 
 Description: The subnet mask for the network.
@@ -316,9 +500,33 @@ Type: `string`
 
 Default: `"255.255.255.0"`
 
-### <a name="input_tags"></a> [tags](#input\_tags)
+### <a name="input_witness_path"></a> [witness\_path](#input\_witness\_path)
 
-Description: (Optional) Tags of the resource.
+Description: The path to the witness.
+
+Type: `string`
+
+Default: `"Cloud"`
+
+### <a name="input_witness_storage_key_content_type"></a> [witness\_storage\_key\_content\_type](#input\_witness\_storage\_key\_content\_type)
+
+Description: (Optional) Content type of the witness storage key.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_witness_storage_key_expiration_date"></a> [witness\_storage\_key\_expiration\_date](#input\_witness\_storage\_key\_expiration\_date)
+
+Description: (Optional) Expiration date of witness storage key.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_witness_storage_key_tags"></a> [witness\_storage\_key\_tags](#input\_witness\_storage\_key\_tags)
+
+Description: (Optional) Tags of the witness storage key.
 
 Type: `map(string)`
 

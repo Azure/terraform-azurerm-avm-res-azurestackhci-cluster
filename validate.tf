@@ -35,13 +35,13 @@ resource "azapi_resource" "validatedeploymentsetting" {
               }
               observability = {
                 streamingDataClient = true
-                euLocation          = false
+                euLocation          = var.eu_location
                 episodicDataUpload  = true
               }
               cluster = {
-                name                 = azapi_resource.cluster.name
+                name                 = coalesce(var.cluster_name, "") == "" ? azapi_resource.cluster.name : var.cluster_name
                 witnessType          = "Cloud"
-                witnessPath          = "Cloud"
+                witnessPath          = var.witness_path
                 cloudAccountName     = azurerm_storage_account.witness.name
                 azureServiceEndpoint = "core.windows.net"
               }
@@ -70,7 +70,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 storageConnectivitySwitchless = false
               }
               adouPath        = var.adou_path
-              secretsLocation = azurerm_key_vault.deployment_keyvault.vault_uri
+              secretsLocation = coalesce(var.secrets_location, "") == "" ? azurerm_key_vault.deployment_keyvault.vault_uri : var.secrets_location
               optionalServices = {
                 customLocation = var.custom_location_name
               }
@@ -127,13 +127,13 @@ resource "azapi_resource" "validatedeploymentsetting_seperate" {
               }
               observability = {
                 streamingDataClient = true
-                euLocation          = false
+                euLocation          = var.eu_location
                 episodicDataUpload  = true
               }
               cluster = {
                 name                 = azapi_resource.cluster.name
                 witnessType          = "Cloud"
-                witnessPath          = "Cloud"
+                witnessPath          = var.witness_path
                 cloudAccountName     = azurerm_storage_account.witness.name
                 azureServiceEndpoint = "core.windows.net"
               }

@@ -142,6 +142,90 @@ variable "witness_storage_account_name" {
   description = "The name of the witness storage account."
 }
 
+variable "azure_stack_lcm_user_credential_content_type" {
+  type        = string
+  default     = null
+  description = "(Optional) Content type of the azure stack lcm user credential."
+}
+
+variable "azure_stack_lcm_user_credential_expiration_date" {
+  type        = string
+  default     = null
+  description = "(Optional) Expiration date of the azure stack lcm user credential."
+}
+
+variable "azure_stack_lcm_user_credential_tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the azure stack lcm user credential."
+}
+
+variable "cluster_name" {
+  type        = string
+  default     = null
+  description = "The name of the HCI cluster."
+}
+
+variable "cluster_tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the cluster."
+}
+
+variable "converged_intents_name" {
+  type        = string
+  default     = "ManagementComputeStorage"
+  description = "The name of converged intents."
+}
+
+variable "converged_intents_override_adapter_property" {
+  type        = bool
+  default     = true
+  description = "Indicates whether to override adapter property."
+}
+
+variable "converged_intents_qos_policy_overrides" {
+  type = object({
+    priorityValue8021Action_SMB     = string
+    priorityValue8021Action_Cluster = string
+    bandwidthPercentage_SMB         = string
+  })
+  default = {
+    priorityValue8021Action_SMB     = ""
+    priorityValue8021Action_Cluster = ""
+    bandwidthPercentage_SMB         = ""
+  }
+  description = "QoS policy overrides for network settings with required properties."
+}
+
+variable "converged_intents_traffic_type" {
+  type = list(string)
+  default = [
+    "Management",
+    "Compute",
+    "Storage"
+  ]
+  description = "Traffic type of converged intents."
+}
+
+variable "default_arb_application_content_type" {
+  type        = string
+  default     = null
+  description = "(Optional) Content type of the default arb application."
+}
+
+variable "default_arb_application_expiration_date" {
+  type        = string
+  default     = null
+  description = "(Optional) Expiration date of the default arb application."
+}
+
+variable "default_arb_application_tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the default arb application."
+}
+
 variable "enable_telemetry" {
   type        = bool
   default     = true
@@ -153,10 +237,46 @@ DESCRIPTION
   nullable    = false
 }
 
+variable "eu_location" {
+  type        = bool
+  default     = false
+  description = "Indicates whether the location is in EU."
+}
+
 variable "is_exported" {
   type        = bool
   default     = false
   description = "Indicate whether the resource is exported"
+}
+
+variable "keyvault_soft_delete_retention_days" {
+  type        = number
+  default     = 30
+  description = "The number of days that items should be retained for soft delete."
+}
+
+variable "keyvault_tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the keyvault."
+}
+
+variable "local_admin_credential_content_type" {
+  type        = string
+  default     = null
+  description = "(Optional) Content type of the local admin credential."
+}
+
+variable "local_admin_credential_expiration_date" {
+  type        = string
+  default     = null
+  description = "(Optional) Expiration date of the local admin credential."
+}
+
+variable "local_admin_credential_tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the local admin credential."
 }
 
 variable "lock" {
@@ -217,14 +337,44 @@ variable "rp_service_principal_object_id" {
   description = "The object ID of the HCI resource provider service principal."
 }
 
+variable "secrets_location" {
+  type        = string
+  default     = null
+  description = "Secrets location for the deployment."
+}
+
+variable "storage_tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the storage."
+}
+
 variable "subnet_mask" {
   type        = string
   default     = "255.255.255.0"
   description = "The subnet mask for the network."
 }
 
-variable "tags" {
+variable "witness_path" {
+  type        = string
+  default     = "Cloud"
+  description = "The path to the witness."
+}
+
+variable "witness_storage_key_content_type" {
+  type        = string
+  default     = null
+  description = "(Optional) Content type of the witness storage key."
+}
+
+variable "witness_storage_key_expiration_date" {
+  type        = string
+  default     = null
+  description = "(Optional) Expiration date of witness storage key."
+}
+
+variable "witness_storage_key_tags" {
   type        = map(string)
   default     = null
-  description = "(Optional) Tags of the resource."
+  description = "(Optional) Tags of the witness storage key."
 }

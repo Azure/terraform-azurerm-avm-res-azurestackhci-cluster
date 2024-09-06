@@ -7,25 +7,17 @@ locals {
   combined_adapters = setintersection(toset(var.management_adapters), toset(local.storage_adapters))
   converged         = (length(local.combined_adapters) == length(var.management_adapters)) && (length(local.combined_adapters) == length(local.storage_adapters))
   converged_intents = [{
-    name = "ManagementComputeStorage",
-    trafficType = [
-      "Management",
-      "Compute",
-      "Storage"
-    ],
+    name                               = var.converged_intents_name,
+    trafficType                        = var.converged_intents_traffic_type,
     adapter                            = flatten(var.management_adapters),
     overrideVirtualSwitchConfiguration = false,
     virtualSwitchConfigurationOverrides = {
       enableIov              = "",
       loadBalancingAlgorithm = ""
     },
-    overrideQosPolicy = false,
-    qosPolicyOverrides = {
-      priorityValue8021Action_SMB     = "",
-      priorityValue8021Action_Cluster = "",
-      bandwidthPercentage_SMB         = ""
-    },
-    overrideAdapterProperty  = true,
+    overrideQosPolicy        = false,
+    qosPolicyOverrides       = var.converged_intents_qos_policy_overrides,
+    overrideAdapterProperty  = var.converged_intents_override_adapter_property,
     adapterPropertyOverrides = var.rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
   }]
   decoded_user_storages = jsondecode(data.azapi_resource_list.user_storages.output).value
