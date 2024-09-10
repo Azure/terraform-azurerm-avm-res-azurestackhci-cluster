@@ -15,5 +15,5 @@ resource "azapi_update_resource" "deploymentsetting" {
     delete = "60m"
   }
 
-  depends_on = [azapi_resource.validatedeploymentsetting, azapi_resource.validatedeploymentsetting_seperate]
+  depends_on = [azapi_resource.validatedeploymentsetting]
 }

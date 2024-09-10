@@ -33,7 +33,6 @@ The following resources are used by this module:
 
 - [azapi_resource.cluster](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_resource.validatedeploymentsetting](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
-- [azapi_resource.validatedeploymentsetting_seperate](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_update_resource.deploymentsetting](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/update_resource) (resource)
 - [azurerm_key_vault.deployment_keyvault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault) (resource)
 - [azurerm_key_vault_secret.azure_stack_lcm_user_credential](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
@@ -55,7 +54,9 @@ The following resources are used by this module:
 - [azurerm_arc_machine.arcservers](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/arc_machine) (data source)
 - [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 - [azurerm_client_config.telemetry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
+- [azurerm_key_vault.key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault) (data source)
 - [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
+- [azurerm_storage_account.witness](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) (data source)
 - [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
 
 <!-- markdownlint-disable MD013 -->
@@ -147,12 +148,6 @@ Description: The name of the HCI cluster. Must be the same as the name when prep
 
 Type: `string`
 
-### <a name="input_rdma_enabled"></a> [rdma\_enabled](#input\_rdma\_enabled)
-
-Description: Indicates whether RDMA is enabled.
-
-Type: `bool`
-
 ### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
 
 Description: The resource group where the resources will be deployed.
@@ -226,17 +221,33 @@ Type: `string`
 
 The following input variables are optional (have default values):
 
-### <a name="input_azure_stack_lcm_user_credential_content_type"></a> [azure\_stack\_lcm\_user\_credential\_content\_type](#input\_azure\_stack\_lcm\_user\_credential\_content\_type)
+### <a name="input_account_replication_type"></a> [account\_replication\_type](#input\_account\_replication\_type)
 
-Description: (Optional) Content type of the azure stack lcm user credential.
+Description: The replication type for the storage account.
 
 Type: `string`
 
-Default: `null`
+Default: `"ZRS"`
 
-### <a name="input_azure_stack_lcm_user_credential_expiration_date"></a> [azure\_stack\_lcm\_user\_credential\_expiration\_date](#input\_azure\_stack\_lcm\_user\_credential\_expiration\_date)
+### <a name="input_allow_nested_items_to_be_public"></a> [allow\_nested\_items\_to\_be\_public](#input\_allow\_nested\_items\_to\_be\_public)
 
-Description: (Optional) Expiration date of the azure stack lcm user credential.
+Description: Indicates whether nested items can be public.
+
+Type: `bool`
+
+Default: `false`
+
+### <a name="input_azure_service_endpoint"></a> [azure\_service\_endpoint](#input\_azure\_service\_endpoint)
+
+Description: The Azure service endpoint.
+
+Type: `string`
+
+Default: `"core.windows.net"`
+
+### <a name="input_azure_stack_lcm_user_credential_content_type"></a> [azure\_stack\_lcm\_user\_credential\_content\_type](#input\_azure\_stack\_lcm\_user\_credential\_content\_type)
+
+Description: (Optional) Content type of the azure stack lcm user credential.
 
 Type: `string`
 
@@ -274,7 +285,7 @@ Type: `string`
 
 Default: `"ManagementComputeStorage"`
 
-### <a name="input_converged_intents_override_adapter_property"></a> [converged\_intents\_override\_adapter\_property](#input\_converged\_intents\_override\_adapter\_property)
+### <a name="input_converged_override_adapter_property"></a> [converged\_override\_adapter\_property](#input\_converged\_override\_adapter\_property)
 
 Description: Indicates whether to override adapter property.
 
@@ -282,7 +293,7 @@ Type: `bool`
 
 Default: `true`
 
-### <a name="input_converged_intents_qos_policy_overrides"></a> [converged\_intents\_qos\_policy\_overrides](#input\_converged\_intents\_qos\_policy\_overrides)
+### <a name="input_converged_qos_policy_overrides"></a> [converged\_qos\_policy\_overrides](#input\_converged\_qos\_policy\_overrides)
 
 Description: QoS policy overrides for network settings with required properties.
 
@@ -306,33 +317,41 @@ Default:
 }
 ```
 
-### <a name="input_converged_intents_traffic_type"></a> [converged\_intents\_traffic\_type](#input\_converged\_intents\_traffic\_type)
+### <a name="input_converged_rdma_enabled"></a> [converged\_rdma\_enabled](#input\_converged\_rdma\_enabled)
 
-Description: Traffic type of converged intents.
+Description: Indicates whether RDMA is enabled.
 
-Type: `list(string)`
+Type: `bool`
 
-Default:
+Default: `false`
 
-```json
-[
-  "Management",
-  "Compute",
-  "Storage"
-]
-```
+### <a name="input_create_key_vault"></a> [create\_key\_vault](#input\_create\_key\_vault)
+
+Description: Set to true to create the key vault, or false to skip it
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_create_witness_storage_account"></a> [create\_witness\_storage\_account](#input\_create\_witness\_storage\_account)
+
+Description: Set to true to create the witness storage account, or false to skip it
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_cross_tenant_replication_enabled"></a> [cross\_tenant\_replication\_enabled](#input\_cross\_tenant\_replication\_enabled)
+
+Description: Indicates whether cross-tenant replication is enabled.
+
+Type: `bool`
+
+Default: `false`
 
 ### <a name="input_default_arb_application_content_type"></a> [default\_arb\_application\_content\_type](#input\_default\_arb\_application\_content\_type)
 
 Description: (Optional) Content type of the default arb application.
-
-Type: `string`
-
-Default: `null`
-
-### <a name="input_default_arb_application_expiration_date"></a> [default\_arb\_application\_expiration\_date](#input\_default\_arb\_application\_expiration\_date)
-
-Description: (Optional) Expiration date of the default arb application.
 
 Type: `string`
 
@@ -372,6 +391,30 @@ Type: `bool`
 
 Default: `false`
 
+### <a name="input_key_vault_location"></a> [key\_vault\_location](#input\_key\_vault\_location)
+
+Description: The location of the key vault.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_key_vault_name"></a> [key\_vault\_name](#input\_key\_vault\_name)
+
+Description: The name of the key vault.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_keyvault_purge_protection_enabled"></a> [keyvault\_purge\_protection\_enabled](#input\_keyvault\_purge\_protection\_enabled)
+
+Description: Indicates whether purge protection is enabled.
+
+Type: `bool`
+
+Default: `true`
+
 ### <a name="input_keyvault_soft_delete_retention_days"></a> [keyvault\_soft\_delete\_retention\_days](#input\_keyvault\_soft\_delete\_retention\_days)
 
 Description: The number of days that items should be retained for soft delete.
@@ -391,14 +434,6 @@ Default: `null`
 ### <a name="input_local_admin_credential_content_type"></a> [local\_admin\_credential\_content\_type](#input\_local\_admin\_credential\_content\_type)
 
 Description: (Optional) Content type of the local admin credential.
-
-Type: `string`
-
-Default: `null`
-
-### <a name="input_local_admin_credential_expiration_date"></a> [local\_admin\_credential\_expiration\_date](#input\_local\_admin\_credential\_expiration\_date)
-
-Description: (Optional) Expiration date of the local admin credential.
 
 Type: `string`
 
@@ -429,6 +464,14 @@ object({
 ```
 
 Default: `null`
+
+### <a name="input_min_tls_version"></a> [min\_tls\_version](#input\_min\_tls\_version)
+
+Description: The minimum TLS version.
+
+Type: `string`
+
+Default: `"TLS1_2"`
 
 ### <a name="input_random_suffix"></a> [random\_suffix](#input\_random\_suffix)
 
@@ -484,6 +527,102 @@ Type: `string`
 
 Default: `null`
 
+### <a name="input_seperate_compute_override_adapter_property"></a> [seperate\_compute\_override\_adapter\_property](#input\_seperate\_compute\_override\_adapter\_property)
+
+Description: Indicates whether to override adapter property for compute.
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_seperate_compute_qos_policy_overrides"></a> [seperate\_compute\_qos\_policy\_overrides](#input\_seperate\_compute\_qos\_policy\_overrides)
+
+Description: QoS policy overrides for network settings with required properties for compute.
+
+Type:
+
+```hcl
+object({
+    priorityValue8021Action_SMB     = string
+    priorityValue8021Action_Cluster = string
+    bandwidthPercentage_SMB         = string
+  })
+```
+
+Default:
+
+```json
+{
+  "bandwidthPercentage_SMB": "",
+  "priorityValue8021Action_Cluster": "",
+  "priorityValue8021Action_SMB": ""
+}
+```
+
+### <a name="input_seperate_compute_rdma_enabled"></a> [seperate\_compute\_rdma\_enabled](#input\_seperate\_compute\_rdma\_enabled)
+
+Description: Indicates whether RDMA is enabled for compute.
+
+Type: `bool`
+
+Default: `false`
+
+### <a name="input_seperate_intents_compute_name"></a> [seperate\_intents\_compute\_name](#input\_seperate\_intents\_compute\_name)
+
+Description: The name of compute intents.
+
+Type: `string`
+
+Default: `"ManagementCompute"`
+
+### <a name="input_seperate_intents_storage_name"></a> [seperate\_intents\_storage\_name](#input\_seperate\_intents\_storage\_name)
+
+Description: The name of storage intents.
+
+Type: `string`
+
+Default: `"Storage"`
+
+### <a name="input_seperate_storage_override_adapter_property"></a> [seperate\_storage\_override\_adapter\_property](#input\_seperate\_storage\_override\_adapter\_property)
+
+Description: Indicates whether to override adapter property for storagte.
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_seperate_storage_qos_policy_overrides"></a> [seperate\_storage\_qos\_policy\_overrides](#input\_seperate\_storage\_qos\_policy\_overrides)
+
+Description: QoS policy overrides for network settings with required properties for storage.
+
+Type:
+
+```hcl
+object({
+    priorityValue8021Action_SMB     = string
+    priorityValue8021Action_Cluster = string
+    bandwidthPercentage_SMB         = string
+  })
+```
+
+Default:
+
+```json
+{
+  "bandwidthPercentage_SMB": "",
+  "priorityValue8021Action_Cluster": "",
+  "priorityValue8021Action_SMB": ""
+}
+```
+
+### <a name="input_seperate_storage_rdma_enabled"></a> [seperate\_storage\_rdma\_enabled](#input\_seperate\_storage\_rdma\_enabled)
+
+Description: Indicates whether RDMA is enabled for storage.
+
+Type: `bool`
+
+Default: `false`
+
 ### <a name="input_storage_tags"></a> [storage\_tags](#input\_storage\_tags)
 
 Description: (Optional) Tags of the storage.
@@ -500,6 +639,22 @@ Type: `string`
 
 Default: `"255.255.255.0"`
 
+### <a name="input_traffic_type"></a> [traffic\_type](#input\_traffic\_type)
+
+Description: Traffic type of converged intents.
+
+Type: `list(string)`
+
+Default:
+
+```json
+[
+  "Management",
+  "Compute",
+  "Storage"
+]
+```
+
 ### <a name="input_witness_path"></a> [witness\_path](#input\_witness\_path)
 
 Description: The path to the witness.
@@ -508,17 +663,17 @@ Type: `string`
 
 Default: `"Cloud"`
 
-### <a name="input_witness_storage_key_content_type"></a> [witness\_storage\_key\_content\_type](#input\_witness\_storage\_key\_content\_type)
+### <a name="input_witness_storage_account_id"></a> [witness\_storage\_account\_id](#input\_witness\_storage\_account\_id)
 
-Description: (Optional) Content type of the witness storage key.
+Description: The ID of the storage account.
 
 Type: `string`
 
-Default: `null`
+Default: `""`
 
-### <a name="input_witness_storage_key_expiration_date"></a> [witness\_storage\_key\_expiration\_date](#input\_witness\_storage\_key\_expiration\_date)
+### <a name="input_witness_storage_key_content_type"></a> [witness\_storage\_key\_content\_type](#input\_witness\_storage\_key\_content\_type)
 
-Description: (Optional) Expiration date of witness storage key.
+Description: (Optional) Content type of the witness storage key.
 
 Type: `string`
 
@@ -531,6 +686,14 @@ Description: (Optional) Tags of the witness storage key.
 Type: `map(string)`
 
 Default: `null`
+
+### <a name="input_witness_type"></a> [witness\_type](#input\_witness\_type)
+
+Description: The type of the witness.
+
+Type: `string`
+
+Default: `"Cloud"`
 
 ## Outputs
 

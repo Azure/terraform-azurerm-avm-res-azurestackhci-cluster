@@ -79,11 +79,6 @@ variable "name" {
   }
 }
 
-variable "rdma_enabled" {
-  type        = bool
-  description = "Indicates whether RDMA is enabled."
-}
-
 # This is required for most resource modules
 variable "resource_group_name" {
   type        = string
@@ -142,16 +137,28 @@ variable "witness_storage_account_name" {
   description = "The name of the witness storage account."
 }
 
+variable "account_replication_type" {
+  type        = string
+  default     = "ZRS"
+  description = "The replication type for the storage account."
+}
+
+variable "allow_nested_items_to_be_public" {
+  type        = bool
+  default     = false
+  description = "Indicates whether nested items can be public."
+}
+
+variable "azure_service_endpoint" {
+  type        = string
+  default     = "core.windows.net"
+  description = "The Azure service endpoint."
+}
+
 variable "azure_stack_lcm_user_credential_content_type" {
   type        = string
   default     = null
   description = "(Optional) Content type of the azure stack lcm user credential."
-}
-
-variable "azure_stack_lcm_user_credential_expiration_date" {
-  type        = string
-  default     = null
-  description = "(Optional) Expiration date of the azure stack lcm user credential."
 }
 
 variable "azure_stack_lcm_user_credential_tags" {
@@ -178,13 +185,13 @@ variable "converged_intents_name" {
   description = "The name of converged intents."
 }
 
-variable "converged_intents_override_adapter_property" {
+variable "converged_override_adapter_property" {
   type        = bool
   default     = true
   description = "Indicates whether to override adapter property."
 }
 
-variable "converged_intents_qos_policy_overrides" {
+variable "converged_qos_policy_overrides" {
   type = object({
     priorityValue8021Action_SMB     = string
     priorityValue8021Action_Cluster = string
@@ -198,26 +205,34 @@ variable "converged_intents_qos_policy_overrides" {
   description = "QoS policy overrides for network settings with required properties."
 }
 
-variable "converged_intents_traffic_type" {
-  type = list(string)
-  default = [
-    "Management",
-    "Compute",
-    "Storage"
-  ]
-  description = "Traffic type of converged intents."
+variable "converged_rdma_enabled" {
+  type        = bool
+  default     = false
+  description = "Indicates whether RDMA is enabled."
+}
+
+variable "create_key_vault" {
+  type        = bool
+  default     = true
+  description = "Set to true to create the key vault, or false to skip it"
+}
+
+variable "create_witness_storage_account" {
+  type        = bool
+  default     = true
+  description = "Set to true to create the witness storage account, or false to skip it"
+}
+
+variable "cross_tenant_replication_enabled" {
+  type        = bool
+  default     = false
+  description = "Indicates whether cross-tenant replication is enabled."
 }
 
 variable "default_arb_application_content_type" {
   type        = string
   default     = null
   description = "(Optional) Content type of the default arb application."
-}
-
-variable "default_arb_application_expiration_date" {
-  type        = string
-  default     = null
-  description = "(Optional) Expiration date of the default arb application."
 }
 
 variable "default_arb_application_tags" {
@@ -249,6 +264,29 @@ variable "is_exported" {
   description = "Indicate whether the resource is exported"
 }
 
+variable "key_vault_location" {
+  type        = string
+  default     = ""
+  description = "The location of the key vault."
+}
+
+variable "key_vault_name" {
+  type        = string
+  default     = ""
+  description = "The name of the key vault."
+
+  validation {
+    condition     = var.create_key_vault || var.key_vault_name != ""
+    error_message = "If 'create_key_vault' is false, 'key_vault_name' must be provided."
+  }
+}
+
+variable "keyvault_purge_protection_enabled" {
+  type        = bool
+  default     = true
+  description = "Indicates whether purge protection is enabled."
+}
+
 variable "keyvault_soft_delete_retention_days" {
   type        = number
   default     = 30
@@ -265,12 +303,6 @@ variable "local_admin_credential_content_type" {
   type        = string
   default     = null
   description = "(Optional) Content type of the local admin credential."
-}
-
-variable "local_admin_credential_expiration_date" {
-  type        = string
-  default     = null
-  description = "(Optional) Expiration date of the local admin credential."
 }
 
 variable "local_admin_credential_tags" {
@@ -296,6 +328,12 @@ DESCRIPTION
     condition     = var.lock != null ? contains(["CanNotDelete", "ReadOnly"], var.lock.kind) : true
     error_message = "The lock level must be one of: 'None', 'CanNotDelete', or 'ReadOnly'."
   }
+}
+
+variable "min_tls_version" {
+  type        = string
+  default     = "TLS1_2"
+  description = "The minimum TLS version."
 }
 
 variable "random_suffix" {
@@ -343,6 +381,70 @@ variable "secrets_location" {
   description = "Secrets location for the deployment."
 }
 
+variable "seperate_compute_override_adapter_property" {
+  type        = bool
+  default     = true
+  description = "Indicates whether to override adapter property for compute."
+}
+
+variable "seperate_compute_qos_policy_overrides" {
+  type = object({
+    priorityValue8021Action_SMB     = string
+    priorityValue8021Action_Cluster = string
+    bandwidthPercentage_SMB         = string
+  })
+  default = {
+    priorityValue8021Action_SMB     = ""
+    priorityValue8021Action_Cluster = ""
+    bandwidthPercentage_SMB         = ""
+  }
+  description = "QoS policy overrides for network settings with required properties for compute."
+}
+
+variable "seperate_compute_rdma_enabled" {
+  type        = bool
+  default     = false
+  description = "Indicates whether RDMA is enabled for compute."
+}
+
+variable "seperate_intents_compute_name" {
+  type        = string
+  default     = "ManagementCompute"
+  description = "The name of compute intents."
+}
+
+variable "seperate_intents_storage_name" {
+  type        = string
+  default     = "Storage"
+  description = "The name of storage intents."
+}
+
+variable "seperate_storage_override_adapter_property" {
+  type        = bool
+  default     = true
+  description = "Indicates whether to override adapter property for storagte."
+}
+
+variable "seperate_storage_qos_policy_overrides" {
+  type = object({
+    priorityValue8021Action_SMB     = string
+    priorityValue8021Action_Cluster = string
+    bandwidthPercentage_SMB         = string
+  })
+  default = {
+    priorityValue8021Action_SMB     = ""
+    priorityValue8021Action_Cluster = ""
+    bandwidthPercentage_SMB         = ""
+  }
+  description = "QoS policy overrides for network settings with required properties for storage."
+}
+
+variable "seperate_storage_rdma_enabled" {
+  type        = bool
+  default     = false
+  description = "Indicates whether RDMA is enabled for storage."
+}
+
 variable "storage_tags" {
   type        = map(string)
   default     = null
@@ -355,10 +457,31 @@ variable "subnet_mask" {
   description = "The subnet mask for the network."
 }
 
+variable "traffic_type" {
+  type = list(string)
+  default = [
+    "Management",
+    "Compute",
+    "Storage"
+  ]
+  description = "Traffic type of converged intents."
+}
+
 variable "witness_path" {
   type        = string
   default     = "Cloud"
   description = "The path to the witness."
+}
+
+variable "witness_storage_account_id" {
+  type        = string
+  default     = ""
+  description = "The ID of the storage account."
+
+  validation {
+    condition     = var.create_witness_storage_account || var.witness_storage_account_id != ""
+    error_message = "If 'create_witness_storage_account' is false, 'witness_storage_account_id' must be provided."
+  }
 }
 
 variable "witness_storage_key_content_type" {
@@ -367,14 +490,14 @@ variable "witness_storage_key_content_type" {
   description = "(Optional) Content type of the witness storage key."
 }
 
-variable "witness_storage_key_expiration_date" {
-  type        = string
-  default     = null
-  description = "(Optional) Expiration date of witness storage key."
-}
-
 variable "witness_storage_key_tags" {
   type        = map(string)
   default     = null
   description = "(Optional) Tags of the witness storage key."
+}
+
+variable "witness_type" {
+  type        = string
+  default     = "Cloud"
+  description = "The type of the witness."
 }

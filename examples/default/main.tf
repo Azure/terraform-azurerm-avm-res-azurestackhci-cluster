@@ -5,10 +5,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.74"
     }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.5"
-    }
   }
 }
 
@@ -18,27 +14,6 @@ provider "azurerm" {
       prevent_deletion_if_contains_resources = false
     }
   }
-}
-
-
-## Section to provide a random Azure region for the resource group
-# This allows us to randomize the region for the resource group.
-module "regions" {
-  source  = "Azure/regions/azurerm"
-  version = "~> 0.3"
-}
-
-# This allows us to randomize the region for the resource group.
-resource "random_integer" "region_index" {
-  max = length(module.regions.regions) - 1
-  min = 0
-}
-## End of section to provide a random Azure region for the resource group
-
-# This ensures we have unique CAF compliant names for our resources.
-module "naming" {
-  source  = "Azure/naming/azurerm"
-  version = "~> 0.3"
 }
 
 data "azurerm_resource_group" "rg" {
@@ -52,9 +27,10 @@ data "azurerm_resource_group" "rg" {
 module "test" {
   source = "../../"
   # source             = "Azure/avm-res-azurestackhci-cluster/azurerm"
-  # ...
+  # version = "~> 0.1.0"
+
   location            = data.azurerm_resource_group.rg.location
-  name                = local.name # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
+  name                = local.name
   resource_group_name = data.azurerm_resource_group.rg.name
 
   enable_telemetry = var.enable_telemetry # see variables.tf
@@ -90,7 +66,6 @@ module "test" {
       vlanId             = "712"
     }
   ]
-  rdma_enabled                    = false
   storage_connectivity_switchless = false
   custom_location_name            = local.custom_location_name
   witness_storage_account_name    = local.witness_storage_account_name

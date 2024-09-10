@@ -8,7 +8,7 @@ locals {
   converged         = (length(local.combined_adapters) == length(var.management_adapters)) && (length(local.combined_adapters) == length(local.storage_adapters))
   converged_intents = [{
     name                               = var.converged_intents_name,
-    trafficType                        = var.converged_intents_traffic_type,
+    trafficType                        = var.traffic_type,
     adapter                            = flatten(var.management_adapters),
     overrideVirtualSwitchConfiguration = false,
     virtualSwitchConfigurationOverrides = {
@@ -16,9 +16,9 @@ locals {
       loadBalancingAlgorithm = ""
     },
     overrideQosPolicy        = false,
-    qosPolicyOverrides       = var.converged_intents_qos_policy_overrides,
-    overrideAdapterProperty  = var.converged_intents_override_adapter_property,
-    adapterPropertyOverrides = var.rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
+    qosPolicyOverrides       = var.converged_qos_policy_overrides,
+    overrideAdapterProperty  = var.converged_override_adapter_property,
+    adapterPropertyOverrides = var.converged_rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
   }]
   decoded_user_storages = jsondecode(data.azapi_resource_list.user_storages.output).value
   owned_user_storages   = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
@@ -32,7 +32,7 @@ locals {
     ACMRM = "Azure Connected Machine Resource Manager",
   }
   seperate_intents = [{
-    name = "ManagementCompute",
+    name = var.seperate_intents_compute_name,
     trafficType = [
       "Management",
       "Compute"
@@ -40,46 +40,45 @@ locals {
     adapter                            = flatten(var.management_adapters)
     overrideVirtualSwitchConfiguration = false,
     overrideQosPolicy                  = false,
-    overrideAdapterProperty            = true,
+    overrideAdapterProperty            = var.seperate_compute_override_adapter_property,
     virtualSwitchConfigurationOverrides = {
       enableIov              = "",
       loadBalancingAlgorithm = ""
     },
-    qosPolicyOverrides = {
-      priorityValue8021Action_Cluster = "",
-      priorityValue8021Action_SMB     = "",
-      bandwidthPercentage_SMB         = ""
-    },
-    adapterPropertyOverrides = {
-      jumboPacket             = "",
-      networkDirect           = "Disabled",
-      networkDirectTechnology = ""
-    }
+    qosPolicyOverrides       = var.seperate_compute_qos_policy_overrides,
+    adapterPropertyOverrides = var.seperate_compute_rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
     },
     {
-      name = "Storage",
+      name = var.seperate_intents_storage_name,
       trafficType = [
         "Storage"
       ],
       adapter                            = local.storage_adapters,
       overrideVirtualSwitchConfiguration = false,
       overrideQosPolicy                  = false,
-      overrideAdapterProperty            = true,
+      overrideAdapterProperty            = var.seperate_storage_override_adapter_property,
       virtualSwitchConfigurationOverrides = {
         enableIov              = "",
         loadBalancingAlgorithm = ""
       },
-      qosPolicyOverrides = {
-        priorityValue8021Action_Cluster = "",
-        priorityValue8021Action_SMB     = "",
-        bandwidthPercentage_SMB         = ""
-      },
-      adapterPropertyOverrides = var.rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
+      qosPolicyOverrides       = var.seperate_storage_qos_policy_overrides,
+      adapterPropertyOverrides = var.seperate_storage_rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
   }]
+  # Get the resource group name and storage account name from the witness storage account id
+  storage_account_id_is_valid = var.create_witness_storage_account || length(var.witness_storage_account_id) > 0
+  storage_account_id_parts = can(regex(
+    "^/subscriptions/([^/]+)/resourceGroups/([^/]+)/providers/Microsoft.Storage/storageAccounts/([^/]+)$",
+    var.witness_storage_account_id
+    )) ? regex(
+    "^/subscriptions/([^/]+)/resourceGroups/([^/]+)/providers/Microsoft.Storage/storageAccounts/([^/]+)$",
+    var.witness_storage_account_id
+  ) : ["", "", ""]
   storage_adapters = flatten([for storageNetwork in var.storage_networks : storageNetwork.networkAdapterName])
   switchless_adapter_properties = {
     jumboPacket             = "9014"
     networkDirect           = "Enabled"
     networkDirectTechnology = "iWARP"
   }
+  witness_storage_account_name                 = local.storage_account_id_is_valid ? local.storage_account_id_parts[2] : ""
+  witness_storeage_account_resource_group_name = local.storage_account_id_is_valid ? local.storage_account_id_parts[1] : ""
 }
