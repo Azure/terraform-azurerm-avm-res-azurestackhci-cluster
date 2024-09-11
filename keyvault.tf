@@ -28,51 +28,48 @@ data "azurerm_key_vault" "key_vault" {
 
 resource "azurerm_key_vault_secret" "azure_stack_lcm_user_credential" {
   key_vault_id = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0].id : data.azurerm_key_vault.key_vault[0].id
-  name         = "${azapi_resource.cluster.name}-AzureStackLCMUserCredential"
+  name         = "${var.name}-AzureStackLCMUserCredential"
   value        = base64encode("${var.deployment_user}:${var.deployment_user_password}")
-  content_type = flatten([var.azure_stack_lcm_user_credential_content_type])[0]
+  content_type = one(flatten([var.azure_stack_lcm_user_credential_content_type]))
   tags         = var.azure_stack_lcm_user_credential_tags
 
   depends_on = [
     azurerm_key_vault.deployment_keyvault,
     data.azurerm_key_vault.key_vault,
-    azapi_resource.cluster
   ]
 }
 
 resource "azurerm_key_vault_secret" "local_admin_credential" {
   key_vault_id = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0].id : data.azurerm_key_vault.key_vault[0].id
-  name         = "${azapi_resource.cluster.name}-LocalAdminCredential"
+  name         = "${var.name}-LocalAdminCredential"
   value        = base64encode("${var.local_admin_user}:${var.local_admin_password}")
-  content_type = flatten([var.local_admin_credential_content_type])[0]
+  content_type = one(flatten([var.local_admin_credential_content_type]))
   tags         = var.local_admin_credential_tags
 
   depends_on = [
     azurerm_key_vault.deployment_keyvault,
     data.azurerm_key_vault.key_vault,
-    azapi_resource.cluster
   ]
 }
 
 resource "azurerm_key_vault_secret" "default_arb_application" {
   key_vault_id = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0].id : data.azurerm_key_vault.key_vault[0].id
-  name         = "${azapi_resource.cluster.name}-DefaultARBApplication"
+  name         = "${var.name}-DefaultARBApplication"
   value        = base64encode("${var.service_principal_id}:${var.service_principal_secret}")
-  content_type = flatten([var.default_arb_application_content_type])[0]
+  content_type = one(flatten([var.default_arb_application_content_type]))
   tags         = var.default_arb_application_tags
 
   depends_on = [
     azurerm_key_vault.deployment_keyvault,
     data.azurerm_key_vault.key_vault,
-    azapi_resource.cluster
   ]
 }
 
 resource "azurerm_key_vault_secret" "witness_storage_key" {
   key_vault_id = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0].id : data.azurerm_key_vault.key_vault[0].id
-  name         = "${azapi_resource.cluster.name}-WitnessStorageKey"
+  name         = "${var.name}-WitnessStorageKey"
   value        = base64encode(var.create_witness_storage_account ? azurerm_storage_account.witness[0].primary_access_key : data.azurerm_storage_account.witness[0].primary_access_key)
-  content_type = flatten([var.witness_storage_key_content_type])[0]
+  content_type = one(flatten([var.witness_storage_key_content_type]))
   tags         = var.witness_storage_key_tags
 
   depends_on = [
@@ -80,6 +77,5 @@ resource "azurerm_key_vault_secret" "witness_storage_key" {
     data.azurerm_key_vault.key_vault,
     azurerm_storage_account.witness,
     data.azurerm_storage_account.witness,
-    azapi_resource.cluster
   ]
 }
