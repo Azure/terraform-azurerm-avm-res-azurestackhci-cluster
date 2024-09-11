@@ -37,7 +37,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 episodicDataUpload  = true
               }
               cluster = {
-                name                 = coalesce(var.cluster_name, "") == "" ? azapi_resource.cluster.name : var.cluster_name
+                name                 = var.cluster_name == "" ? azapi_resource.cluster.name : var.cluster_name
                 witnessType          = var.witness_type
                 witnessPath          = var.witness_path
                 cloudAccountName     = var.create_witness_storage_account ? azurerm_storage_account.witness[0].name : var.witness_storage_account_id
@@ -68,7 +68,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 storageConnectivitySwitchless = false
               }
               adouPath        = var.adou_path
-              secretsLocation = coalesce(var.secrets_location, "") == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+              secretsLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
               optionalServices = {
                 customLocation = var.custom_location_name
               }

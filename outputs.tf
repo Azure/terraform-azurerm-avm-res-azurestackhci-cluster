@@ -20,7 +20,7 @@ output "customlocation" {
 
 output "keyvault" {
   description = "Keyvault instance that stores deployment secrets."
-  value       = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
+  value       = local.key_vault
 }
 
 # Module owners should include the full resource via a 'resource' output

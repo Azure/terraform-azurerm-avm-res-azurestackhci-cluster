@@ -13,3 +13,19 @@ resource "azurerm_role_assignment" "service_principal_role_assign" {
 
   depends_on = [data.azuread_service_principal.hci_rp]
 }
+
+resource "azurerm_role_assignment" "machine_role_assign" {
+  for_each = {
+    for idx, assignment in local.role_assignments :
+    "${assignment.server_name}_${assignment.role_key}" => assignment
+  }
+
+  principal_id         = each.value.principal_id
+  scope                = local.key_vault.id
+  role_definition_name = each.value.role_name
+
+  depends_on = [
+    azurerm_key_vault.deployment_keyvault,
+    data.azurerm_key_vault.key_vault
+  ]
+}

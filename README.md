@@ -40,6 +40,7 @@ The following resources are used by this module:
 - [azurerm_key_vault_secret.local_admin_credential](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
 - [azurerm_key_vault_secret.witness_storage_key](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) (resource)
 - [azurerm_management_lock.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) (resource)
+- [azurerm_role_assignment.machine_role_assign](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
 - [azurerm_role_assignment.service_principal_role_assign](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
 - [azurerm_role_assignment.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) (resource)
 - [azurerm_storage_account.witness](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) (resource)
@@ -267,7 +268,7 @@ Description: The name of the HCI cluster.
 
 Type: `string`
 
-Default: `null`
+Default: `""`
 
 ### <a name="input_cluster_tags"></a> [cluster\_tags](#input\_cluster\_tags)
 
@@ -324,6 +325,22 @@ Description: Indicates whether RDMA is enabled.
 Type: `bool`
 
 Default: `false`
+
+### <a name="input_converged_traffic_type"></a> [converged\_traffic\_type](#input\_converged\_traffic\_type)
+
+Description: Traffic type of converged intents.
+
+Type: `list(string)`
+
+Default:
+
+```json
+[
+  "Management",
+  "Compute",
+  "Storage"
+]
+```
 
 ### <a name="input_create_key_vault"></a> [create\_key\_vault](#input\_create\_key\_vault)
 
@@ -402,6 +419,14 @@ Default: `""`
 ### <a name="input_key_vault_name"></a> [key\_vault\_name](#input\_key\_vault\_name)
 
 Description: The name of the key vault.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_key_vault_resource_group"></a> [key\_vault\_resource\_group](#input\_key\_vault\_resource\_group)
+
+Description: The resource group of the key vault.
 
 Type: `string`
 
@@ -525,7 +550,7 @@ Description: Secrets location for the deployment.
 
 Type: `string`
 
-Default: `null`
+Default: `""`
 
 ### <a name="input_seperate_compute_override_adapter_property"></a> [seperate\_compute\_override\_adapter\_property](#input\_seperate\_compute\_override\_adapter\_property)
 
@@ -623,6 +648,21 @@ Type: `bool`
 
 Default: `false`
 
+### <a name="input_seperate_traffic_type"></a> [seperate\_traffic\_type](#input\_seperate\_traffic\_type)
+
+Description: Traffic type of seperate intents.
+
+Type: `list(string)`
+
+Default:
+
+```json
+[
+  "Management",
+  "Compute"
+]
+```
+
 ### <a name="input_storage_tags"></a> [storage\_tags](#input\_storage\_tags)
 
 Description: (Optional) Tags of the storage.
@@ -638,22 +678,6 @@ Description: The subnet mask for the network.
 Type: `string`
 
 Default: `"255.255.255.0"`
-
-### <a name="input_traffic_type"></a> [traffic\_type](#input\_traffic\_type)
-
-Description: Traffic type of converged intents.
-
-Type: `list(string)`
-
-Default:
-
-```json
-[
-  "Management",
-  "Compute",
-  "Storage"
-]
-```
 
 ### <a name="input_witness_path"></a> [witness\_path](#input\_witness\_path)
 

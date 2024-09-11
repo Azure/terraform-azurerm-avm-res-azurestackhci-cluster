@@ -1,4 +1,3 @@
-# TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
 data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }

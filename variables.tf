@@ -169,7 +169,7 @@ variable "azure_stack_lcm_user_credential_tags" {
 
 variable "cluster_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "The name of the HCI cluster."
 }
 
@@ -209,6 +209,16 @@ variable "converged_rdma_enabled" {
   type        = bool
   default     = false
   description = "Indicates whether RDMA is enabled."
+}
+
+variable "converged_traffic_type" {
+  type = list(string)
+  default = [
+    "Management",
+    "Compute",
+    "Storage"
+  ]
+  description = "Traffic type of converged intents."
 }
 
 variable "create_key_vault" {
@@ -279,6 +289,12 @@ variable "key_vault_name" {
     condition     = var.create_key_vault || var.key_vault_name != ""
     error_message = "If 'create_key_vault' is false, 'key_vault_name' must be provided."
   }
+}
+
+variable "key_vault_resource_group" {
+  type        = string
+  default     = ""
+  description = "The resource group of the key vault."
 }
 
 variable "keyvault_purge_protection_enabled" {
@@ -377,7 +393,7 @@ variable "rp_service_principal_object_id" {
 
 variable "secrets_location" {
   type        = string
-  default     = null
+  default     = ""
   description = "Secrets location for the deployment."
 }
 
@@ -445,6 +461,15 @@ variable "seperate_storage_rdma_enabled" {
   description = "Indicates whether RDMA is enabled for storage."
 }
 
+variable "seperate_traffic_type" {
+  type = list(string)
+  default = [
+    "Management",
+    "Compute"
+  ]
+  description = "Traffic type of seperate intents."
+}
+
 variable "storage_tags" {
   type        = map(string)
   default     = null
@@ -455,16 +480,6 @@ variable "subnet_mask" {
   type        = string
   default     = "255.255.255.0"
   description = "The subnet mask for the network."
-}
-
-variable "traffic_type" {
-  type = list(string)
-  default = [
-    "Management",
-    "Compute",
-    "Storage"
-  ]
-  description = "Traffic type of converged intents."
 }
 
 variable "witness_path" {

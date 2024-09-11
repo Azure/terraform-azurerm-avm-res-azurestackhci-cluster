@@ -8,7 +8,7 @@ locals {
   converged         = (length(local.combined_adapters) == length(var.management_adapters)) && (length(local.combined_adapters) == length(local.storage_adapters))
   converged_intents = [{
     name                               = var.converged_intents_name,
-    trafficType                        = var.traffic_type,
+    trafficType                        = var.converged_traffic_type,
     adapter                            = flatten(var.management_adapters),
     overrideVirtualSwitchConfiguration = false,
     virtualSwitchConfigurationOverrides = {
@@ -21,22 +21,34 @@ locals {
     adapterPropertyOverrides = var.converged_rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
   }]
   decoded_user_storages = jsondecode(data.azapi_resource_list.user_storages.output).value
+  key_vault             = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0].id : data.azurerm_key_vault.key_vault[0].id
+  key_vault_id          = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0].id : data.azurerm_key_vault.key_vault[0].id
   owned_user_storages   = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
   rdma_adapter_properties = {
     jumboPacket             = "9014"
     networkDirect           = "Enabled"
     networkDirectTechnology = "RoCEv2"
   }
+  role_assignments = flatten([
+    for server_key, arcserver in data.azurerm_arc_machine.arcservers : [
+      for role_key, role_name in local.roles : {
+        server_name  = server_key
+        principal_id = arcserver.identity[0].principal_id
+        role_name    = role_name
+        role_key     = role_key
+      }
+    ]
+  ])
   role_definition_resource_substring = "/providers/Microsoft.Authorization/roleDefinitions"
+  roles = {
+    KVSU = "Key Vault Secrets User",
+  }
   rp_roles = {
     ACMRM = "Azure Connected Machine Resource Manager",
   }
   seperate_intents = [{
-    name = var.seperate_intents_compute_name,
-    trafficType = [
-      "Management",
-      "Compute"
-    ],
+    name                               = var.seperate_intents_compute_name,
+    trafficType                        = var.seperate_traffic_type,
     adapter                            = flatten(var.management_adapters)
     overrideVirtualSwitchConfiguration = false,
     overrideQosPolicy                  = false,
