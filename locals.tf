@@ -21,8 +21,7 @@ locals {
     adapterPropertyOverrides = var.converged_rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
   }]
   decoded_user_storages = jsondecode(data.azapi_resource_list.user_storages.output).value
-  key_vault             = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0].id : data.azurerm_key_vault.key_vault[0].id
-  key_vault_id          = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0].id : data.azurerm_key_vault.key_vault[0].id
+  key_vault             = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
   owned_user_storages   = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
   rdma_adapter_properties = {
     jumboPacket             = "9014"
