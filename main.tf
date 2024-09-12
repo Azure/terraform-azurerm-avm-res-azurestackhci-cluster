@@ -27,7 +27,7 @@ data "azapi_resource_list" "user_storages" {
 }
 
 data "azapi_resource" "arc_settings" {
-  type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2023-08-01"
+  type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2024-04-01"
   name      = "default"
   parent_id = azapi_resource.cluster.id
 
@@ -35,7 +35,7 @@ data "azapi_resource" "arc_settings" {
 }
 
 resource "azapi_resource" "cluster" {
-  type = "Microsoft.AzureStackHCI/clusters@2023-08-01-preview"
+  type = "Microsoft.AzureStackHCI/clusters@2024-04-01"
   body = {
     properties = {}
   }

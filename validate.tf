@@ -9,7 +9,7 @@ data "azurerm_arc_machine" "arcservers" {
 }
 
 resource "azapi_resource" "validatedeploymentsetting" {
-  type = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
+  type = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2024-04-01"
   body = {
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
@@ -69,6 +69,28 @@ resource "azapi_resource" "validatedeploymentsetting" {
               }
               adouPath        = var.adou_path
               secretsLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+              secrets = [
+                {
+                  secretName     = "${var.name}-AzureStackLCMUserCredential"
+                  eceSecretName  = "AzureStackLCMUserCredential",
+                  secretLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+                },
+                {
+                  secretName     = "${var.name}-LocalAdminCredential"
+                  eceSecretName  = "LocalAdminCredential",
+                  secretLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+                },
+                {
+                  secretName     = "${var.name}-DefaultARBApplication"
+                  eceSecretName  = "DefaultARBApplication",
+                  secretLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+                },
+                {
+                  secretName     = "${var.name}-WitnessStorageKey"
+                  eceSecretName  = "WitnessStorageKey",
+                  secretLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+                }
+              ]
               optionalServices = {
                 customLocation = var.custom_location_name
               }

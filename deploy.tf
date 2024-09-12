@@ -1,7 +1,7 @@
 resource "azapi_update_resource" "deploymentsetting" {
   count = var.is_exported ? 0 : 1
 
-  type = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2023-08-01-preview"
+  type = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2024-04-01"
   body = {
     properties = {
       deploymentMode = "Deploy"
