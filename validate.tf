@@ -55,7 +55,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 ipPools = [
                   {
                     startingAddress = var.starting_address
-                    endingEddress   = var.ending_address
+                    endingAddress   = var.ending_address
                   }
                 ]
                 dnsServers = flatten(var.dns_servers)
