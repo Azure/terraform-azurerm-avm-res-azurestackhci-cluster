@@ -45,6 +45,7 @@ locals {
   rp_roles = {
     ACMRM = "Azure Connected Machine Resource Manager",
   }
+  secrets_location = var.secrets_location == "" ? local.key_vault.vault_uri : var.secrets_location
   seperate_intents = [{
     name                               = var.seperate_intents_compute_name,
     trafficType                        = var.seperate_traffic_type,

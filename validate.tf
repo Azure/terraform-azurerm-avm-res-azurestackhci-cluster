@@ -67,28 +67,27 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 storageNetworks               = flatten(var.storage_networks)
                 storageConnectivitySwitchless = false
               }
-              adouPath        = var.adou_path
-              secretsLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+              adouPath = var.adou_path
               secrets = [
                 {
                   secretName     = "${var.name}-AzureStackLCMUserCredential"
                   eceSecretName  = "AzureStackLCMUserCredential",
-                  secretLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+                  secretLocation = local.secrets_location
                 },
                 {
                   secretName     = "${var.name}-LocalAdminCredential"
                   eceSecretName  = "LocalAdminCredential",
-                  secretLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+                  secretLocation = local.secrets_location
                 },
                 {
                   secretName     = "${var.name}-DefaultARBApplication"
                   eceSecretName  = "DefaultARBApplication",
-                  secretLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+                  secretLocation = local.secrets_location
                 },
                 {
                   secretName     = "${var.name}-WitnessStorageKey"
                   eceSecretName  = "WitnessStorageKey",
-                  secretLocation = var.secrets_location == "" ? azurerm_key_vault.deployment_keyvault[0].vault_uri : var.secrets_location
+                  secretLocation = local.secrets_location
                 }
               ]
               optionalServices = {
