@@ -72,22 +72,22 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 {
                   secretName     = "${var.name}-AzureStackLCMUserCredential"
                   eceSecretName  = "AzureStackLCMUserCredential"
-                  secretLocation = local.secrets_location
+                  secretLocation = "${local.secrets_location}secrets/${var.name}-AzureStackLCMUserCredential"
                 },
                 {
                   secretName     = "${var.name}-LocalAdminCredential"
                   eceSecretName  = "LocalAdminCredential"
-                  secretLocation = local.secrets_location
+                  secretLocation = "${local.secrets_location}secrets/${var.name}-LocalAdminCredential"
                 },
                 {
                   secretName     = "${var.name}-DefaultARBApplication"
                   eceSecretName  = "DefaultARBApplication"
-                  secretLocation = local.secrets_location
+                  secretLocation = "${local.secrets_location}secrets/${var.name}-DefaultARBApplication"
                 },
                 {
                   secretName     = "${var.name}-WitnessStorageKey"
                   eceSecretName  = "WitnessStorageKey"
-                  secretLocation = local.secrets_location
+                  secretLocation = "${local.secrets_location}secrets/${var.name}-WitnessStorageKey"
                 }
               ]
               optionalServices = {
