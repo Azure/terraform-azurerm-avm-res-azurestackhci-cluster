@@ -20,7 +20,7 @@ output "customlocation" {
 
 output "keyvault" {
   description = "Keyvault instance that stores deployment secrets."
-  value       = azurerm_key_vault.deployment_keyvault
+  value       = local.key_vault
 }
 
 # Module owners should include the full resource via a 'resource' output
@@ -37,5 +37,5 @@ output "user_storages" {
 
 output "v_switch_name" {
   description = "The name of the virtual switch that is used by the network."
-  value       = local.converged ? "ConvergedSwitch(managementcomputestorage)" : "ConvergedSwitch(managementcompute)"
+  value       = local.converged ? "ConvergedSwitch(${lower(var.intent_name)})" : "ConvergedSwitch(${lower(var.compute_intent_name)})"
 }

@@ -1,4 +1,3 @@
-# TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
 data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }
@@ -28,7 +27,7 @@ data "azapi_resource_list" "user_storages" {
 }
 
 data "azapi_resource" "arc_settings" {
-  type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2023-08-01"
+  type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2024-04-01"
   name      = "default"
   parent_id = azapi_resource.cluster.id
 
@@ -36,13 +35,14 @@ data "azapi_resource" "arc_settings" {
 }
 
 resource "azapi_resource" "cluster" {
-  type = "Microsoft.AzureStackHCI/clusters@2023-08-01-preview"
+  type = "Microsoft.AzureStackHCI/clusters@2024-04-01"
   body = {
     properties = {}
   }
   location  = var.location
   name      = var.name
   parent_id = data.azurerm_resource_group.rg.id
+  tags      = var.cluster_tags
 
   identity {
     type = "SystemAssigned"
@@ -70,7 +70,7 @@ resource "azurerm_management_lock" "this" {
 
   lock_level = var.lock.kind
   name       = coalesce(var.lock.name, "lock-${var.lock.kind}")
-  scope      = azapi_resource.cluster.id # TODO: Replace with your azurerm resource name
+  scope      = azapi_resource.cluster.id
   notes      = var.lock.kind == "CanNotDelete" ? "Cannot delete the resource or its child resources." : "Cannot delete or modify the resource or its child resources."
 }
 
@@ -78,7 +78,7 @@ resource "azurerm_role_assignment" "this" {
   for_each = var.role_assignments
 
   principal_id                           = each.value.principal_id
-  scope                                  = azapi_resource.cluster.id # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
+  scope                                  = azapi_resource.cluster.id
   condition                              = each.value.condition
   condition_version                      = each.value.condition_version
   delegated_managed_identity_resource_id = each.value.delegated_managed_identity_resource_id
