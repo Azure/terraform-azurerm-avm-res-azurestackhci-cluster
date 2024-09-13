@@ -179,10 +179,10 @@ variable "cluster_tags" {
   description = "(Optional) Tags of the cluster."
 }
 
-variable "compute_intents_name" {
+variable "compute_intent_name" {
   type        = string
   default     = "ManagementCompute"
-  description = "The name of compute intents."
+  description = "The name of compute intent."
 }
 
 variable "compute_override_adapter_property" {
@@ -267,10 +267,10 @@ variable "eu_location" {
   description = "Indicates whether the location is in EU."
 }
 
-variable "intents_name" {
+variable "intent_name" {
   type        = string
   default     = "ManagementComputeStorage"
-  description = "The name of intents."
+  description = "The name of intent."
 }
 
 variable "is_exported" {
@@ -428,10 +428,10 @@ variable "secrets_location" {
   description = "Secrets location for the deployment."
 }
 
-variable "storage_intents_name" {
+variable "storage_intent_name" {
   type        = string
   default     = "Storage"
-  description = "The name of storage intents."
+  description = "The name of storage intent."
 }
 
 variable "storage_override_adapter_property" {
@@ -487,7 +487,7 @@ variable "traffic_type" {
     "Compute",
     "Storage"
   ]
-  description = "Traffic type of intents."
+  description = "Traffic type of intent."
 }
 
 variable "witness_path" {

@@ -7,7 +7,7 @@ locals {
   combined_adapters = setintersection(toset(var.management_adapters), toset(local.storage_adapters))
   converged         = (length(local.combined_adapters) == length(var.management_adapters)) && (length(local.combined_adapters) == length(local.storage_adapters))
   converged_intents = [{
-    name                               = var.intents_name,
+    name                               = var.intent_name,
     trafficType                        = var.traffic_type,
     adapter                            = flatten(var.management_adapters),
     overrideVirtualSwitchConfiguration = false,
@@ -47,7 +47,7 @@ locals {
   }
   secrets_location = var.secrets_location == "" ? local.key_vault.vault_uri : var.secrets_location
   seperate_intents = [{
-    name                               = var.compute_intents_name,
+    name                               = var.compute_intent_name,
     trafficType                        = var.compute_traffic_type,
     adapter                            = flatten(var.management_adapters)
     overrideVirtualSwitchConfiguration = false,
@@ -61,7 +61,7 @@ locals {
     adapterPropertyOverrides = var.compute_rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
     },
     {
-      name                               = var.storage_intents_name,
+      name                               = var.storage_intent_name,
       trafficType                        = var.storage_traffic_type,
       adapter                            = local.storage_adapters,
       overrideVirtualSwitchConfiguration = false,

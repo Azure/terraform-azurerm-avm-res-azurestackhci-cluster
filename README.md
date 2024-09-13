@@ -271,9 +271,9 @@ Type: `map(string)`
 
 Default: `null`
 
-### <a name="input_compute_intents_name"></a> [compute\_intents\_name](#input\_compute\_intents\_name)
+### <a name="input_compute_intent_name"></a> [compute\_intent\_name](#input\_compute\_intent\_name)
 
-Description: The name of compute intents.
+Description: The name of compute intent.
 
 Type: `string`
 
@@ -392,9 +392,9 @@ Type: `bool`
 
 Default: `false`
 
-### <a name="input_intents_name"></a> [intents\_name](#input\_intents\_name)
+### <a name="input_intent_name"></a> [intent\_name](#input\_intent\_name)
 
-Description: The name of intents.
+Description: The name of intent.
 
 Type: `string`
 
@@ -592,9 +592,9 @@ Type: `string`
 
 Default: `""`
 
-### <a name="input_storage_intents_name"></a> [storage\_intents\_name](#input\_storage\_intents\_name)
+### <a name="input_storage_intent_name"></a> [storage\_intent\_name](#input\_storage\_intent\_name)
 
-Description: The name of storage intents.
+Description: The name of storage intent.
 
 Type: `string`
 
@@ -672,7 +672,7 @@ Default: `"255.255.255.0"`
 
 ### <a name="input_traffic_type"></a> [traffic\_type](#input\_traffic\_type)
 
-Description: Traffic type of intents.
+Description: Traffic type of intent.
 
 Type: `list(string)`
 
