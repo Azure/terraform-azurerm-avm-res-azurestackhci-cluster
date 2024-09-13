@@ -285,17 +285,6 @@ variable "key_vault_location" {
   description = "The location of the key vault."
 }
 
-variable "key_vault_name" {
-  type        = string
-  default     = ""
-  description = "The name of the key vault."
-
-  validation {
-    condition     = var.create_key_vault || var.key_vault_name != ""
-    error_message = "If 'create_key_vault' is false, 'key_vault_name' must be provided."
-  }
-}
-
 variable "key_vault_resource_group" {
   type        = string
   default     = ""

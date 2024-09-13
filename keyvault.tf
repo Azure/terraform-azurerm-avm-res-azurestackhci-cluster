@@ -22,7 +22,7 @@ resource "azurerm_key_vault" "deployment_keyvault" {
 data "azurerm_key_vault" "key_vault" {
   count = var.create_key_vault ? 0 : 1
 
-  name                = var.key_vault_name
+  name                = var.keyvault_name
   resource_group_name = var.key_vault_resource_group == "" ? data.azurerm_resource_group.rg.name : var.key_vault_resource_group
 }
 

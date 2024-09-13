@@ -416,14 +416,6 @@ Type: `string`
 
 Default: `""`
 
-### <a name="input_key_vault_name"></a> [key\_vault\_name](#input\_key\_vault\_name)
-
-Description: The name of the key vault.
-
-Type: `string`
-
-Default: `""`
-
 ### <a name="input_key_vault_resource_group"></a> [key\_vault\_resource\_group](#input\_key\_vault\_resource\_group)
 
 Description: The resource group of the key vault.
