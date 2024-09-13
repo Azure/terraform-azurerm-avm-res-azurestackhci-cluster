@@ -7,8 +7,8 @@ locals {
   combined_adapters = setintersection(toset(var.management_adapters), toset(local.storage_adapters))
   converged         = (length(local.combined_adapters) == length(var.management_adapters)) && (length(local.combined_adapters) == length(local.storage_adapters))
   converged_intents = [{
-    name                               = var.converged_intents_name,
-    trafficType                        = var.converged_traffic_type,
+    name                               = var.intents_name,
+    trafficType                        = var.traffic_type,
     adapter                            = flatten(var.management_adapters),
     overrideVirtualSwitchConfiguration = false,
     virtualSwitchConfigurationOverrides = {
@@ -16,9 +16,9 @@ locals {
       loadBalancingAlgorithm = ""
     },
     overrideQosPolicy        = false,
-    qosPolicyOverrides       = var.converged_qos_policy_overrides,
-    overrideAdapterProperty  = var.converged_override_adapter_property,
-    adapterPropertyOverrides = var.converged_rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
+    qosPolicyOverrides       = var.qos_policy_overrides,
+    overrideAdapterProperty  = var.override_adapter_property,
+    adapterPropertyOverrides = var.rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
   }]
   decoded_user_storages = jsondecode(data.azapi_resource_list.user_storages.output).value
   key_vault             = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
@@ -47,34 +47,32 @@ locals {
   }
   secrets_location = var.secrets_location == "" ? local.key_vault.vault_uri : var.secrets_location
   seperate_intents = [{
-    name                               = var.seperate_intents_compute_name,
-    trafficType                        = var.seperate_traffic_type,
+    name                               = var.compute_intents_name,
+    trafficType                        = var.compute_traffic_type,
     adapter                            = flatten(var.management_adapters)
     overrideVirtualSwitchConfiguration = false,
     overrideQosPolicy                  = false,
-    overrideAdapterProperty            = var.seperate_compute_override_adapter_property,
+    overrideAdapterProperty            = var.compute_override_adapter_property,
     virtualSwitchConfigurationOverrides = {
       enableIov              = "",
       loadBalancingAlgorithm = ""
     },
-    qosPolicyOverrides       = var.seperate_compute_qos_policy_overrides,
-    adapterPropertyOverrides = var.seperate_compute_rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
+    qosPolicyOverrides       = var.compute_qos_policy_overrides,
+    adapterPropertyOverrides = var.compute_rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
     },
     {
-      name = var.seperate_intents_storage_name,
-      trafficType = [
-        "Storage"
-      ],
+      name                               = var.storage_intents_name,
+      trafficType                        = var.storage_traffic_type,
       adapter                            = local.storage_adapters,
       overrideVirtualSwitchConfiguration = false,
       overrideQosPolicy                  = false,
-      overrideAdapterProperty            = var.seperate_storage_override_adapter_property,
+      overrideAdapterProperty            = var.storage_override_adapter_property,
       virtualSwitchConfigurationOverrides = {
         enableIov              = "",
         loadBalancingAlgorithm = ""
       },
-      qosPolicyOverrides       = var.seperate_storage_qos_policy_overrides,
-      adapterPropertyOverrides = var.seperate_storage_rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
+      qosPolicyOverrides       = var.storage_qos_policy_overrides,
+      adapterPropertyOverrides = var.storage_rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
   }]
   # Get the resource group name and storage account name from the witness storage account id
   storage_account_id_is_valid = var.create_witness_storage_account || length(var.witness_storage_account_id) > 0

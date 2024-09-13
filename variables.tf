@@ -179,19 +179,19 @@ variable "cluster_tags" {
   description = "(Optional) Tags of the cluster."
 }
 
-variable "converged_intents_name" {
+variable "compute_intents_name" {
   type        = string
-  default     = "ManagementComputeStorage"
-  description = "The name of converged intents."
+  default     = "ManagementCompute"
+  description = "The name of compute intents."
 }
 
-variable "converged_override_adapter_property" {
+variable "compute_override_adapter_property" {
   type        = bool
   default     = true
-  description = "Indicates whether to override adapter property."
+  description = "Indicates whether to override adapter property for compute."
 }
 
-variable "converged_qos_policy_overrides" {
+variable "compute_qos_policy_overrides" {
   type = object({
     priorityValue8021Action_SMB     = string
     priorityValue8021Action_Cluster = string
@@ -202,23 +202,22 @@ variable "converged_qos_policy_overrides" {
     priorityValue8021Action_Cluster = ""
     bandwidthPercentage_SMB         = ""
   }
-  description = "QoS policy overrides for network settings with required properties."
+  description = "QoS policy overrides for network settings with required properties for compute."
 }
 
-variable "converged_rdma_enabled" {
+variable "compute_rdma_enabled" {
   type        = bool
   default     = false
-  description = "Indicates whether RDMA is enabled."
+  description = "Indicates whether RDMA is enabled for compute."
 }
 
-variable "converged_traffic_type" {
+variable "compute_traffic_type" {
   type = list(string)
   default = [
     "Management",
-    "Compute",
-    "Storage"
+    "Compute"
   ]
-  description = "Traffic type of converged intents."
+  description = "Traffic type of compute."
 }
 
 variable "create_key_vault" {
@@ -266,6 +265,12 @@ variable "eu_location" {
   type        = bool
   default     = false
   description = "Indicates whether the location is in EU."
+}
+
+variable "intents_name" {
+  type        = string
+  default     = "ManagementComputeStorage"
+  description = "The name of intents."
 }
 
 variable "is_exported" {
@@ -352,10 +357,36 @@ variable "min_tls_version" {
   description = "The minimum TLS version."
 }
 
+variable "override_adapter_property" {
+  type        = bool
+  default     = true
+  description = "Indicates whether to override adapter property."
+}
+
+variable "qos_policy_overrides" {
+  type = object({
+    priorityValue8021Action_SMB     = string
+    priorityValue8021Action_Cluster = string
+    bandwidthPercentage_SMB         = string
+  })
+  default = {
+    priorityValue8021Action_SMB     = ""
+    priorityValue8021Action_Cluster = ""
+    bandwidthPercentage_SMB         = ""
+  }
+  description = "QoS policy overrides for network settings with required properties."
+}
+
 variable "random_suffix" {
   type        = bool
   default     = true
   description = "Indicate whether to add random suffix"
+}
+
+variable "rdma_enabled" {
+  type        = bool
+  default     = false
+  description = "Enables RDMA when set to true. In a converged network configuration, this will make the network use RDMA. In a dedicated storage network configuration, enabling this will enable RDMA on the storage network."
 }
 
 variable "role_assignments" {
@@ -397,51 +428,19 @@ variable "secrets_location" {
   description = "Secrets location for the deployment."
 }
 
-variable "seperate_compute_override_adapter_property" {
-  type        = bool
-  default     = true
-  description = "Indicates whether to override adapter property for compute."
-}
-
-variable "seperate_compute_qos_policy_overrides" {
-  type = object({
-    priorityValue8021Action_SMB     = string
-    priorityValue8021Action_Cluster = string
-    bandwidthPercentage_SMB         = string
-  })
-  default = {
-    priorityValue8021Action_SMB     = ""
-    priorityValue8021Action_Cluster = ""
-    bandwidthPercentage_SMB         = ""
-  }
-  description = "QoS policy overrides for network settings with required properties for compute."
-}
-
-variable "seperate_compute_rdma_enabled" {
-  type        = bool
-  default     = false
-  description = "Indicates whether RDMA is enabled for compute."
-}
-
-variable "seperate_intents_compute_name" {
-  type        = string
-  default     = "ManagementCompute"
-  description = "The name of compute intents."
-}
-
-variable "seperate_intents_storage_name" {
+variable "storage_intents_name" {
   type        = string
   default     = "Storage"
   description = "The name of storage intents."
 }
 
-variable "seperate_storage_override_adapter_property" {
+variable "storage_override_adapter_property" {
   type        = bool
   default     = true
   description = "Indicates whether to override adapter property for storagte."
 }
 
-variable "seperate_storage_qos_policy_overrides" {
+variable "storage_qos_policy_overrides" {
   type = object({
     priorityValue8021Action_SMB     = string
     priorityValue8021Action_Cluster = string
@@ -455,19 +454,10 @@ variable "seperate_storage_qos_policy_overrides" {
   description = "QoS policy overrides for network settings with required properties for storage."
 }
 
-variable "seperate_storage_rdma_enabled" {
+variable "storage_rdma_enabled" {
   type        = bool
   default     = false
-  description = "Indicates whether RDMA is enabled for storage."
-}
-
-variable "seperate_traffic_type" {
-  type = list(string)
-  default = [
-    "Management",
-    "Compute"
-  ]
-  description = "Traffic type of seperate intents."
+  description = "Indicates whether RDMA is enabled for storage. Storage RDMA will be enabled if either rdma_enabled or storage_rdma_enabled is set to true."
 }
 
 variable "storage_tags" {
@@ -476,10 +466,28 @@ variable "storage_tags" {
   description = "(Optional) Tags of the storage."
 }
 
+variable "storage_traffic_type" {
+  type = list(string)
+  default = [
+    "Storage"
+  ]
+  description = "Traffic type of storage."
+}
+
 variable "subnet_mask" {
   type        = string
   default     = "255.255.255.0"
   description = "The subnet mask for the network."
+}
+
+variable "traffic_type" {
+  type = list(string)
+  default = [
+    "Management",
+    "Compute",
+    "Storage"
+  ]
+  description = "Traffic type of intents."
 }
 
 variable "witness_path" {

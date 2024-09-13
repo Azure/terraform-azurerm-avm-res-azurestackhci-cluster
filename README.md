@@ -278,25 +278,25 @@ Type: `map(string)`
 
 Default: `null`
 
-### <a name="input_converged_intents_name"></a> [converged\_intents\_name](#input\_converged\_intents\_name)
+### <a name="input_compute_intents_name"></a> [compute\_intents\_name](#input\_compute\_intents\_name)
 
-Description: The name of converged intents.
+Description: The name of compute intents.
 
 Type: `string`
 
-Default: `"ManagementComputeStorage"`
+Default: `"ManagementCompute"`
 
-### <a name="input_converged_override_adapter_property"></a> [converged\_override\_adapter\_property](#input\_converged\_override\_adapter\_property)
+### <a name="input_compute_override_adapter_property"></a> [compute\_override\_adapter\_property](#input\_compute\_override\_adapter\_property)
 
-Description: Indicates whether to override adapter property.
+Description: Indicates whether to override adapter property for compute.
 
 Type: `bool`
 
 Default: `true`
 
-### <a name="input_converged_qos_policy_overrides"></a> [converged\_qos\_policy\_overrides](#input\_converged\_qos\_policy\_overrides)
+### <a name="input_compute_qos_policy_overrides"></a> [compute\_qos\_policy\_overrides](#input\_compute\_qos\_policy\_overrides)
 
-Description: QoS policy overrides for network settings with required properties.
+Description: QoS policy overrides for network settings with required properties for compute.
 
 Type:
 
@@ -318,17 +318,17 @@ Default:
 }
 ```
 
-### <a name="input_converged_rdma_enabled"></a> [converged\_rdma\_enabled](#input\_converged\_rdma\_enabled)
+### <a name="input_compute_rdma_enabled"></a> [compute\_rdma\_enabled](#input\_compute\_rdma\_enabled)
 
-Description: Indicates whether RDMA is enabled.
+Description: Indicates whether RDMA is enabled for compute.
 
 Type: `bool`
 
 Default: `false`
 
-### <a name="input_converged_traffic_type"></a> [converged\_traffic\_type](#input\_converged\_traffic\_type)
+### <a name="input_compute_traffic_type"></a> [compute\_traffic\_type](#input\_compute\_traffic\_type)
 
-Description: Traffic type of converged intents.
+Description: Traffic type of compute.
 
 Type: `list(string)`
 
@@ -337,8 +337,7 @@ Default:
 ```json
 [
   "Management",
-  "Compute",
-  "Storage"
+  "Compute"
 ]
 ```
 
@@ -399,6 +398,14 @@ Description: Indicates whether the location is in EU.
 Type: `bool`
 
 Default: `false`
+
+### <a name="input_intents_name"></a> [intents\_name](#input\_intents\_name)
+
+Description: The name of intents.
+
+Type: `string`
+
+Default: `"ManagementComputeStorage"`
 
 ### <a name="input_is_exported"></a> [is\_exported](#input\_is\_exported)
 
@@ -498,6 +505,38 @@ Type: `string`
 
 Default: `"TLS1_2"`
 
+### <a name="input_override_adapter_property"></a> [override\_adapter\_property](#input\_override\_adapter\_property)
+
+Description: Indicates whether to override adapter property.
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_qos_policy_overrides"></a> [qos\_policy\_overrides](#input\_qos\_policy\_overrides)
+
+Description: QoS policy overrides for network settings with required properties.
+
+Type:
+
+```hcl
+object({
+    priorityValue8021Action_SMB     = string
+    priorityValue8021Action_Cluster = string
+    bandwidthPercentage_SMB         = string
+  })
+```
+
+Default:
+
+```json
+{
+  "bandwidthPercentage_SMB": "",
+  "priorityValue8021Action_Cluster": "",
+  "priorityValue8021Action_SMB": ""
+}
+```
+
 ### <a name="input_random_suffix"></a> [random\_suffix](#input\_random\_suffix)
 
 Description: Indicate whether to add random suffix
@@ -505,6 +544,14 @@ Description: Indicate whether to add random suffix
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_rdma_enabled"></a> [rdma\_enabled](#input\_rdma\_enabled)
+
+Description: Enables RDMA when set to true. In a converged network configuration, this will make the network use RDMA. In a dedicated storage network configuration, enabling this will enable RDMA on the storage network.
+
+Type: `bool`
+
+Default: `false`
 
 ### <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments)
 
@@ -552,55 +599,7 @@ Type: `string`
 
 Default: `""`
 
-### <a name="input_seperate_compute_override_adapter_property"></a> [seperate\_compute\_override\_adapter\_property](#input\_seperate\_compute\_override\_adapter\_property)
-
-Description: Indicates whether to override adapter property for compute.
-
-Type: `bool`
-
-Default: `true`
-
-### <a name="input_seperate_compute_qos_policy_overrides"></a> [seperate\_compute\_qos\_policy\_overrides](#input\_seperate\_compute\_qos\_policy\_overrides)
-
-Description: QoS policy overrides for network settings with required properties for compute.
-
-Type:
-
-```hcl
-object({
-    priorityValue8021Action_SMB     = string
-    priorityValue8021Action_Cluster = string
-    bandwidthPercentage_SMB         = string
-  })
-```
-
-Default:
-
-```json
-{
-  "bandwidthPercentage_SMB": "",
-  "priorityValue8021Action_Cluster": "",
-  "priorityValue8021Action_SMB": ""
-}
-```
-
-### <a name="input_seperate_compute_rdma_enabled"></a> [seperate\_compute\_rdma\_enabled](#input\_seperate\_compute\_rdma\_enabled)
-
-Description: Indicates whether RDMA is enabled for compute.
-
-Type: `bool`
-
-Default: `false`
-
-### <a name="input_seperate_intents_compute_name"></a> [seperate\_intents\_compute\_name](#input\_seperate\_intents\_compute\_name)
-
-Description: The name of compute intents.
-
-Type: `string`
-
-Default: `"ManagementCompute"`
-
-### <a name="input_seperate_intents_storage_name"></a> [seperate\_intents\_storage\_name](#input\_seperate\_intents\_storage\_name)
+### <a name="input_storage_intents_name"></a> [storage\_intents\_name](#input\_storage\_intents\_name)
 
 Description: The name of storage intents.
 
@@ -608,7 +607,7 @@ Type: `string`
 
 Default: `"Storage"`
 
-### <a name="input_seperate_storage_override_adapter_property"></a> [seperate\_storage\_override\_adapter\_property](#input\_seperate\_storage\_override\_adapter\_property)
+### <a name="input_storage_override_adapter_property"></a> [storage\_override\_adapter\_property](#input\_storage\_override\_adapter\_property)
 
 Description: Indicates whether to override adapter property for storagte.
 
@@ -616,7 +615,7 @@ Type: `bool`
 
 Default: `true`
 
-### <a name="input_seperate_storage_qos_policy_overrides"></a> [seperate\_storage\_qos\_policy\_overrides](#input\_seperate\_storage\_qos\_policy\_overrides)
+### <a name="input_storage_qos_policy_overrides"></a> [storage\_qos\_policy\_overrides](#input\_storage\_qos\_policy\_overrides)
 
 Description: QoS policy overrides for network settings with required properties for storage.
 
@@ -640,28 +639,13 @@ Default:
 }
 ```
 
-### <a name="input_seperate_storage_rdma_enabled"></a> [seperate\_storage\_rdma\_enabled](#input\_seperate\_storage\_rdma\_enabled)
+### <a name="input_storage_rdma_enabled"></a> [storage\_rdma\_enabled](#input\_storage\_rdma\_enabled)
 
-Description: Indicates whether RDMA is enabled for storage.
+Description: Indicates whether RDMA is enabled for storage. Storage RDMA will be enabled if either rdma\_enabled or storage\_rdma\_enabled is set to true.
 
 Type: `bool`
 
 Default: `false`
-
-### <a name="input_seperate_traffic_type"></a> [seperate\_traffic\_type](#input\_seperate\_traffic\_type)
-
-Description: Traffic type of seperate intents.
-
-Type: `list(string)`
-
-Default:
-
-```json
-[
-  "Management",
-  "Compute"
-]
-```
 
 ### <a name="input_storage_tags"></a> [storage\_tags](#input\_storage\_tags)
 
@@ -671,6 +655,20 @@ Type: `map(string)`
 
 Default: `null`
 
+### <a name="input_storage_traffic_type"></a> [storage\_traffic\_type](#input\_storage\_traffic\_type)
+
+Description: Traffic type of storage.
+
+Type: `list(string)`
+
+Default:
+
+```json
+[
+  "Storage"
+]
+```
+
 ### <a name="input_subnet_mask"></a> [subnet\_mask](#input\_subnet\_mask)
 
 Description: The subnet mask for the network.
@@ -678,6 +676,22 @@ Description: The subnet mask for the network.
 Type: `string`
 
 Default: `"255.255.255.0"`
+
+### <a name="input_traffic_type"></a> [traffic\_type](#input\_traffic\_type)
+
+Description: Traffic type of intents.
+
+Type: `list(string)`
+
+Default:
+
+```json
+[
+  "Management",
+  "Compute",
+  "Storage"
+]
+```
 
 ### <a name="input_witness_path"></a> [witness\_path](#input\_witness\_path)
 
