@@ -202,6 +202,11 @@ list(object({
     name               = string
     networkAdapterName = string
     vlanId             = string
+    storageAdapterIPInfo = optional(object({
+      physicalNode = string
+      ipv4Address  = string
+      subnetMask   = string
+    }))
   }))
 ```
 
@@ -489,6 +494,14 @@ Description: The minimum TLS version.
 Type: `string`
 
 Default: `"TLS1_2"`
+
+### <a name="input_operation_type"></a> [operation\_type](#input\_operation\_type)
+
+Description: The intended operation for a cluster.
+
+Type: `string`
+
+Default: `"ClusterProvisioning"`
 
 ### <a name="input_override_adapter_property"></a> [override\_adapter\_property](#input\_override\_adapter\_property)
 

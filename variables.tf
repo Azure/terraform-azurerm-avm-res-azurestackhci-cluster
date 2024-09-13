@@ -128,6 +128,11 @@ variable "storage_networks" {
     name               = string
     networkAdapterName = string
     vlanId             = string
+    storageAdapterIPInfo = optional(object({
+      physicalNode = string
+      ipv4Address  = string
+      subnetMask   = string
+    }))
   }))
   description = "A list of storage networks."
 }
@@ -344,6 +349,17 @@ variable "min_tls_version" {
   type        = string
   default     = "TLS1_2"
   description = "The minimum TLS version."
+}
+
+variable "operation_type" {
+  type        = string
+  default     = "ClusterProvisioning"
+  description = "The intended operation for a cluster."
+
+  validation {
+    condition     = contains(["ClusterProvisioning", "ClusterUpgrade"], var.operation_type)
+    error_message = "operation_type must be either 'ClusterProvisioning' or 'ClusterUpgrade'."
+  }
 }
 
 variable "override_adapter_property" {
