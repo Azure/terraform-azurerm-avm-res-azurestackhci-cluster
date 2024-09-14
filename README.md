@@ -699,7 +699,7 @@ Description: The name of the witness storage account.
 
 Type: `string`
 
-Default: `null`
+Default: `""`
 
 ### <a name="input_witness_storage_account_resource_group_name"></a> [witness\_storage\_account\_resource\_group\_name](#input\_witness\_storage\_account\_resource\_group\_name)
 
@@ -707,7 +707,7 @@ Description: The resource group of the witness storage account. If not provided,
 
 Type: `string`
 
-Default: `null`
+Default: `""`
 
 ### <a name="input_witness_storage_key_content_type"></a> [witness\_storage\_key\_content\_type](#input\_witness\_storage\_key\_content\_type)
 

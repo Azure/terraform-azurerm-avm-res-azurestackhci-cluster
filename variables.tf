@@ -498,19 +498,19 @@ variable "witness_path" {
 
 variable "witness_storage_account_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "The name of the witness storage account."
 
   # Validation rule to ensure the variable is provided if witness_type is "Cloud"
   validation {
-    condition     = lower(var.witness_type) != "cloud" || (lower(var.witness_type) == "cloud" && var.witness_storage_account_name != null)
+    condition     = lower(var.witness_type) != "cloud" || (lower(var.witness_type) == "cloud" && var.witness_storage_account_name != "")
     error_message = "The 'witness_storage_account_name' must be provided when 'witness_type' is set to 'Cloud'."
   }
 }
 
 variable "witness_storage_account_resource_group_name" {
   type        = string
-  default     = null
+  default     = ""
   description = "The resource group of the witness storage account. If not provided, 'resource_group_name' will be used as the storage account's resource group."
 }
 

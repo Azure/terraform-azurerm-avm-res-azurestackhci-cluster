@@ -80,5 +80,5 @@ locals {
     networkDirect           = "Enabled"
     networkDirectTechnology = "iWARP"
   }
-  witness_storage_account_resource_group_name = var.witness_storage_account_resource_group_name == null ? var.resource_group_name : var.witness_storage_account_resource_group_name
+  witness_storage_account_resource_group_name = var.witness_storage_account_resource_group_name == "" ? var.resource_group_name : var.witness_storage_account_resource_group_name
 }
