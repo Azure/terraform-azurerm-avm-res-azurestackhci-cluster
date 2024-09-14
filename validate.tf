@@ -41,7 +41,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 name                 = var.cluster_name == "" ? azapi_resource.cluster.name : var.cluster_name
                 witnessType          = var.witness_type
                 witnessPath          = var.witness_path
-                cloudAccountName     = var.witness_storage_account_name
+                cloudAccountName     = var.create_witness_storage_account ? azurerm_storage_account.witness[0].name : var.witness_storage_account_name
                 azureServiceEndpoint = var.azure_service_endpoint
               }
               storage = {
