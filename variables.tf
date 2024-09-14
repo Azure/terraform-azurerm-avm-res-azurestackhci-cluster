@@ -128,13 +128,13 @@ variable "storage_networks" {
     name               = string
     networkAdapterName = string
     vlanId             = string
+    storageAdapterIPInfo = optional(object({
+      physicalNode = string
+      ipv4Address  = string
+      subnetMask   = string
+    }))
   }))
   description = "A list of storage networks."
-}
-
-variable "witness_storage_account_name" {
-  type        = string
-  description = "The name of the witness storage account."
 }
 
 variable "account_replication_type" {
@@ -346,6 +346,17 @@ variable "min_tls_version" {
   description = "The minimum TLS version."
 }
 
+variable "operation_type" {
+  type        = string
+  default     = "ClusterProvisioning"
+  description = "The intended operation for a cluster."
+
+  validation {
+    condition     = contains(["ClusterProvisioning", "ClusterUpgrade"], var.operation_type)
+    error_message = "operation_type must be either 'ClusterProvisioning' or 'ClusterUpgrade'."
+  }
+}
+
 variable "override_adapter_property" {
   type        = bool
   default     = true
@@ -485,15 +496,22 @@ variable "witness_path" {
   description = "The path to the witness."
 }
 
-variable "witness_storage_account_id" {
+variable "witness_storage_account_name" {
   type        = string
   default     = ""
-  description = "The ID of the storage account."
+  description = "The name of the witness storage account."
 
+  # Validation rule to ensure the variable is provided if witness_type is "Cloud"
   validation {
-    condition     = var.create_witness_storage_account || var.witness_storage_account_id != ""
-    error_message = "If 'create_witness_storage_account' is false, 'witness_storage_account_id' must be provided."
+    condition     = lower(var.witness_type) != "cloud" || (lower(var.witness_type) == "cloud" && var.witness_storage_account_name != "")
+    error_message = "The 'witness_storage_account_name' must be provided when 'witness_type' is set to 'Cloud'."
   }
+}
+
+variable "witness_storage_account_resource_group_name" {
+  type        = string
+  default     = ""
+  description = "The resource group of the witness storage account. If not provided, 'resource_group_name' will be used as the storage account's resource group."
 }
 
 variable "witness_storage_key_content_type" {

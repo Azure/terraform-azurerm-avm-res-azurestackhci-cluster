@@ -14,6 +14,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
     properties = {
       arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
       deploymentMode     = var.is_exported ? "Deploy" : "Validate"
+      operationType      = var.operation_type
       deploymentConfiguration = {
         version = "10.0.0.0"
         scaleUnits = [
@@ -40,7 +41,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 name                 = var.cluster_name == "" ? azapi_resource.cluster.name : var.cluster_name
                 witnessType          = var.witness_type
                 witnessPath          = var.witness_path
-                cloudAccountName     = var.create_witness_storage_account ? azurerm_storage_account.witness[0].name : var.witness_storage_account_id
+                cloudAccountName     = var.witness_storage_account_name
                 azureServiceEndpoint = var.azure_service_endpoint
               }
               storage = {

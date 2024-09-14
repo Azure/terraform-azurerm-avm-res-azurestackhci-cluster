@@ -202,14 +202,13 @@ list(object({
     name               = string
     networkAdapterName = string
     vlanId             = string
+    storageAdapterIPInfo = optional(object({
+      physicalNode = string
+      ipv4Address  = string
+      subnetMask   = string
+    }))
   }))
 ```
-
-### <a name="input_witness_storage_account_name"></a> [witness\_storage\_account\_name](#input\_witness\_storage\_account\_name)
-
-Description: The name of the witness storage account.
-
-Type: `string`
 
 ## Optional Inputs
 
@@ -490,6 +489,14 @@ Type: `string`
 
 Default: `"TLS1_2"`
 
+### <a name="input_operation_type"></a> [operation\_type](#input\_operation\_type)
+
+Description: The intended operation for a cluster.
+
+Type: `string`
+
+Default: `"ClusterProvisioning"`
+
 ### <a name="input_override_adapter_property"></a> [override\_adapter\_property](#input\_override\_adapter\_property)
 
 Description: Indicates whether to override adapter property.
@@ -686,9 +693,17 @@ Type: `string`
 
 Default: `"Cloud"`
 
-### <a name="input_witness_storage_account_id"></a> [witness\_storage\_account\_id](#input\_witness\_storage\_account\_id)
+### <a name="input_witness_storage_account_name"></a> [witness\_storage\_account\_name](#input\_witness\_storage\_account\_name)
 
-Description: The ID of the storage account.
+Description: The name of the witness storage account.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_witness_storage_account_resource_group_name"></a> [witness\_storage\_account\_resource\_group\_name](#input\_witness\_storage\_account\_resource\_group\_name)
+
+Description: The resource group of the witness storage account. If not provided, 'resource\_group\_name' will be used as the storage account's resource group.
 
 Type: `string`
 
