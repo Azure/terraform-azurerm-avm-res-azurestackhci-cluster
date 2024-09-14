@@ -210,12 +210,6 @@ list(object({
   }))
 ```
 
-### <a name="input_witness_storage_account_name"></a> [witness\_storage\_account\_name](#input\_witness\_storage\_account\_name)
-
-Description: The name of the witness storage account.
-
-Type: `string`
-
 ## Optional Inputs
 
 The following input variables are optional (have default values):
@@ -699,13 +693,21 @@ Type: `string`
 
 Default: `"Cloud"`
 
-### <a name="input_witness_storage_account_id"></a> [witness\_storage\_account\_id](#input\_witness\_storage\_account\_id)
+### <a name="input_witness_storage_account_name"></a> [witness\_storage\_account\_name](#input\_witness\_storage\_account\_name)
 
-Description: The ID of the storage account.
+Description: The name of the witness storage account.
 
 Type: `string`
 
-Default: `""`
+Default: `null`
+
+### <a name="input_witness_storage_account_resource_group_name"></a> [witness\_storage\_account\_resource\_group\_name](#input\_witness\_storage\_account\_resource\_group\_name)
+
+Description: The resource group of the witness storage account. If not provided, 'resource\_group\_name' will be used as the storage account's resource group.
+
+Type: `string`
+
+Default: `null`
 
 ### <a name="input_witness_storage_key_content_type"></a> [witness\_storage\_key\_content\_type](#input\_witness\_storage\_key\_content\_type)
 

@@ -1,11 +1,11 @@
 resource "azurerm_storage_account" "witness" {
-  count = var.create_witness_storage_account ? 1 : 0
+  count = (lower(var.witness_type) == "cloud" && var.create_witness_storage_account) ? 1 : 0
 
   account_replication_type         = var.account_replication_type
   account_tier                     = "Standard"
   location                         = data.azurerm_resource_group.rg.location
   name                             = var.random_suffix ? "${var.witness_storage_account_name}${random_integer.random_suffix.result}" : var.witness_storage_account_name
-  resource_group_name              = var.resource_group_name
+  resource_group_name              = local.witness_storage_account_resource_group_name
   allow_nested_items_to_be_public  = var.allow_nested_items_to_be_public
   cross_tenant_replication_enabled = var.cross_tenant_replication_enabled
   min_tls_version                  = var.min_tls_version
@@ -13,8 +13,8 @@ resource "azurerm_storage_account" "witness" {
 }
 
 data "azurerm_storage_account" "witness" {
-  count = var.create_witness_storage_account ? 0 : 1
+  count = (lower(var.witness_type) == "cloud" && !var.create_witness_storage_account) ? 1 : 0
 
-  name                = local.witness_storage_account_name
-  resource_group_name = local.witness_storeage_account_resource_group_name
+  name                = var.witness_storage_account_name
+  resource_group_name = local.witness_storage_account_resource_group_name
 }

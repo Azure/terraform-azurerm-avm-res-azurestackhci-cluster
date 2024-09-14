@@ -74,21 +74,11 @@ locals {
       qosPolicyOverrides       = var.storage_qos_policy_overrides,
       adapterPropertyOverrides = var.storage_rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
   }]
-  # Get the resource group name and storage account name from the witness storage account id
-  storage_account_id_is_valid = var.create_witness_storage_account || length(var.witness_storage_account_id) > 0
-  storage_account_id_parts = can(regex(
-    "^/subscriptions/([^/]+)/resourceGroups/([^/]+)/providers/Microsoft.Storage/storageAccounts/([^/]+)$",
-    var.witness_storage_account_id
-    )) ? regex(
-    "^/subscriptions/([^/]+)/resourceGroups/([^/]+)/providers/Microsoft.Storage/storageAccounts/([^/]+)$",
-    var.witness_storage_account_id
-  ) : ["", "", ""]
   storage_adapters = flatten([for storageNetwork in var.storage_networks : storageNetwork.networkAdapterName])
   switchless_adapter_properties = {
     jumboPacket             = "9014"
     networkDirect           = "Enabled"
     networkDirectTechnology = "iWARP"
   }
-  witness_storage_account_name                 = local.storage_account_id_is_valid ? local.storage_account_id_parts[2] : ""
-  witness_storeage_account_resource_group_name = local.storage_account_id_is_valid ? local.storage_account_id_parts[1] : ""
+  witness_storage_account_resource_group_name = var.witness_storage_account_resource_group_name == null ? var.resource_group_name : var.witness_storage_account_resource_group_name
 }
