@@ -68,8 +68,9 @@ resource "azapi_resource" "validatedeploymentsetting" {
                 storageNetworks               = flatten(var.storage_networks)
                 storageConnectivitySwitchless = false
               }
-              adouPath = var.adou_path
-              secrets = [
+              adouPath        = var.adou_path
+              secretsLocation = var.use_legacy_key_vault_model ? local.secrets_location : null
+              secrets = var.use_legacy_key_vault_model ? null : [
                 {
                   secretName     = "${var.name}-AzureStackLCMUserCredential"
                   eceSecretName  = "AzureStackLCMUserCredential"

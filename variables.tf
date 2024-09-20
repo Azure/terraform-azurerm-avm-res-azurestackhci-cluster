@@ -224,6 +224,11 @@ variable "create_key_vault" {
   type        = bool
   default     = true
   description = "Set to true to create the key vault, or false to skip it"
+
+  validation {
+    condition     = !var.use_legacy_key_vault_model || var.create_key_vault
+    error_message = "create_key_vault must be true when use_legacy_key_vault_model is true."
+  }
 }
 
 variable "create_witness_storage_account" {
@@ -488,6 +493,12 @@ variable "traffic_type" {
     "Storage"
   ]
   description = "Traffic type of intent."
+}
+
+variable "use_legacy_key_vault_model" {
+  type        = bool
+  default     = false
+  description = "Indicates whether to use the legacy key vault model."
 }
 
 variable "witness_path" {

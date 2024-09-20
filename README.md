@@ -685,6 +685,14 @@ Default:
 ]
 ```
 
+### <a name="input_use_legacy_key_vault_model"></a> [use\_legacy\_key\_vault\_model](#input\_use\_legacy\_key\_vault\_model)
+
+Description: Indicates whether to use the legacy key vault model.
+
+Type: `bool`
+
+Default: `false`
+
 ### <a name="input_witness_path"></a> [witness\_path](#input\_witness\_path)
 
 Description: The path to the witness.
