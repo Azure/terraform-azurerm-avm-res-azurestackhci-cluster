@@ -65,7 +65,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
               hostNetwork = {
                 enableStorageAutoIp           = true
                 intents                       = local.converged ? local.converged_intents : local.seperate_intents
-                storageNetworks               = flatten(var.storage_networks)
+                storageNetworks               = local.storage_networks
                 storageConnectivitySwitchless = false
               }
               adouPath = var.adou_path
