@@ -75,26 +75,18 @@ locals {
       adapterPropertyOverrides = var.storage_rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
   }]
   storage_adapters = flatten([for storageNetwork in var.storage_networks : storageNetwork.networkAdapterName])
-  storage_networks = var.storage_adapter_ip_info == null ? flatten(var.storage_networks) : (
-    length(local.vlan_ids) == 0 ? [
-      for idx, storageNetwork in var.storage_networks : {
-        name                 = storageNetwork.name
-        networkAdapterName   = storageNetwork.networkAdapterName
-        storageAdapterIPInfo = flatten(var.storage_adapter_ip_info[storageNetwork.name])
-      }
-      ] : [
-      for storageNetwork in var.storage_networks : {
-        name                 = storageNetwork.name
-        networkAdapterName   = storageNetwork.networkAdapterName
-        vlanId               = storageNetwork.vlanId
-        storageAdapterIPInfo = flatten(var.storage_adapter_ip_info[storageNetwork.name])
-      }
-  ])
+  storage_networks = var.storage_adapter_ip_info == null ? flatten(var.storage_networks) : [
+    for storageNetwork in var.storage_networks : {
+      name                 = storageNetwork.name
+      networkAdapterName   = storageNetwork.networkAdapterName
+      vlanId               = storageNetwork.vlanId
+      storageAdapterIPInfo = var.storage_adapter_ip_info[storageNetwork.name]
+    }
+  ]
   switchless_adapter_properties = {
     jumboPacket             = "9014"
     networkDirect           = "Enabled"
     networkDirectTechnology = "iWARP"
   }
-  vlan_ids                                    = flatten([for storageNetwork in var.storage_networks : storageNetwork.vlanId])
   witness_storage_account_resource_group_name = var.witness_storage_account_resource_group_name == "" ? var.resource_group_name : var.witness_storage_account_resource_group_name
 }
