@@ -424,11 +424,11 @@ variable "secrets_location" {
 }
 
 variable "storage_adapter_ip_info" {
-  type = map(object({
+  type = map(list(object({
     physicalNode = string
     ipv4Address  = string
     subnetMask   = string
-  }))
+  })))
   default     = null
   description = "The IP information for the storage networks. Key is the storage network name."
 }

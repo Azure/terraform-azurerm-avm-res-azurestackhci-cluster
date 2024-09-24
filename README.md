@@ -593,11 +593,11 @@ Description: The IP information for the storage networks. Key is the storage net
 Type:
 
 ```hcl
-map(object({
+map(list(object({
     physicalNode = string
     ipv4Address  = string
     subnetMask   = string
-  }))
+  })))
 ```
 
 Default: `null`
