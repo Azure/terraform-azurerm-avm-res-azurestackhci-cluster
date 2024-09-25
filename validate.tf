@@ -19,7 +19,72 @@ resource "azapi_resource" "validatedeploymentsetting" {
         version = "10.0.0.0"
         scaleUnits = [
           {
-            deploymentData = var.use_legacy_key_vault_model ? local.deployment_data_legacy : local.deployment_data
+            deploymentData = {
+              securitySettings = local.security_settings
+              observability = {
+                streamingDataClient = true
+                euLocation          = var.eu_location
+                episodicDataUpload  = true
+              }
+              cluster = {
+                name                 = var.cluster_name == "" ? azapi_resource.cluster.name : var.cluster_name
+                witnessType          = var.witness_type
+                witnessPath          = var.witness_path
+                cloudAccountName     = var.create_witness_storage_account ? azurerm_storage_account.witness[0].name : var.witness_storage_account_name
+                azureServiceEndpoint = var.azure_service_endpoint
+              }
+              storage = {
+                configurationMode = var.configuration_mode
+              }
+              namingPrefix = var.site_id
+              domainFqdn   = var.domain_fqdn
+              infrastructureNetwork = [{
+                useDhcp    = false
+                subnetMask = var.subnet_mask
+                gateway    = var.default_gateway
+                ipPools = [
+                  {
+                    startingAddress = var.starting_address
+                    endingAddress   = var.ending_address
+                  }
+                ]
+                dnsServers = flatten(var.dns_servers)
+              }]
+              physicalNodes = flatten(var.servers)
+              hostNetwork = {
+                enableStorageAutoIp           = true
+                intents                       = local.converged ? local.converged_intents : local.seperate_intents
+                storageNetworks               = local.storage_networks
+                storageConnectivitySwitchless = false
+              }
+              adouPath        = var.adou_path
+              secretsLocation = var.use_legacy_key_vault_model ? local.secrets_location : null
+              secrets = var.use_legacy_key_vault_model ? null : [
+                {
+                  secretName     = "${var.name}-AzureStackLCMUserCredential"
+                  eceSecretName  = "AzureStackLCMUserCredential"
+                  secretLocation = "${local.secrets_location}secrets/${var.name}-AzureStackLCMUserCredential"
+                },
+                {
+                  secretName     = "${var.name}-LocalAdminCredential"
+                  eceSecretName  = "LocalAdminCredential"
+                  secretLocation = "${local.secrets_location}secrets/${var.name}-LocalAdminCredential"
+                },
+                {
+                  secretName     = "${var.name}-DefaultARBApplication"
+                  eceSecretName  = "DefaultARBApplication"
+                  secretLocation = "${local.secrets_location}secrets/${var.name}-DefaultARBApplication"
+                },
+                {
+                  secretName     = "${var.name}-WitnessStorageKey"
+                  eceSecretName  = "WitnessStorageKey"
+                  secretLocation = "${local.secrets_location}secrets/${var.name}-WitnessStorageKey"
+                }
+              ]
+              optionalServices = {
+                customLocation = var.custom_location_name
+              }
+            }
           }
         ]
       }
