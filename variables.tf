@@ -162,6 +162,18 @@ variable "azure_stack_lcm_user_credential_tags" {
   description = "(Optional) Tags of the azure stack lcm user credential."
 }
 
+variable "bitlocker_boot_volume" {
+  type        = bool
+  default     = true
+  description = "When set to true, BitLocker XTS_AES 256-bit encryption is enabled for all data-at-rest on the OS volume of your Azure Stack HCI cluster. This setting is TPM-hardware dependent."
+}
+
+variable "bitlocker_data_volumes" {
+  type        = bool
+  default     = true
+  description = "When set to true, BitLocker XTS-AES 256-bit encryption is enabled for all data-at-rest on your Azure Stack HCI cluster shared volumes."
+}
+
 variable "cluster_name" {
   type        = string
   default     = ""
@@ -215,16 +227,33 @@ variable "compute_traffic_type" {
   description = "Traffic type of compute."
 }
 
+variable "configuration_mode" {
+  type        = string
+  default     = "Express"
+  description = "The configuration mode for the storage."
+}
+
 variable "create_key_vault" {
   type        = bool
   default     = true
   description = "Set to true to create the key vault, or false to skip it"
+
+  validation {
+    condition     = !var.use_legacy_key_vault_model || var.create_key_vault
+    error_message = "create_key_vault must be true when use_legacy_key_vault_model is true."
+  }
 }
 
 variable "create_witness_storage_account" {
   type        = bool
   default     = true
   description = "Set to true to create the witness storage account, or false to skip it"
+}
+
+variable "credential_guard_enforced" {
+  type        = bool
+  default     = false
+  description = "When set to true, Credential Guard is enabled on your Azure HCI cluster."
 }
 
 variable "cross_tenant_replication_enabled" {
@@ -245,6 +274,18 @@ variable "default_arb_application_tags" {
   description = "(Optional) Tags of the default arb application."
 }
 
+variable "drift_control_enforced" {
+  type        = bool
+  default     = true
+  description = "When set to true, the security baseline is re-applied regularly."
+}
+
+variable "drtm_protection" {
+  type        = bool
+  default     = true
+  description = "By default, Secure Boot is enabled on your Azure HCI cluster. This setting is hardware dependent."
+}
+
 variable "enable_telemetry" {
   type        = bool
   default     = true
@@ -260,6 +301,12 @@ variable "eu_location" {
   type        = bool
   default     = false
   description = "Indicates whether the location is in EU."
+}
+
+variable "hvci_protection" {
+  type        = bool
+  default     = true
+  description = "By default, Hypervisor-protected Code Integrity is enabled on your Azure HCI cluster."
 }
 
 variable "intent_name" {
@@ -423,6 +470,24 @@ variable "secrets_location" {
   description = "Secrets location for the deployment."
 }
 
+variable "side_channel_mitigation_enforced" {
+  type        = bool
+  default     = true
+  description = "When set to true, all the side channel mitigations are enabled."
+}
+
+variable "smb_cluster_encryption" {
+  type        = bool
+  default     = false
+  description = "When set to true, cluster east-west traffic is encrypted."
+}
+
+variable "smb_signing_enforced" {
+  type        = bool
+  default     = true
+  description = "When set to true, the SMB default instance requires sign in for the client and server services."
+}
+
 variable "storage_adapter_ip_info" {
   type = map(list(object({
     physicalNode = string
@@ -493,6 +558,18 @@ variable "traffic_type" {
     "Storage"
   ]
   description = "Traffic type of intent."
+}
+
+variable "use_legacy_key_vault_model" {
+  type        = bool
+  default     = false
+  description = "Indicates whether to use the legacy key vault model."
+}
+
+variable "wdac_enforced" {
+  type        = bool
+  default     = true
+  description = "WDAC is enabled by default and limits the applications and the code that you can run on your Azure Stack HCI cluster."
 }
 
 variable "witness_path" {

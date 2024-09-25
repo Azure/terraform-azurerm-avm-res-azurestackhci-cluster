@@ -21,8 +21,86 @@ locals {
     adapterPropertyOverrides = var.rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
   }]
   decoded_user_storages = jsondecode(data.azapi_resource_list.user_storages.output).value
-  key_vault             = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
-  owned_user_storages   = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
+  deployment_data = {
+    securitySettings = {
+      hvciProtection                = var.hvci_protection
+      drtmProtection                = var.drtm_protection
+      driftControlEnforced          = var.drift_control_enforced
+      credentialGuardEnforced       = var.credential_guard_enforced
+      smbSigningEnforced            = var.smb_signing_enforced
+      smbClusterEncryption          = var.smb_cluster_encryption
+      sideChannelMitigationEnforced = var.side_channel_mitigation_enforced
+      bitlockerBootVolume           = var.bitlocker_boot_volume
+      bitlockerDataVolumes          = var.bitlocker_data_volumes
+      wdacEnforced                  = var.wdac_enforced
+    }
+    observability = {
+      streamingDataClient = true
+      euLocation          = var.eu_location
+      episodicDataUpload  = true
+    }
+    cluster = {
+      name                 = var.cluster_name == "" ? azapi_resource.cluster.name : var.cluster_name
+      witnessType          = var.witness_type
+      witnessPath          = var.witness_path
+      cloudAccountName     = var.create_witness_storage_account ? azurerm_storage_account.witness[0].name : var.witness_storage_account_name
+      azureServiceEndpoint = var.azure_service_endpoint
+    }
+    storage = {
+      configurationMode = var.configuration_mode
+    }
+    namingPrefix = var.site_id
+    domainFqdn   = var.domain_fqdn
+    infrastructureNetwork = [{
+      useDhcp    = false
+      subnetMask = var.subnet_mask
+      gateway    = var.default_gateway
+      ipPools = [
+        {
+          startingAddress = var.starting_address
+          endingAddress   = var.ending_address
+        }
+      ]
+      dnsServers = flatten(var.dns_servers)
+    }]
+    physicalNodes = flatten(var.servers)
+    hostNetwork = {
+      enableStorageAutoIp           = true
+      intents                       = local.converged ? local.converged_intents : local.seperate_intents
+      storageNetworks               = local.storage_networks
+      storageConnectivitySwitchless = false
+    }
+    adouPath        = var.adou_path
+    secretsLocation = var.use_legacy_key_vault_model ? local.secrets_location : null
+    secrets = var.use_legacy_key_vault_model ? null : [
+      {
+        secretName     = "${var.name}-AzureStackLCMUserCredential"
+        eceSecretName  = "AzureStackLCMUserCredential"
+        secretLocation = "${local.secrets_location}secrets/${var.name}-AzureStackLCMUserCredential"
+      },
+      {
+        secretName     = "${var.name}-LocalAdminCredential"
+        eceSecretName  = "LocalAdminCredential"
+        secretLocation = "${local.secrets_location}secrets/${var.name}-LocalAdminCredential"
+      },
+      {
+        secretName     = "${var.name}-DefaultARBApplication"
+        eceSecretName  = "DefaultARBApplication"
+        secretLocation = "${local.secrets_location}secrets/${var.name}-DefaultARBApplication"
+      },
+      {
+        secretName     = "${var.name}-WitnessStorageKey"
+        eceSecretName  = "WitnessStorageKey"
+        secretLocation = "${local.secrets_location}secrets/${var.name}-WitnessStorageKey"
+      }
+    ]
+    optionalServices = {
+      customLocation = var.custom_location_name
+    }
+  }
+  deployment_data_omit_null = { for k, v in local.deployment_data : k => v if v != null }
+  key_vault                 = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
+  owned_user_storages       = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
   rdma_adapter_properties = {
     jumboPacket             = "9014"
     networkDirect           = "Enabled"

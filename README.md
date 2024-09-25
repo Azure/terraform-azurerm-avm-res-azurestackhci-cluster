@@ -249,6 +249,22 @@ Type: `map(string)`
 
 Default: `null`
 
+### <a name="input_bitlocker_boot_volume"></a> [bitlocker\_boot\_volume](#input\_bitlocker\_boot\_volume)
+
+Description: When set to true, BitLocker XTS\_AES 256-bit encryption is enabled for all data-at-rest on the OS volume of your Azure Stack HCI cluster. This setting is TPM-hardware dependent.
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_bitlocker_data_volumes"></a> [bitlocker\_data\_volumes](#input\_bitlocker\_data\_volumes)
+
+Description: When set to true, BitLocker XTS-AES 256-bit encryption is enabled for all data-at-rest on your Azure Stack HCI cluster shared volumes.
+
+Type: `bool`
+
+Default: `true`
+
 ### <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name)
 
 Description: The name of the HCI cluster.
@@ -328,6 +344,14 @@ Default:
 ]
 ```
 
+### <a name="input_configuration_mode"></a> [configuration\_mode](#input\_configuration\_mode)
+
+Description: The configuration mode for the storage.
+
+Type: `string`
+
+Default: `"Express"`
+
 ### <a name="input_create_key_vault"></a> [create\_key\_vault](#input\_create\_key\_vault)
 
 Description: Set to true to create the key vault, or false to skip it
@@ -343,6 +367,14 @@ Description: Set to true to create the witness storage account, or false to skip
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_credential_guard_enforced"></a> [credential\_guard\_enforced](#input\_credential\_guard\_enforced)
+
+Description: When set to true, Credential Guard is enabled on your Azure HCI cluster.
+
+Type: `bool`
+
+Default: `false`
 
 ### <a name="input_cross_tenant_replication_enabled"></a> [cross\_tenant\_replication\_enabled](#input\_cross\_tenant\_replication\_enabled)
 
@@ -368,6 +400,22 @@ Type: `map(string)`
 
 Default: `null`
 
+### <a name="input_drift_control_enforced"></a> [drift\_control\_enforced](#input\_drift\_control\_enforced)
+
+Description: When set to true, the security baseline is re-applied regularly.
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_drtm_protection"></a> [drtm\_protection](#input\_drtm\_protection)
+
+Description: By default, Secure Boot is enabled on your Azure HCI cluster. This setting is hardware dependent.
+
+Type: `bool`
+
+Default: `true`
+
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
 Description: This variable controls whether or not telemetry is enabled for the module.  
@@ -385,6 +433,14 @@ Description: Indicates whether the location is in EU.
 Type: `bool`
 
 Default: `false`
+
+### <a name="input_hvci_protection"></a> [hvci\_protection](#input\_hvci\_protection)
+
+Description: By default, Hypervisor-protected Code Integrity is enabled on your Azure HCI cluster.
+
+Type: `bool`
+
+Default: `true`
 
 ### <a name="input_intent_name"></a> [intent\_name](#input\_intent\_name)
 
@@ -586,6 +642,30 @@ Type: `string`
 
 Default: `""`
 
+### <a name="input_side_channel_mitigation_enforced"></a> [side\_channel\_mitigation\_enforced](#input\_side\_channel\_mitigation\_enforced)
+
+Description: When set to true, all the side channel mitigations are enabled.
+
+Type: `bool`
+
+Default: `true`
+
+### <a name="input_smb_cluster_encryption"></a> [smb\_cluster\_encryption](#input\_smb\_cluster\_encryption)
+
+Description: When set to true, cluster east-west traffic is encrypted.
+
+Type: `bool`
+
+Default: `false`
+
+### <a name="input_smb_signing_enforced"></a> [smb\_signing\_enforced](#input\_smb\_signing\_enforced)
+
+Description: When set to true, the SMB default instance requires sign in for the client and server services.
+
+Type: `bool`
+
+Default: `true`
+
 ### <a name="input_storage_adapter_ip_info"></a> [storage\_adapter\_ip\_info](#input\_storage\_adapter\_ip\_info)
 
 Description: The IP information for the storage networks. Key is the storage network name.
@@ -695,6 +775,22 @@ Default:
   "Storage"
 ]
 ```
+
+### <a name="input_use_legacy_key_vault_model"></a> [use\_legacy\_key\_vault\_model](#input\_use\_legacy\_key\_vault\_model)
+
+Description: Indicates whether to use the legacy key vault model.
+
+Type: `bool`
+
+Default: `false`
+
+### <a name="input_wdac_enforced"></a> [wdac\_enforced](#input\_wdac\_enforced)
+
+Description: WDAC is enabled by default and limits the applications and the code that you can run on your Azure Stack HCI cluster.
+
+Type: `bool`
+
+Default: `true`
 
 ### <a name="input_witness_path"></a> [witness\_path](#input\_witness\_path)
 
