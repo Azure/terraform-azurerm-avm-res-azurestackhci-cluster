@@ -21,8 +21,7 @@ locals {
     adapterPropertyOverrides = var.rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
   }]
   decoded_user_storages = jsondecode(data.azapi_resource_list.user_storages.output).value
-  deployment_data       = var.use_legacy_key_vault_model ? merge(local.deployment_data_without_keyvault, flatten(local.secrets_settings_legacy)) : merge(local.deployment_data_without_keyvault, flatten(local.secrets_settings))
-  deployment_data_without_keyvault = {
+  deployment_data = {
     securitySettings = {
       hvciProtection                = var.hvci_protection
       drtmProtection                = var.drtm_protection
@@ -71,13 +70,37 @@ locals {
       storageNetworks               = local.storage_networks
       storageConnectivitySwitchless = false
     }
-    adouPath = var.adou_path
+    adouPath        = var.adou_path
+    secretsLocation = var.use_legacy_key_vault_model ? local.secrets_location : null
+    secrets = var.use_legacy_key_vault_model ? null : [
+      {
+        secretName     = "${var.name}-AzureStackLCMUserCredential"
+        eceSecretName  = "AzureStackLCMUserCredential"
+        secretLocation = "${local.secrets_location}secrets/${var.name}-AzureStackLCMUserCredential"
+      },
+      {
+        secretName     = "${var.name}-LocalAdminCredential"
+        eceSecretName  = "LocalAdminCredential"
+        secretLocation = "${local.secrets_location}secrets/${var.name}-LocalAdminCredential"
+      },
+      {
+        secretName     = "${var.name}-DefaultARBApplication"
+        eceSecretName  = "DefaultARBApplication"
+        secretLocation = "${local.secrets_location}secrets/${var.name}-DefaultARBApplication"
+      },
+      {
+        secretName     = "${var.name}-WitnessStorageKey"
+        eceSecretName  = "WitnessStorageKey"
+        secretLocation = "${local.secrets_location}secrets/${var.name}-WitnessStorageKey"
+      }
+    ]
     optionalServices = {
       customLocation = var.custom_location_name
     }
   }
-  key_vault           = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
-  owned_user_storages = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
+  deployment_data_omit_null = { for k, v in local.deployment_data : k => v if v != null }
+  key_vault                 = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
+  owned_user_storages       = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
   rdma_adapter_properties = {
     jumboPacket             = "9014"
     networkDirect           = "Enabled"
@@ -101,35 +124,6 @@ locals {
     ACMRM = "Azure Connected Machine Resource Manager",
   }
   secrets_location = var.secrets_location == "" ? local.key_vault.vault_uri : var.secrets_location
-  secrets_settings = {
-    secretsLocation = null
-    secrets = [
-      {
-        secretName     = "${var.name}-AzureStackLCMUserCredential"
-        eceSecretName  = "AzureStackLCMUserCredential"
-        secretLocation = "${local.secrets_location}secrets/${var.name}-AzureStackLCMUserCredential"
-      },
-      {
-        secretName     = "${var.name}-LocalAdminCredential"
-        eceSecretName  = "LocalAdminCredential"
-        secretLocation = "${local.secrets_location}secrets/${var.name}-LocalAdminCredential"
-      },
-      {
-        secretName     = "${var.name}-DefaultARBApplication"
-        eceSecretName  = "DefaultARBApplication"
-        secretLocation = "${local.secrets_location}secrets/${var.name}-DefaultARBApplication"
-      },
-      {
-        secretName     = "${var.name}-WitnessStorageKey"
-        eceSecretName  = "WitnessStorageKey"
-        secretLocation = "${local.secrets_location}secrets/${var.name}-WitnessStorageKey"
-      }
-    ]
-  }
-  secrets_settings_legacy = {
-    secretsLocation = local.secrets_location
-    secrets         = null
-  }
   seperate_intents = [{
     name                               = var.compute_intent_name,
     trafficType                        = var.compute_traffic_type,

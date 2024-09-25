@@ -19,7 +19,7 @@ resource "azapi_resource" "validatedeploymentsetting" {
         version = "10.0.0.0"
         scaleUnits = [
           {
-            deploymentData = local.deployment_data
+            deploymentData = local.deployment_data_omit_null
           }
         ]
       }
