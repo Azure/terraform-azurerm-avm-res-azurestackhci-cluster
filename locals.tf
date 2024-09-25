@@ -46,18 +46,6 @@ locals {
     ACMRM = "Azure Connected Machine Resource Manager",
   }
   secrets_location = var.secrets_location == "" ? local.key_vault.vault_uri : var.secrets_location
-  security_settings = {
-    hvciProtection                = var.hvci_protection
-    drtmProtection                = var.drtm_protection
-    driftControlEnforced          = var.drift_control_enforced
-    credentialGuardEnforced       = var.credential_guard_enforced
-    smbSigningEnforced            = var.smb_signing_enforced
-    smbClusterEncryption          = var.smb_cluster_encryption
-    sideChannelMitigationEnforced = var.side_channel_mitigation_enforced
-    bitlockerBootVolume           = var.bitlocker_boot_volume
-    bitlockerDataVolumes          = var.bitlocker_data_volumes
-    wdacEnforced                  = var.wdac_enforced
-  }
   seperate_intents = [{
     name                               = var.compute_intent_name,
     trafficType                        = var.compute_traffic_type,

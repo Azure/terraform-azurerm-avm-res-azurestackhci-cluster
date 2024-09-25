@@ -20,7 +20,18 @@ resource "azapi_resource" "validatedeploymentsetting" {
         scaleUnits = [
           {
             deploymentData = {
-              securitySettings = local.security_settings
+              securitySettings = {
+                hvciProtection                = var.hvci_protection
+                drtmProtection                = var.drtm_protection
+                driftControlEnforced          = var.drift_control_enforced
+                credentialGuardEnforced       = var.credential_guard_enforced
+                smbSigningEnforced            = var.smb_signing_enforced
+                smbClusterEncryption          = var.smb_cluster_encryption
+                sideChannelMitigationEnforced = var.side_channel_mitigation_enforced
+                bitlockerBootVolume           = var.bitlocker_boot_volume
+                bitlockerDataVolumes          = var.bitlocker_data_volumes
+                wdacEnforced                  = var.wdac_enforced
+              }
               observability = {
                 streamingDataClient = true
                 euLocation          = var.eu_location
