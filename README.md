@@ -202,11 +202,6 @@ list(object({
     name               = string
     networkAdapterName = string
     vlanId             = string
-    storageAdapterIPInfo = optional(object({
-      physicalNode = string
-      ipv4Address  = string
-      subnetMask   = string
-    }))
   }))
 ```
 
@@ -590,6 +585,22 @@ Description: Secrets location for the deployment.
 Type: `string`
 
 Default: `""`
+
+### <a name="input_storage_adapter_ip_info"></a> [storage\_adapter\_ip\_info](#input\_storage\_adapter\_ip\_info)
+
+Description: The IP information for the storage networks. Key is the storage network name.
+
+Type:
+
+```hcl
+map(list(object({
+    physicalNode = string
+    ipv4Address  = string
+    subnetMask   = string
+  })))
+```
+
+Default: `null`
 
 ### <a name="input_storage_intent_name"></a> [storage\_intent\_name](#input\_storage\_intent\_name)
 

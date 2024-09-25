@@ -128,11 +128,6 @@ variable "storage_networks" {
     name               = string
     networkAdapterName = string
     vlanId             = string
-    storageAdapterIPInfo = optional(object({
-      physicalNode = string
-      ipv4Address  = string
-      subnetMask   = string
-    }))
   }))
   description = "A list of storage networks."
 }
@@ -431,6 +426,16 @@ variable "secrets_location" {
   type        = string
   default     = ""
   description = "Secrets location for the deployment."
+}
+
+variable "storage_adapter_ip_info" {
+  type = map(list(object({
+    physicalNode = string
+    ipv4Address  = string
+    subnetMask   = string
+  })))
+  default     = null
+  description = "The IP information for the storage networks. Key is the storage network name."
 }
 
 variable "storage_intent_name" {
