@@ -394,7 +394,7 @@ variable "operation_type" {
   description = "The intended operation for a cluster."
 
   validation {
-    condition     = var.operation_type == null || contains(["ClusterProvisioning", "ClusterUpgrade"], var.operation_type)
+    condition     = contains(["ClusterProvisioning", "ClusterUpgrade"], var.operation_type == null ? "ClusterProvisioning" : var.operation_type)
     error_message = "operation_type must be either 'ClusterProvisioning' or 'ClusterUpgrade'."
   }
 }
