@@ -11,19 +11,7 @@ data "azurerm_arc_machine" "arcservers" {
 resource "azapi_resource" "validatedeploymentsetting" {
   type = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2024-04-01"
   body = {
-    properties = {
-      arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
-      deploymentMode     = var.is_exported ? "Deploy" : "Validate"
-      operationType      = var.operation_type
-      deploymentConfiguration = {
-        version = "10.0.0.0"
-        scaleUnits = [
-          {
-            deploymentData = local.deployment_data_omit_null
-          }
-        ]
-      }
-    }
+    properties = local.deployment_setting_properties_omit_null
   }
   name      = "default"
   parent_id = azapi_resource.cluster.id
