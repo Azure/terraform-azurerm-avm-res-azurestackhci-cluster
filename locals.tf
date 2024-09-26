@@ -99,8 +99,22 @@ locals {
     }
   }
   deployment_data_omit_null = { for k, v in local.deployment_data : k => v if v != null }
-  key_vault                 = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
-  owned_user_storages       = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
+  deployment_setting_properties = {
+    arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
+    deploymentMode     = var.is_exported ? "Deploy" : "Validate"
+    operationType      = var.operation_type
+    deploymentConfiguration = {
+      version = "10.0.0.0"
+      scaleUnits = [
+        {
+          deploymentData = local.deployment_data_omit_null
+        }
+      ]
+    }
+  }
+  deployment_setting_properties_omit_null = { for k, v in local.deployment_setting_properties : k => v if v != null }
+  key_vault                               = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
+  owned_user_storages                     = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
   rdma_adapter_properties = {
     jumboPacket             = "9014"
     networkDirect           = "Enabled"
