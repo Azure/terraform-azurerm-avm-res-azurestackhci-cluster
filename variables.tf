@@ -399,6 +399,12 @@ variable "operation_type" {
   }
 }
 
+variable "naming_prefix" {
+  type        = string
+  default     = ""
+  description = "The naming prefix in HCI deployment settings. Site id will be used if not provided."
+}
+
 variable "override_adapter_property" {
   type        = bool
   default     = true
