@@ -388,6 +388,12 @@ variable "min_tls_version" {
   description = "The minimum TLS version."
 }
 
+variable "naming_prefix" {
+  type        = string
+  default     = ""
+  description = "The naming prefix in HCI deployment settings. Site id will be used if not provided."
+}
+
 variable "operation_type" {
   type        = string
   default     = "ClusterProvisioning"

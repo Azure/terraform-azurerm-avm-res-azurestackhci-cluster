@@ -540,6 +540,14 @@ Type: `string`
 
 Default: `"TLS1_2"`
 
+### <a name="input_naming_prefix"></a> [naming\_prefix](#input\_naming\_prefix)
+
+Description: The naming prefix in HCI deployment settings. Site id will be used if not provided.
+
+Type: `string`
+
+Default: `""`
+
 ### <a name="input_operation_type"></a> [operation\_type](#input\_operation\_type)
 
 Description: The intended operation for a cluster.

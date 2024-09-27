@@ -49,7 +49,7 @@ locals {
     storage = {
       configurationMode = var.configuration_mode
     }
-    namingPrefix = var.site_id
+    namingPrefix = var.naming_prefix == "" ? var.site_id : var.naming_prefix
     domainFqdn   = var.domain_fqdn
     infrastructureNetwork = [{
       useDhcp    = false
@@ -68,10 +68,10 @@ locals {
       enableStorageAutoIp           = true
       intents                       = local.converged ? local.converged_intents : local.seperate_intents
       storageNetworks               = local.storage_networks
-      storageConnectivitySwitchless = false
+      storageConnectivitySwitchless = var.storage_connectivity_switchless
     }
     adouPath        = var.adou_path
-    secretsLocation = var.use_legacy_key_vault_model ? local.secrets_location : null
+    secretsLocation = var.use_legacy_key_vault_model ? local.secrets_location : (var.secrets_location == "" ? null : var.secrets_location)
     secrets = var.use_legacy_key_vault_model ? null : [
       {
         secretName     = "${var.name}-AzureStackLCMUserCredential"
