@@ -20,14 +20,14 @@ data "azapi_resource" "customlocation" {
 
 data "azapi_resource_list" "user_storages" {
   parent_id              = data.azurerm_resource_group.rg.id
-  type                   = "Microsoft.AzureStackHCI/storagecontainers@2022-12-15-preview"
+  type                   = "microsoft.azurestackhci/storagecontainers@2022-12-15-preview"
   response_export_values = ["*"]
 
   depends_on = [azapi_update_resource.deploymentsetting]
 }
 
 data "azapi_resource" "arc_settings" {
-  type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2024-04-01"
+  type      = "microsoft.azurestackhci/clusters/ArcSettings@2024-04-01"
   name      = "default"
   parent_id = azapi_resource.cluster.id
 
@@ -35,7 +35,7 @@ data "azapi_resource" "arc_settings" {
 }
 
 resource "azapi_resource" "cluster" {
-  type = "Microsoft.AzureStackHCI/clusters@2024-04-01"
+  type = "microsoft.azurestackhci/clusters@2024-04-01"
   body = {
     properties = {}
   }
