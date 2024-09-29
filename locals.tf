@@ -72,28 +72,7 @@ locals {
     }
     adouPath        = var.adou_path
     secretsLocation = var.use_legacy_key_vault_model ? local.secrets_location : (var.secrets_location == "" ? null : var.secrets_location)
-    secrets = var.use_legacy_key_vault_model ? null : [
-      {
-        secretName     = "${var.name}-AzureStackLCMUserCredential"
-        eceSecretName  = "AzureStackLCMUserCredential"
-        secretLocation = "${local.secrets_location}secrets/${var.name}-AzureStackLCMUserCredential"
-      },
-      {
-        secretName     = "${var.name}-LocalAdminCredential"
-        eceSecretName  = "LocalAdminCredential"
-        secretLocation = "${local.secrets_location}secrets/${var.name}-LocalAdminCredential"
-      },
-      {
-        secretName     = "${var.name}-DefaultARBApplication"
-        eceSecretName  = "DefaultARBApplication"
-        secretLocation = "${local.secrets_location}secrets/${var.name}-DefaultARBApplication"
-      },
-      {
-        secretName     = "${var.name}-WitnessStorageKey"
-        eceSecretName  = "WitnessStorageKey"
-        secretLocation = "${local.secrets_location}secrets/${var.name}-WitnessStorageKey"
-      }
-    ]
+    secrets         = var.use_legacy_key_vault_model ? null : local.keyvault_secrets
     optionalServices = {
       customLocation = var.custom_location_name
     }
@@ -114,11 +93,26 @@ locals {
   }
   deployment_setting_properties_omit_null = { for k, v in local.deployment_setting_properties : k => v if v != null }
   key_vault                               = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
-  owned_user_storages                     = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
+  keyvault_secret_names = var.use_legacy_key_vault_model ? {
+    "AzureStackLCMUserCredential" = "AzureStackLCMUserCredential"
+    "LocalAdminCredential"        = "LocalAdminCredential"
+    "DefaultARBApplication"       = "DefaultARBApplication"
+    "WitnessStorageKey"           = "WitnessStorageKey"
+    } : {
+    for secret in var.keyvault_secrets : secret.eceSecretName => "${var.name}-${secret.secretSuffix}"
+  }
+  keyvault_secrets = [
+    for secret in var.keyvault_secrets : {
+      secretName     = local.keyvault_secret_names[secret.eceSecretName]
+      eceSecretName  = secret.eceSecretName
+      secretLocation = "${local.secrets_location}secrets/${local.keyvault_secret_names[secret.eceSecretName]}"
+    }
+  ]
+  owned_user_storages = [for storage in local.decoded_user_storages : storage if lower(storage.extendedLocation.name) == lower(data.azapi_resource.customlocation.id)]
   rdma_adapter_properties = {
-    jumboPacket             = "9014"
+    jumboPacket             = var.rdma_jumbo_packet
     networkDirect           = "Enabled"
-    networkDirectTechnology = "RoCEv2"
+    networkDirectTechnology = var.rdma_protocol
   }
   role_assignments = flatten([
     for server_key, arcserver in data.azurerm_arc_machine.arcservers : [
@@ -164,7 +158,7 @@ locals {
         loadBalancingAlgorithm = ""
       },
       qosPolicyOverrides       = var.storage_qos_policy_overrides,
-      adapterPropertyOverrides = var.storage_rdma_enabled ? (var.storage_connectivity_switchless ? local.switchless_adapter_properties : local.rdma_adapter_properties) : local.adapter_properties
+      adapterPropertyOverrides = var.storage_rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
   }]
   storage_adapters = flatten([for storageNetwork in var.storage_networks : storageNetwork.networkAdapterName])
   storage_networks = var.storage_adapter_ip_info == null ? flatten(var.storage_networks) : [
@@ -175,10 +169,5 @@ locals {
       storageAdapterIPInfo = var.storage_adapter_ip_info[storageNetwork.name]
     }
   ]
-  switchless_adapter_properties = {
-    jumboPacket             = "9014"
-    networkDirect           = "Enabled"
-    networkDirectTechnology = "iWARP"
-  }
   witness_storage_account_resource_group_name = var.witness_storage_account_resource_group_name == "" ? var.resource_group_name : var.witness_storage_account_resource_group_name
 }

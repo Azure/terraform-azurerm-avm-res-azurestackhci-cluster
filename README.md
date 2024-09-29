@@ -482,6 +482,42 @@ Type: `bool`
 
 Default: `true`
 
+### <a name="input_keyvault_secrets"></a> [keyvault\_secrets](#input\_keyvault\_secrets)
+
+Description: A list of key vault secrets.
+
+Type:
+
+```hcl
+list(object({
+    eceSecretName = string
+    secretSuffix  = string
+  }))
+```
+
+Default:
+
+```json
+[
+  {
+    "eceSecretName": "AzureStackLCMUserCredential",
+    "secretSuffix": "AzureStackLCMUserCredential"
+  },
+  {
+    "eceSecretName": "LocalAdminCredential",
+    "secretSuffix": "LocalAdminCredential"
+  },
+  {
+    "eceSecretName": "DefaultARBApplication",
+    "secretSuffix": "DefaultARBApplication"
+  },
+  {
+    "eceSecretName": "WitnessStorageKey",
+    "secretSuffix": "WitnessStorageKey"
+  }
+]
+```
+
 ### <a name="input_keyvault_soft_delete_retention_days"></a> [keyvault\_soft\_delete\_retention\_days](#input\_keyvault\_soft\_delete\_retention\_days)
 
 Description: The number of days that items should be retained for soft delete.
@@ -603,6 +639,22 @@ Description: Enables RDMA when set to true. In a converged network configuration
 Type: `bool`
 
 Default: `false`
+
+### <a name="input_rdma_jumbo_packet"></a> [rdma\_jumbo\_packet](#input\_rdma\_jumbo\_packet)
+
+Description: The jumbo packet size for RDMA.
+
+Type: `string`
+
+Default: `"9014"`
+
+### <a name="input_rdma_protocol"></a> [rdma\_protocol](#input\_rdma\_protocol)
+
+Description: The RDMA protocol.
+
+Type: `string`
+
+Default: `"RoCEv2"`
 
 ### <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments)
 
