@@ -370,7 +370,7 @@ variable "keyvault_secrets" {
   }
 
   validation {
-    condition    = var.use_legacy_key_vault_model || all([for secret in var.keyvault_secrets : contains(["AzureStackLCMUserCredential", "LocalAdminCredential", "DefaultARBApplication", "WitnessStorageKey"], secret.eceSecretName)])
+    condition    = var.use_legacy_key_vault_model || alltrue([for secret in var.keyvault_secrets : contains(["AzureStackLCMUserCredential", "LocalAdminCredential", "DefaultARBApplication", "WitnessStorageKey"], secret.eceSecretName)])
     error_message = "keyvault_secrets must be provided when use_legacy_key_vault_model is false. EceSecretNames are AzureStackLCMUserCredential, LocalAdminCredential, DefaultARBApplication, WitnessStorageKey."
   }
 }
