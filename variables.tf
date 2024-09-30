@@ -339,6 +339,41 @@ variable "keyvault_purge_protection_enabled" {
   description = "Indicates whether purge protection is enabled."
 }
 
+variable "keyvault_secrets" {
+  type = list(object({
+    eceSecretName = string
+    secretSuffix  = string
+  }))
+  default = [
+    {
+      eceSecretName = "AzureStackLCMUserCredential"
+      secretSuffix  = "AzureStackLCMUserCredential"
+    },
+    {
+      eceSecretName = "LocalAdminCredential"
+      secretSuffix  = "LocalAdminCredential"
+    },
+    {
+      eceSecretName = "DefaultARBApplication"
+      secretSuffix  = "DefaultARBApplication"
+    },
+    {
+      eceSecretName = "WitnessStorageKey"
+      secretSuffix  = "WitnessStorageKey"
+    }
+  ]
+  description = "A list of key vault secrets."
+
+  validation {
+    condition     = var.use_legacy_key_vault_model || length(var.keyvault_secrets) == 4
+    error_message = "keyvault_secrets must be provided when use_legacy_key_vault_model is false. EceSecretNames are AzureStackLCMUserCredential, LocalAdminCredential, DefaultARBApplication, WitnessStorageKey."
+  }
+  validation {
+    condition     = var.use_legacy_key_vault_model || alltrue([for secret in var.keyvault_secrets : contains(["AzureStackLCMUserCredential", "LocalAdminCredential", "DefaultARBApplication", "WitnessStorageKey"], secret.eceSecretName)])
+    error_message = "keyvault_secrets must be provided when use_legacy_key_vault_model is false. EceSecretNames are AzureStackLCMUserCredential, LocalAdminCredential, DefaultARBApplication, WitnessStorageKey."
+  }
+}
+
 variable "keyvault_soft_delete_retention_days" {
   type        = number
   default     = 30
@@ -435,6 +470,18 @@ variable "rdma_enabled" {
   type        = bool
   default     = false
   description = "Enables RDMA when set to true. In a converged network configuration, this will make the network use RDMA. In a dedicated storage network configuration, enabling this will enable RDMA on the storage network."
+}
+
+variable "rdma_jumbo_packet" {
+  type        = string
+  default     = "9014"
+  description = "The jumbo packet size for RDMA."
+}
+
+variable "rdma_protocol" {
+  type        = string
+  default     = "RoCEv2"
+  description = "The RDMA protocol."
 }
 
 variable "role_assignments" {
