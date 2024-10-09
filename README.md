@@ -241,6 +241,14 @@ Type: `string`
 
 Default: `null`
 
+### <a name="input_azure_stack_lcm_user_credential_expiration_date"></a> [azure\_stack\_lcm\_user\_credential\_expiration\_date](#input\_azure\_stack\_lcm\_user\_credential\_expiration\_date)
+
+Description: (Optional) Expiration date of the azure stack lcm user credential.
+
+Type: `string`
+
+Default: `null`
+
 ### <a name="input_azure_stack_lcm_user_credential_tags"></a> [azure\_stack\_lcm\_user\_credential\_tags](#input\_azure\_stack\_lcm\_user\_credential\_tags)
 
 Description: (Optional) Tags of the azure stack lcm user credential.
@@ -392,6 +400,14 @@ Type: `string`
 
 Default: `null`
 
+### <a name="input_default_arb_application_expiration_date"></a> [default\_arb\_application\_expiration\_date](#input\_default\_arb\_application\_expiration\_date)
+
+Description: (Optional) Expiration date of the default arb application.
+
+Type: `string`
+
+Default: `null`
+
 ### <a name="input_default_arb_application_tags"></a> [default\_arb\_application\_tags](#input\_default\_arb\_application\_tags)
 
 Description: (Optional) Tags of the default arb application.
@@ -537,6 +553,14 @@ Default: `null`
 ### <a name="input_local_admin_credential_content_type"></a> [local\_admin\_credential\_content\_type](#input\_local\_admin\_credential\_content\_type)
 
 Description: (Optional) Content type of the local admin credential.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_local_admin_credential_expiration_date"></a> [local\_admin\_credential\_expiration\_date](#input\_local\_admin\_credential\_expiration\_date)
+
+Description: (Optional) Expiration date of the local admin credential.
 
 Type: `string`
 
@@ -879,6 +903,14 @@ Default: `""`
 ### <a name="input_witness_storage_key_content_type"></a> [witness\_storage\_key\_content\_type](#input\_witness\_storage\_key\_content\_type)
 
 Description: (Optional) Content type of the witness storage key.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_witness_storage_key_expiration_date"></a> [witness\_storage\_key\_expiration\_date](#input\_witness\_storage\_key\_expiration\_date)
+
+Description: (Optional) Expiration date of the witness storage key.
 
 Type: `string`
 

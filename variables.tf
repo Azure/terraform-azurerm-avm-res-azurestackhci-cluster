@@ -156,6 +156,12 @@ variable "azure_stack_lcm_user_credential_content_type" {
   description = "(Optional) Content type of the azure stack lcm user credential."
 }
 
+variable "azure_stack_lcm_user_credential_expiration_date" {
+  type        = string
+  default     = null
+  description = "(Optional) Expiration date of the azure stack lcm user credential."
+}
+
 variable "azure_stack_lcm_user_credential_tags" {
   type        = map(string)
   default     = null
@@ -266,6 +272,12 @@ variable "default_arb_application_content_type" {
   type        = string
   default     = null
   description = "(Optional) Content type of the default arb application."
+}
+
+variable "default_arb_application_expiration_date" {
+  type        = string
+  default     = null
+  description = "(Optional) Expiration date of the default arb application."
 }
 
 variable "default_arb_application_tags" {
@@ -390,6 +402,12 @@ variable "local_admin_credential_content_type" {
   type        = string
   default     = null
   description = "(Optional) Content type of the local admin credential."
+}
+
+variable "local_admin_credential_expiration_date" {
+  type        = string
+  default     = null
+  description = "(Optional) Expiration date of the local admin credential."
 }
 
 variable "local_admin_credential_tags" {
@@ -653,6 +671,12 @@ variable "witness_storage_key_content_type" {
   type        = string
   default     = null
   description = "(Optional) Content type of the witness storage key."
+}
+
+variable "witness_storage_key_expiration_date" {
+  type        = string
+  default     = null
+  description = "(Optional) Expiration date of the witness storage key."
 }
 
 variable "witness_storage_key_tags" {
