@@ -114,6 +114,10 @@ locals {
     networkDirect           = "Enabled"
     networkDirectTechnology = var.rdma_protocol
   }
+  # The resource group name is the last element of the split result
+  resource_group_name = element(local.resource_group_parts, length(local.resource_group_parts) - 1)
+  # Split the resource group ID into parts based on '/'
+  resource_group_parts = split("/", var.resource_group_id)
   role_assignments = flatten([
     for server_key, arcserver in data.azurerm_arc_machine.arcservers : [
       for role_key, role_name in local.roles : {
@@ -169,5 +173,5 @@ locals {
       storageAdapterIPInfo = var.storage_adapter_ip_info[storageNetwork.name]
     }
   ]
-  witness_storage_account_resource_group_name = var.witness_storage_account_resource_group_name == "" ? var.resource_group_name : var.witness_storage_account_resource_group_name
+  witness_storage_account_resource_group_name = var.witness_storage_account_resource_group_name == "" ? local.resource_group_name : var.witness_storage_account_resource_group_name
 }

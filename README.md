@@ -49,7 +49,6 @@ The following resources are used by this module:
 - [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 - [azurerm_client_config.telemetry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 - [azurerm_key_vault.key_vault](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault) (data source)
-- [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 - [azurerm_storage_account.witness](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/storage_account) (data source)
 - [modtm_module_source.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/data-sources/module_source) (data source)
 
@@ -142,9 +141,15 @@ Description: The name of the HCI cluster. Must be the same as the name when prep
 
 Type: `string`
 
-### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
+### <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id)
 
-Description: The resource group where the resources will be deployed.
+Description: The resource group id where the resources will be deployed.
+
+Type: `string`
+
+### <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location)
+
+Description: The resource group location where the resources will be deployed.
 
 Type: `string`
 

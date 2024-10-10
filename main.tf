@@ -1,11 +1,7 @@
-data "azurerm_resource_group" "rg" {
-  name = var.resource_group_name
-}
-
 data "azapi_resource" "arcbridge" {
   type      = "Microsoft.ResourceConnector/appliances@2022-10-27"
   name      = "${var.name}-arcbridge"
-  parent_id = data.azurerm_resource_group.rg.id
+  parent_id = var.resource_group_id
 
   depends_on = [azapi_update_resource.deploymentsetting]
 }
@@ -13,13 +9,13 @@ data "azapi_resource" "arcbridge" {
 data "azapi_resource" "customlocation" {
   type      = "Microsoft.ExtendedLocation/customLocations@2021-08-15"
   name      = var.custom_location_name
-  parent_id = data.azurerm_resource_group.rg.id
+  parent_id = var.resource_group_id
 
   depends_on = [azapi_update_resource.deploymentsetting]
 }
 
 data "azapi_resource_list" "user_storages" {
-  parent_id              = data.azurerm_resource_group.rg.id
+  parent_id              = var.resource_group_id
   type                   = "Microsoft.AzureStackHCI/storagecontainers@2022-12-15-preview"
   response_export_values = ["*"]
 
@@ -41,7 +37,7 @@ resource "azapi_resource" "cluster" {
   }
   location  = var.location
   name      = var.name
-  parent_id = data.azurerm_resource_group.rg.id
+  parent_id = var.resource_group_id
   tags      = var.cluster_tags
 
   identity {

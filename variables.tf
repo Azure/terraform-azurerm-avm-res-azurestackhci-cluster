@@ -79,10 +79,14 @@ variable "name" {
   }
 }
 
-# This is required for most resource modules
-variable "resource_group_name" {
+variable "resource_group_id" {
   type        = string
-  description = "The resource group where the resources will be deployed."
+  description = "The resource group id where the resources will be deployed."
+}
+
+variable "resource_group_location" {
+  type        = string
+  description = "The resource group location where the resources will be deployed."
 }
 
 variable "servers" {
