@@ -143,13 +143,13 @@ Type: `string`
 
 ### <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id)
 
-Description: The resource group id where the resources will be deployed.
+Description: The resource id of resource group.
 
 Type: `string`
 
 ### <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location)
 
-Description: The resource group location where the resources will be deployed.
+Description: The location of resource group.
 
 Type: `string`
 

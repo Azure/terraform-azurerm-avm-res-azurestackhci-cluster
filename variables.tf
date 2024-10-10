@@ -81,12 +81,12 @@ variable "name" {
 
 variable "resource_group_id" {
   type        = string
-  description = "The resource group id where the resources will be deployed."
+  description = "The resource id of resource group."
 }
 
 variable "resource_group_location" {
   type        = string
-  description = "The resource group location where the resources will be deployed."
+  description = "The location of resource group."
 }
 
 variable "servers" {
