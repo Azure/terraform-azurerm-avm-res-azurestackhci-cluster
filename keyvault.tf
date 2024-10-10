@@ -3,9 +3,9 @@ data "azurerm_client_config" "current" {}
 resource "azurerm_key_vault" "deployment_keyvault" {
   count = var.create_key_vault ? 1 : 0
 
-  location                        = var.key_vault_location == "" ? data.azurerm_resource_group.rg.location : var.key_vault_location
+  location                        = var.key_vault_location == "" ? var.resource_group_location : var.key_vault_location
   name                            = var.random_suffix ? "${var.keyvault_name}-${random_integer.random_suffix.result}" : var.keyvault_name
-  resource_group_name             = var.resource_group_name
+  resource_group_name             = local.resource_group_name
   sku_name                        = "standard"
   tenant_id                       = data.azurerm_client_config.current.tenant_id
   enable_rbac_authorization       = true
@@ -23,7 +23,7 @@ data "azurerm_key_vault" "key_vault" {
   count = var.create_key_vault ? 0 : 1
 
   name                = var.keyvault_name
-  resource_group_name = var.key_vault_resource_group == "" ? data.azurerm_resource_group.rg.name : var.key_vault_resource_group
+  resource_group_name = var.key_vault_resource_group == "" ? local.resource_group_name : var.key_vault_resource_group
 }
 
 resource "azurerm_key_vault_secret" "azure_stack_lcm_user_credential" {

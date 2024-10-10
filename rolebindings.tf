@@ -8,7 +8,7 @@ resource "azurerm_role_assignment" "service_principal_role_assign" {
   for_each = local.rp_roles
 
   principal_id         = var.rp_service_principal_object_id == "" ? data.azuread_service_principal.hci_rp[0].object_id : var.rp_service_principal_object_id
-  scope                = data.azurerm_resource_group.rg.id
+  scope                = var.resource_group_id
   role_definition_name = each.value
 
   depends_on = [data.azuread_service_principal.hci_rp]
