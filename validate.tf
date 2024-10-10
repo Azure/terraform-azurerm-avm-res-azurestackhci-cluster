@@ -5,7 +5,7 @@ data "azurerm_arc_machine" "arcservers" {
   }
 
   name                = each.key
-  resource_group_name = var.resource_group_name
+  resource_group_name = local.resource_group_name
 }
 
 resource "azapi_resource" "validatedeploymentsetting" {

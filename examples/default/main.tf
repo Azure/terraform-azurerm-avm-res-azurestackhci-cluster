@@ -29,9 +29,10 @@ module "test" {
   # source             = "Azure/avm-res-azurestackhci-cluster/azurerm"
   # version = "~> 0.1.0"
 
-  location            = data.azurerm_resource_group.rg.location
-  name                = local.name
-  resource_group_name = data.azurerm_resource_group.rg.name
+  location                = data.azurerm_resource_group.rg.location
+  name                    = local.name
+  resource_group_id       = data.azurerm_resource_group.rg.id
+  resource_group_location = data.azurerm_resource_group.rg.location
 
   enable_telemetry = var.enable_telemetry # see variables.tf
 
