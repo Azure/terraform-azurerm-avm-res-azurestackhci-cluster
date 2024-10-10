@@ -360,32 +360,15 @@ variable "keyvault_secrets" {
     eceSecretName = string
     secretSuffix  = string
   }))
-  default = [
-    {
-      eceSecretName = "AzureStackLCMUserCredential"
-      secretSuffix  = "AzureStackLCMUserCredential"
-    },
-    {
-      eceSecretName = "LocalAdminCredential"
-      secretSuffix  = "LocalAdminCredential"
-    },
-    {
-      eceSecretName = "DefaultARBApplication"
-      secretSuffix  = "DefaultARBApplication"
-    },
-    {
-      eceSecretName = "WitnessStorageKey"
-      secretSuffix  = "WitnessStorageKey"
-    }
-  ]
+  default     = []
   description = "A list of key vault secrets."
 
   validation {
-    condition     = var.use_legacy_key_vault_model || length(var.keyvault_secrets) == 4
-    error_message = "keyvault_secrets must be provided when use_legacy_key_vault_model is false. EceSecretNames are AzureStackLCMUserCredential, LocalAdminCredential, DefaultARBApplication, WitnessStorageKey."
+    condition     = var.use_legacy_key_vault_model || length(var.keyvault_secrets) == 0 || (var.witness_type == null || var.witness_type == "" && length(var.keyvault_secrets) == 3) || (var.witness_type != null && var.witness_type != "" && length(var.keyvault_secrets) == 4)
+    error_message = "When use_legacy_key_vault_model is false and keyvault_secrets is provided, it must contain exactly 3 secrets (AzureStackLCMUserCredential, LocalAdminCredential, DefaultARBApplication) if witness_type is not specified (null or empty), or 4 secrets (including WitnessStorageKey) if witness_type is specified."
   }
   validation {
-    condition     = var.use_legacy_key_vault_model || alltrue([for secret in var.keyvault_secrets : contains(["AzureStackLCMUserCredential", "LocalAdminCredential", "DefaultARBApplication", "WitnessStorageKey"], secret.eceSecretName)])
+    condition     = var.use_legacy_key_vault_model || length(var.keyvault_secrets) == 0 || alltrue([for secret in var.keyvault_secrets : contains(["AzureStackLCMUserCredential", "LocalAdminCredential", "DefaultARBApplication", "WitnessStorageKey"], secret.eceSecretName)])
     error_message = "keyvault_secrets must be provided when use_legacy_key_vault_model is false. EceSecretNames are AzureStackLCMUserCredential, LocalAdminCredential, DefaultARBApplication, WitnessStorageKey."
   }
 }

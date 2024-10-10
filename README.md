@@ -516,28 +516,7 @@ list(object({
   }))
 ```
 
-Default:
-
-```json
-[
-  {
-    "eceSecretName": "AzureStackLCMUserCredential",
-    "secretSuffix": "AzureStackLCMUserCredential"
-  },
-  {
-    "eceSecretName": "LocalAdminCredential",
-    "secretSuffix": "LocalAdminCredential"
-  },
-  {
-    "eceSecretName": "DefaultARBApplication",
-    "secretSuffix": "DefaultARBApplication"
-  },
-  {
-    "eceSecretName": "WitnessStorageKey",
-    "secretSuffix": "WitnessStorageKey"
-  }
-]
-```
+Default: `[]`
 
 ### <a name="input_keyvault_soft_delete_retention_days"></a> [keyvault\_soft\_delete\_retention\_days](#input\_keyvault\_soft\_delete\_retention\_days)
 

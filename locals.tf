@@ -4,8 +4,24 @@ locals {
     networkDirect           = "Disabled"
     networkDirectTechnology = ""
   }
-  combined_adapters = setintersection(toset(var.management_adapters), toset(local.storage_adapters))
-  converged         = (length(local.combined_adapters) == length(var.management_adapters)) && (length(local.combined_adapters) == length(local.storage_adapters))
+  auto_generated_secrets = (var.witness_type == null || var.witness_type == "") ? local.base_secrets : concat(local.base_secrets, [local.witness_secret])
+  base_secrets = [
+    {
+      eceSecretName = "AzureStackLCMUserCredential"
+      secretSuffix  = "AzureStackLCMUserCredential"
+    },
+    {
+      eceSecretName = "LocalAdminCredential"
+      secretSuffix  = "LocalAdminCredential"
+    },
+    {
+      eceSecretName = "DefaultARBApplication"
+      secretSuffix  = "DefaultARBApplication"
+    }
+  ]
+  combined_adapters         = setintersection(toset(var.management_adapters), toset(local.storage_adapters))
+  combined_keyvault_secrets = length(var.keyvault_secrets) != 0 ? var.keyvault_secrets : local.auto_generated_secrets
+  converged                 = (length(local.combined_adapters) == length(var.management_adapters)) && (length(local.combined_adapters) == length(local.storage_adapters))
   converged_intents = [{
     name                               = var.intent_name,
     trafficType                        = var.traffic_type,
@@ -99,10 +115,10 @@ locals {
     "DefaultARBApplication"       = "DefaultARBApplication"
     "WitnessStorageKey"           = "WitnessStorageKey"
     } : {
-    for secret in var.keyvault_secrets : secret.eceSecretName => "${var.name}-${secret.secretSuffix}"
+    for secret in local.combined_keyvault_secrets : secret.eceSecretName => "${var.name}-${secret.secretSuffix}"
   }
   keyvault_secrets = [
-    for secret in var.keyvault_secrets : {
+    for secret in local.combined_keyvault_secrets : {
       secretName     = local.keyvault_secret_names[secret.eceSecretName]
       eceSecretName  = secret.eceSecretName
       secretLocation = "${local.secrets_location}secrets/${local.keyvault_secret_names[secret.eceSecretName]}"
@@ -173,5 +189,9 @@ locals {
       storageAdapterIPInfo = var.storage_adapter_ip_info[storageNetwork.name]
     }
   ]
+  witness_secret = {
+    eceSecretName = "WitnessStorageKey"
+    secretSuffix  = "WitnessStorageKey"
+  }
   witness_storage_account_resource_group_name = var.witness_storage_account_resource_group_name == "" ? local.resource_group_name : var.witness_storage_account_resource_group_name
 }
