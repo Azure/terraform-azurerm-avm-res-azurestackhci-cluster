@@ -84,11 +84,6 @@ variable "resource_group_id" {
   description = "The resource id of resource group."
 }
 
-variable "resource_group_location" {
-  type        = string
-  description = "The location of resource group."
-}
-
 variable "servers" {
   type = list(object({
     name        = string
@@ -487,6 +482,12 @@ variable "rdma_protocol" {
   type        = string
   default     = "RoCEv2"
   description = "The RDMA protocol."
+}
+
+variable "resource_group_location" {
+  type        = string
+  default     = ""
+  description = "The location of resource group."
 }
 
 variable "role_assignments" {

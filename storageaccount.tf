@@ -3,7 +3,7 @@ resource "azurerm_storage_account" "witness" {
 
   account_replication_type         = var.account_replication_type
   account_tier                     = "Standard"
-  location                         = var.resource_group_location
+  location                         = local.resource_group_location
   name                             = var.random_suffix ? "${var.witness_storage_account_name}${random_integer.random_suffix.result}" : var.witness_storage_account_name
   resource_group_name              = local.witness_storage_account_resource_group_name
   allow_nested_items_to_be_public  = var.allow_nested_items_to_be_public

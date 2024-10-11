@@ -3,7 +3,7 @@ data "azurerm_client_config" "current" {}
 resource "azurerm_key_vault" "deployment_keyvault" {
   count = var.create_key_vault ? 1 : 0
 
-  location                        = var.key_vault_location == "" ? var.resource_group_location : var.key_vault_location
+  location                        = var.key_vault_location == "" ? local.resource_group_location : var.key_vault_location
   name                            = var.random_suffix ? "${var.keyvault_name}-${random_integer.random_suffix.result}" : var.keyvault_name
   resource_group_name             = local.resource_group_name
   sku_name                        = "standard"

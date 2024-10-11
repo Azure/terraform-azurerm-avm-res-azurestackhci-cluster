@@ -147,12 +147,6 @@ Description: The resource id of resource group.
 
 Type: `string`
 
-### <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location)
-
-Description: The location of resource group.
-
-Type: `string`
-
 ### <a name="input_servers"></a> [servers](#input\_servers)
 
 Description: A list of servers with their names and IPv4 addresses.
@@ -663,6 +657,14 @@ Description: The RDMA protocol.
 Type: `string`
 
 Default: `"RoCEv2"`
+
+### <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location)
+
+Description: The location of resource group.
+
+Type: `string`
+
+Default: `""`
 
 ### <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments)
 

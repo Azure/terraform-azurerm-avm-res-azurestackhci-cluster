@@ -130,6 +130,7 @@ locals {
     networkDirect           = "Enabled"
     networkDirectTechnology = var.rdma_protocol
   }
+  resource_group_location = var.resource_group_location == "" ? var.location : var.resource_group_location
   # The resource group name is the last element of the split result
   resource_group_name = element(local.resource_group_parts, length(local.resource_group_parts) - 1)
   # Split the resource group ID into parts based on '/'
