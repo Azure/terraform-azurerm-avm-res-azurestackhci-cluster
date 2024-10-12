@@ -69,7 +69,7 @@ resource "azurerm_key_vault_secret" "default_arb_application" {
 }
 
 resource "azurerm_key_vault_secret" "witness_storage_key" {
-  count = var.witness_type == "cloud" ? 1 : 0
+  count = lower(var.witness_type) == "cloud" ? 1 : 0
 
   key_vault_id    = local.key_vault.id
   name            = local.keyvault_secret_names["WitnessStorageKey"]
