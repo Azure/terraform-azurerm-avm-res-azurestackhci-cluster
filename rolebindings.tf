@@ -21,11 +21,10 @@ resource "azurerm_role_assignment" "machine_role_assign" {
   }
 
   principal_id         = each.value.principal_id
-  scope                = provider::azurerm::normalise_resource_id(local.key_vault.id)
+  scope                = local.key_vault_id
   role_definition_name = each.value.role_name
 
   depends_on = [
     azurerm_key_vault.deployment_keyvault,
-    data.azurerm_key_vault.key_vault
   ]
 }

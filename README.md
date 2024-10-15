@@ -14,7 +14,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) (~> 2.50.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.71)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
@@ -102,12 +102,6 @@ Type: `string`
 ### <a name="input_ending_address"></a> [ending\_address](#input\_ending\_address)
 
 Description: The ending IP address of the IP address range.
-
-Type: `string`
-
-### <a name="input_keyvault_name"></a> [keyvault\_name](#input\_keyvault\_name)
-
-Description: The name of the key vault.
 
 Type: `string`
 
@@ -473,6 +467,14 @@ Type: `bool`
 
 Default: `false`
 
+### <a name="input_key_vault_id"></a> [key\_vault\_id](#input\_key\_vault\_id)
+
+Description: The ID of an existing Key Vault. Required if create\_key\_vault is false.
+
+Type: `string`
+
+Default: `""`
+
 ### <a name="input_key_vault_location"></a> [key\_vault\_location](#input\_key\_vault\_location)
 
 Description: The location of the key vault.
@@ -484,6 +486,14 @@ Default: `""`
 ### <a name="input_key_vault_resource_group"></a> [key\_vault\_resource\_group](#input\_key\_vault\_resource\_group)
 
 Description: The resource group of the key vault.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_keyvault_name"></a> [keyvault\_name](#input\_keyvault\_name)
+
+Description: The name of the key vault. Required if create\_key\_vault is true.
 
 Type: `string`
 

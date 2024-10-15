@@ -108,7 +108,10 @@ locals {
     }
   }
   deployment_setting_properties_omit_null = { for k, v in local.deployment_setting_properties : k => v if v != null }
+  exsited_key_vault_name                  = var.create_key_vault ? null : regex("^/subscriptions/[^/]+/resourcegroups/[^/]+/providers/microsoft.keyvault/vaults/([^/]+)$", lower(var.key_vault_id))[0]
+  exsited_key_vault_resource_group        = var.create_key_vault ? null : regex("^/subscriptions/[^/]+/resourcegroups/([^/]+)/providers/microsoft.keyvault/vaults/[^/]+$", lower(var.key_vault_id))[0]
   key_vault                               = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
+  key_vault_id                            = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0].id : var.key_vault_id
   keyvault_secret_names = var.use_legacy_key_vault_model ? {
     "AzureStackLCMUserCredential" = "AzureStackLCMUserCredential"
     "LocalAdminCredential"        = "LocalAdminCredential"

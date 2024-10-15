@@ -41,11 +41,6 @@ variable "ending_address" {
   description = "The ending IP address of the IP address range."
 }
 
-variable "keyvault_name" {
-  type        = string
-  description = "The name of the key vault."
-}
-
 variable "local_admin_password" {
   type        = string
   description = "The password for the local administrator account."
@@ -332,6 +327,17 @@ variable "is_exported" {
   description = "Indicate whether the resource is exported"
 }
 
+variable "key_vault_id" {
+  type        = string
+  default     = ""
+  description = "The ID of an existing Key Vault. Required if create_key_vault is false."
+
+  validation {
+    condition     = var.create_key_vault || (var.key_vault_id != "")
+    error_message = "key_vault_id cannot be empty when create_key_vault is set to false."
+  }
+}
+
 variable "key_vault_location" {
   type        = string
   default     = ""
@@ -342,6 +348,17 @@ variable "key_vault_resource_group" {
   type        = string
   default     = ""
   description = "The resource group of the key vault."
+}
+
+variable "keyvault_name" {
+  type        = string
+  default     = ""
+  description = "The name of the key vault. Required if create_key_vault is true."
+
+  validation {
+    condition     = !var.create_key_vault || (var.keyvault_name != "")
+    error_message = "keyvault_name must be provided when create_key_vault is set to true."
+  }
 }
 
 variable "keyvault_purge_protection_enabled" {
