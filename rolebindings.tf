@@ -21,7 +21,7 @@ resource "azurerm_role_assignment" "machine_role_assign" {
   }
 
   principal_id         = each.value.principal_id
-  scope                = local.key_vault.id
+  scope                = replace(local.key_vault.id, var.keyvault_name, lower(var.keyvault_name))
   role_definition_name = each.value.role_name
 
   depends_on = [
