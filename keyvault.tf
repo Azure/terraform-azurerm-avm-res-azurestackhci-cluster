@@ -1,4 +1,6 @@
-data "azurerm_client_config" "current" {}
+data "azurerm_client_config" "current" {
+  count = var.tenant_id == "" ? 1 : 0
+}
 
 resource "azurerm_key_vault" "deployment_keyvault" {
   count = var.create_key_vault ? 1 : 0
@@ -7,7 +9,7 @@ resource "azurerm_key_vault" "deployment_keyvault" {
   name                            = var.random_suffix ? "${var.keyvault_name}-${random_integer.random_suffix.result}" : var.keyvault_name
   resource_group_name             = local.resource_group_name
   sku_name                        = "standard"
-  tenant_id                       = var.tenant_id == "" ? data.azurerm_client_config.current.tenant_id : var.tenant_id
+  tenant_id                       = var.tenant_id == "" ? data.azurerm_client_config.current[0].tenant_id : var.tenant_id
   enable_rbac_authorization       = true
   enabled_for_deployment          = true
   enabled_for_disk_encryption     = true
