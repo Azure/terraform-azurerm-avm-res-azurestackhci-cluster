@@ -609,6 +609,12 @@ variable "subnet_mask" {
   description = "The subnet mask for the network."
 }
 
+variable "tenant_id" {
+  type        = string
+  default     = ""
+  description = "(Optional) Value of the tenant id"
+}
+
 variable "traffic_type" {
   type = list(string)
   default = [

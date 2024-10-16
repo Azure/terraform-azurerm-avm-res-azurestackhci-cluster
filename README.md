@@ -830,6 +830,14 @@ Type: `string`
 
 Default: `"255.255.255.0"`
 
+### <a name="input_tenant_id"></a> [tenant\_id](#input\_tenant\_id)
+
+Description: (Optional) Value of the tenant id
+
+Type: `string`
+
+Default: `""`
+
 ### <a name="input_traffic_type"></a> [traffic\_type](#input\_traffic\_type)
 
 Description: Traffic type of intent.
