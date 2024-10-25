@@ -21,7 +21,12 @@ locals {
   ]
   combined_adapters         = setintersection(toset(var.management_adapters), toset(local.storage_adapters))
   combined_keyvault_secrets = length(var.keyvault_secrets) != 0 ? var.keyvault_secrets : local.auto_generated_secrets
-  converged                 = (length(local.combined_adapters) == length(var.management_adapters)) && (length(local.combined_adapters) == length(local.storage_adapters))
+  compute_rdma_adapter_properties = {
+    jumboPacket             = var.compute_rdma_jumbo_packet
+    networkDirect           = "Enabled"
+    networkDirectTechnology = var.compute_rdma_protocol
+  }
+  converged = (length(local.combined_adapters) == length(var.management_adapters)) && (length(local.combined_adapters) == length(local.storage_adapters))
   converged_intents = [{
     name                               = var.intent_name,
     trafficType                        = var.traffic_type,
@@ -31,7 +36,7 @@ locals {
       enableIov              = "",
       loadBalancingAlgorithm = ""
     },
-    overrideQosPolicy        = false,
+    overrideQosPolicy        = var.override_qos_policy,
     qosPolicyOverrides       = var.qos_policy_overrides,
     overrideAdapterProperty  = var.override_adapter_property,
     adapterPropertyOverrides = var.rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
@@ -158,28 +163,28 @@ locals {
     trafficType                        = var.compute_traffic_type,
     adapter                            = flatten(var.management_adapters)
     overrideVirtualSwitchConfiguration = false,
-    overrideQosPolicy                  = false,
+    overrideQosPolicy                  = var.compute_override_qos_policy,
     overrideAdapterProperty            = var.compute_override_adapter_property,
     virtualSwitchConfigurationOverrides = {
       enableIov              = "",
       loadBalancingAlgorithm = ""
     },
     qosPolicyOverrides       = var.compute_qos_policy_overrides,
-    adapterPropertyOverrides = var.compute_rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
+    adapterPropertyOverrides = var.compute_rdma_enabled ? local.compute_rdma_adapter_properties : local.adapter_properties
     },
     {
       name                               = var.storage_intent_name,
       trafficType                        = var.storage_traffic_type,
       adapter                            = local.storage_adapters,
       overrideVirtualSwitchConfiguration = false,
-      overrideQosPolicy                  = false,
+      overrideQosPolicy                  = var.storage_override_qos_policy,
       overrideAdapterProperty            = var.storage_override_adapter_property,
       virtualSwitchConfigurationOverrides = {
         enableIov              = "",
         loadBalancingAlgorithm = ""
       },
       qosPolicyOverrides       = var.storage_qos_policy_overrides,
-      adapterPropertyOverrides = var.storage_rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
+      adapterPropertyOverrides = var.storage_rdma_enabled ? local.storage_rdma_adapter_properties : local.adapter_properties
   }]
   storage_adapters = flatten([for storageNetwork in var.storage_networks : storageNetwork.networkAdapterName])
   storage_networks = var.storage_adapter_ip_info == null ? flatten(var.storage_networks) : [
@@ -190,6 +195,11 @@ locals {
       storageAdapterIPInfo = var.storage_adapter_ip_info[storageNetwork.name]
     }
   ]
+  storage_rdma_adapter_properties = {
+    jumboPacket             = var.storage_rdma_jumbo_packet
+    networkDirect           = "Enabled"
+    networkDirectTechnology = var.storage_rdma_protocol
+  }
   witness_secret = {
     eceSecretName = "WitnessStorageKey"
     secretSuffix  = "WitnessStorageKey"

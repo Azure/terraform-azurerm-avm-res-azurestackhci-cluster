@@ -304,6 +304,14 @@ Type: `bool`
 
 Default: `true`
 
+### <a name="input_compute_override_qos_policy"></a> [compute\_override\_qos\_policy](#input\_compute\_override\_qos\_policy)
+
+Description: Indicates whether to override qos policy for compute network.
+
+Type: `bool`
+
+Default: `false`
+
 ### <a name="input_compute_qos_policy_overrides"></a> [compute\_qos\_policy\_overrides](#input\_compute\_qos\_policy\_overrides)
 
 Description: QoS policy overrides for network settings with required properties for compute.
@@ -335,6 +343,22 @@ Description: Indicates whether RDMA is enabled for compute.
 Type: `bool`
 
 Default: `false`
+
+### <a name="input_compute_rdma_jumbo_packet"></a> [compute\_rdma\_jumbo\_packet](#input\_compute\_rdma\_jumbo\_packet)
+
+Description: The jumbo packet size for RDMA of compute network.
+
+Type: `string`
+
+Default: `"9014"`
+
+### <a name="input_compute_rdma_protocol"></a> [compute\_rdma\_protocol](#input\_compute\_rdma\_protocol)
+
+Description: The RDMA protocol of compute network.
+
+Type: `string`
+
+Default: `"RoCEv2"`
 
 ### <a name="input_compute_traffic_type"></a> [compute\_traffic\_type](#input\_compute\_traffic\_type)
 
@@ -602,6 +626,14 @@ Type: `bool`
 
 Default: `true`
 
+### <a name="input_override_qos_policy"></a> [override\_qos\_policy](#input\_override\_qos\_policy)
+
+Description: Indicates whether to override qos policy for converged network.
+
+Type: `bool`
+
+Default: `false`
+
 ### <a name="input_qos_policy_overrides"></a> [qos\_policy\_overrides](#input\_qos\_policy\_overrides)
 
 Description: QoS policy overrides for network settings with required properties.
@@ -644,7 +676,7 @@ Default: `false`
 
 ### <a name="input_rdma_jumbo_packet"></a> [rdma\_jumbo\_packet](#input\_rdma\_jumbo\_packet)
 
-Description: The jumbo packet size for RDMA.
+Description: The jumbo packet size for RDMA of converged network.
 
 Type: `string`
 
@@ -652,7 +684,7 @@ Default: `"9014"`
 
 ### <a name="input_rdma_protocol"></a> [rdma\_protocol](#input\_rdma\_protocol)
 
-Description: The RDMA protocol.
+Description: The RDMA protocol of converged network.
 
 Type: `string`
 
@@ -762,11 +794,19 @@ Default: `"Storage"`
 
 ### <a name="input_storage_override_adapter_property"></a> [storage\_override\_adapter\_property](#input\_storage\_override\_adapter\_property)
 
-Description: Indicates whether to override adapter property for storagte.
+Description: Indicates whether to override adapter property for storage network.
 
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_storage_override_qos_policy"></a> [storage\_override\_qos\_policy](#input\_storage\_override\_qos\_policy)
+
+Description: Indicates whether to override qos policy for storage network.
+
+Type: `bool`
+
+Default: `false`
 
 ### <a name="input_storage_qos_policy_overrides"></a> [storage\_qos\_policy\_overrides](#input\_storage\_qos\_policy\_overrides)
 
@@ -799,6 +839,22 @@ Description: Indicates whether RDMA is enabled for storage. Storage RDMA will be
 Type: `bool`
 
 Default: `false`
+
+### <a name="input_storage_rdma_jumbo_packet"></a> [storage\_rdma\_jumbo\_packet](#input\_storage\_rdma\_jumbo\_packet)
+
+Description: The jumbo packet size for RDMA of storage network.
+
+Type: `string`
+
+Default: `"9014"`
+
+### <a name="input_storage_rdma_protocol"></a> [storage\_rdma\_protocol](#input\_storage\_rdma\_protocol)
+
+Description: The RDMA protocol of storage network.
+
+Type: `string`
+
+Default: `"RoCEv2"`
 
 ### <a name="input_storage_tags"></a> [storage\_tags](#input\_storage\_tags)
 
