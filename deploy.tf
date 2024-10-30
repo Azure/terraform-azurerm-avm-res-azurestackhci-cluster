@@ -1,5 +1,5 @@
 resource "azapi_update_resource" "deploymentsetting" {
-  count = var.is_exported ? 0 : 1
+  count = var.is_exported || var.operation_type == "ClusterUpgrade" ? 0 : 1
 
   type = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2024-04-01"
   body = {
