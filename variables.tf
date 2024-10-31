@@ -559,10 +559,34 @@ variable "rp_service_principal_object_id" {
   description = "The object ID of the HCI resource provider service principal."
 }
 
-variable "sbe_deployment_info" {
-  type        = map(any)
-  default     = {}
-  description = "SBE deployment information"
+variable "sbe_deployment_info_family" {
+  type        = string
+  default     = ""
+  description = "SBE deployment information family."
+}
+
+variable "sbe_deployment_info_publisher" {
+  type        = string
+  default     = ""
+  description = "SBE deployment information publisher."
+}
+
+variable "sbe_deployment_info_sbe_manifest_creation_date" {
+  type        = string
+  default     = ""
+  description = "SBE deployment information sbe manifest creation date."
+}
+
+variable "sbe_deployment_info_sbe_manifest_source" {
+  type        = string
+  default     = ""
+  description = "SBE deployment information sbe manifest source."
+}
+
+variable "sbe_deployment_info_version" {
+  type        = string
+  default     = ""
+  description = "SBE deployment information version."
 }
 
 variable "secrets_location" {

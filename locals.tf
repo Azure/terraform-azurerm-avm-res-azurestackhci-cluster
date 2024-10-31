@@ -161,7 +161,13 @@ locals {
   sbe_partner_info = {
     credentialList    = var.credential_list
     partnerProperties = var.partner_properties
-    sbeDeploymentInfo = var.sbe_deployment_info
+    sbeDeploymentInfo = {
+      family                  = var.sbe_deployment_info_family
+      publisher               = var.sbe_deployment_info_publisher
+      sbeManifestCreationDate = var.sbe_deployment_info_sbe_manifest_creation_date
+      sbeManifestSource       = var.sbe_deployment_info_sbe_manifest_source
+      version                 = var.sbe_deployment_info_version
+    }
   }
   sbe_partner_info_omit_null = { for k, v in local.sbe_partner_info : k => v if v != null }
   secrets_location           = var.secrets_location == "" ? local.key_vault.vault_uri : var.secrets_location

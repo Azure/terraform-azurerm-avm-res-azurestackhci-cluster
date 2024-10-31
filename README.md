@@ -752,13 +752,45 @@ Type: `string`
 
 Default: `""`
 
-### <a name="input_sbe_deployment_info"></a> [sbe\_deployment\_info](#input\_sbe\_deployment\_info)
+### <a name="input_sbe_deployment_info_family"></a> [sbe\_deployment\_info\_family](#input\_sbe\_deployment\_info\_family)
 
-Description: SBE deployment information
+Description: SBE deployment information family.
 
-Type: `map(any)`
+Type: `string`
 
-Default: `{}`
+Default: `""`
+
+### <a name="input_sbe_deployment_info_publisher"></a> [sbe\_deployment\_info\_publisher](#input\_sbe\_deployment\_info\_publisher)
+
+Description: SBE deployment information publisher.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_sbe_deployment_info_sbe_manifest_creation_date"></a> [sbe\_deployment\_info\_sbe\_manifest\_creation\_date](#input\_sbe\_deployment\_info\_sbe\_manifest\_creation\_date)
+
+Description: SBE deployment information sbe manifest creation date.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_sbe_deployment_info_sbe_manifest_source"></a> [sbe\_deployment\_info\_sbe\_manifest\_source](#input\_sbe\_deployment\_info\_sbe\_manifest\_source)
+
+Description: SBE deployment information sbe manifest source.
+
+Type: `string`
+
+Default: `""`
+
+### <a name="input_sbe_deployment_info_version"></a> [sbe\_deployment\_info\_version](#input\_sbe\_deployment\_info\_version)
+
+Description: SBE deployment information version.
+
+Type: `string`
+
+Default: `""`
 
 ### <a name="input_secrets_location"></a> [secrets\_location](#input\_secrets\_location)
 
