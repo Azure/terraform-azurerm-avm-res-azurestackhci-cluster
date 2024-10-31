@@ -407,22 +407,6 @@ Type: `bool`
 
 Default: `false`
 
-### <a name="input_credential_list"></a> [credential\_list](#input\_credential\_list)
-
-Description: A list of credentials, where each item has eceSecretName, secretLocation, and secretName.
-
-Type:
-
-```hcl
-list(object({
-    eceSecretName  = string
-    secretLocation = string
-    secretName     = string
-  }))
-```
-
-Default: `[]`
-
 ### <a name="input_cross_tenant_replication_enabled"></a> [cross\_tenant\_replication\_enabled](#input\_cross\_tenant\_replication\_enabled)
 
 Description: Indicates whether cross-tenant replication is enabled.
@@ -650,21 +634,6 @@ Type: `bool`
 
 Default: `false`
 
-### <a name="input_partner_properties"></a> [partner\_properties](#input\_partner\_properties)
-
-Description: A list of SBE partner properties, where each item has a name and a value.
-
-Type:
-
-```hcl
-list(object({
-    name  = string
-    value = string
-  }))
-```
-
-Default: `[]`
-
 ### <a name="input_qos_policy_overrides"></a> [qos\_policy\_overrides](#input\_qos\_policy\_overrides)
 
 Description: QoS policy overrides for network settings with required properties.
@@ -767,6 +736,22 @@ Type: `string`
 
 Default: `""`
 
+### <a name="input_sbe_credential_list"></a> [sbe\_credential\_list](#input\_sbe\_credential\_list)
+
+Description: A list of credentials in sbe, where each item has eceSecretName, secretLocation, and secretName.
+
+Type:
+
+```hcl
+list(object({
+    eceSecretName  = string
+    secretLocation = string
+    secretName     = string
+  }))
+```
+
+Default: `null`
+
 ### <a name="input_sbe_deployment_info_family"></a> [sbe\_deployment\_info\_family](#input\_sbe\_deployment\_info\_family)
 
 Description: SBE deployment information family.
@@ -804,6 +789,21 @@ Default: `null`
 Description: SBE deployment information version.
 
 Type: `string`
+
+Default: `null`
+
+### <a name="input_sbe_partner_properties"></a> [sbe\_partner\_properties](#input\_sbe\_partner\_properties)
+
+Description: A list of SBE partner properties in sbe, where each item has a name and a value.
+
+Type:
+
+```hcl
+list(object({
+    name  = string
+    value = string
+  }))
+```
 
 Default: `null`
 

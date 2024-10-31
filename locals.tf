@@ -159,8 +159,8 @@ locals {
     ACMRM = "Azure Connected Machine Resource Manager",
   }
   sbe_partner_info = {
-    credentialList    = var.credential_list
-    partnerProperties = var.partner_properties
+    credentialList    = var.sbe_credential_list
+    partnerProperties = var.sbe_partner_properties
     sbeDeploymentInfo = {
       family                  = var.sbe_deployment_info_family
       publisher               = var.sbe_deployment_info_publisher

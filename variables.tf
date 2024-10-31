@@ -279,16 +279,6 @@ variable "credential_guard_enforced" {
   description = "When set to true, Credential Guard is enabled on your Azure HCI cluster."
 }
 
-variable "credential_list" {
-  type = list(object({
-    eceSecretName  = string
-    secretLocation = string
-    secretName     = string
-  }))
-  default     = []
-  description = "A list of credentials, where each item has eceSecretName, secretLocation, and secretName."
-}
-
 variable "cross_tenant_replication_enabled" {
   type        = bool
   default     = false
@@ -480,15 +470,6 @@ variable "override_qos_policy" {
   description = "Indicates whether to override qos policy for converged network."
 }
 
-variable "partner_properties" {
-  type = list(object({
-    name  = string
-    value = string
-  }))
-  default     = []
-  description = "A list of SBE partner properties, where each item has a name and a value."
-}
-
 variable "qos_policy_overrides" {
   type = object({
     priorityValue8021Action_SMB     = string
@@ -566,6 +547,16 @@ variable "rp_service_principal_object_id" {
   description = "The object ID of the HCI resource provider service principal."
 }
 
+variable "sbe_credential_list" {
+  type = list(object({
+    eceSecretName  = string
+    secretLocation = string
+    secretName     = string
+  }))
+  default     = null
+  description = "A list of credentials in sbe, where each item has eceSecretName, secretLocation, and secretName."
+}
+
 variable "sbe_deployment_info_family" {
   type        = string
   default     = null
@@ -594,6 +585,15 @@ variable "sbe_deployment_info_version" {
   type        = string
   default     = null
   description = "SBE deployment information version."
+}
+
+variable "sbe_partner_properties" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  default     = null
+  description = "A list of SBE partner properties in sbe, where each item has a name and a value."
 }
 
 variable "secrets_location" {
