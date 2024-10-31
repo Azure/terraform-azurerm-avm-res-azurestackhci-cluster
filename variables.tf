@@ -279,6 +279,12 @@ variable "credential_guard_enforced" {
   description = "When set to true, Credential Guard is enabled on your Azure HCI cluster."
 }
 
+variable "credential_list" {
+  type        = list(any)
+  default     = []
+  description = "A list of credentials."
+}
+
 variable "cross_tenant_replication_enabled" {
   type        = bool
   default     = false
@@ -470,6 +476,12 @@ variable "override_qos_policy" {
   description = "Indicates whether to override qos policy for converged network."
 }
 
+variable "partner_properties" {
+  type        = list(any)
+  default     = []
+  description = "List of partner properties"
+}
+
 variable "qos_policy_overrides" {
   type = object({
     priorityValue8021Action_SMB     = string
@@ -545,6 +557,12 @@ variable "rp_service_principal_object_id" {
   type        = string
   default     = ""
   description = "The object ID of the HCI resource provider service principal."
+}
+
+variable "sbe_deployment_info" {
+  type        = map(any)
+  default     = {}
+  description = "SBE deployment information"
 }
 
 variable "secrets_location" {

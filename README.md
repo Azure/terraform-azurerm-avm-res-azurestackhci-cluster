@@ -407,6 +407,14 @@ Type: `bool`
 
 Default: `false`
 
+### <a name="input_credential_list"></a> [credential\_list](#input\_credential\_list)
+
+Description: A list of credentials.
+
+Type: `list(any)`
+
+Default: `[]`
+
 ### <a name="input_cross_tenant_replication_enabled"></a> [cross\_tenant\_replication\_enabled](#input\_cross\_tenant\_replication\_enabled)
 
 Description: Indicates whether cross-tenant replication is enabled.
@@ -634,6 +642,14 @@ Type: `bool`
 
 Default: `false`
 
+### <a name="input_partner_properties"></a> [partner\_properties](#input\_partner\_properties)
+
+Description: List of partner properties
+
+Type: `list(any)`
+
+Default: `[]`
+
 ### <a name="input_qos_policy_overrides"></a> [qos\_policy\_overrides](#input\_qos\_policy\_overrides)
 
 Description: QoS policy overrides for network settings with required properties.
@@ -735,6 +751,14 @@ Description: The object ID of the HCI resource provider service principal.
 Type: `string`
 
 Default: `""`
+
+### <a name="input_sbe_deployment_info"></a> [sbe\_deployment\_info](#input\_sbe\_deployment\_info)
+
+Description: SBE deployment information
+
+Type: `map(any)`
+
+Default: `{}`
 
 ### <a name="input_secrets_location"></a> [secrets\_location](#input\_secrets\_location)
 

@@ -108,6 +108,7 @@ locals {
       scaleUnits = [
         {
           deploymentData = local.deployment_data_omit_null
+          sbePartnerInfo = local.sbe_partner_info_omit_null
         }
       ]
     }
@@ -157,7 +158,13 @@ locals {
   rp_roles = {
     ACMRM = "Azure Connected Machine Resource Manager",
   }
-  secrets_location = var.secrets_location == "" ? local.key_vault.vault_uri : var.secrets_location
+  sbe_partner_info = {
+    credentialList    = var.credential_list
+    partnerProperties = var.partner_properties
+    sbeDeploymentInfo = var.sbe_deployment_info
+  }
+  sbe_partner_info_omit_null = { for k, v in local.sbe_partner_info : k => v if v != null }
+  secrets_location           = var.secrets_location == "" ? local.key_vault.vault_uri : var.secrets_location
   seperate_intents = [{
     name                               = var.compute_intent_name,
     trafficType                        = var.compute_traffic_type,
