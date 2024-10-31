@@ -409,9 +409,17 @@ Default: `false`
 
 ### <a name="input_credential_list"></a> [credential\_list](#input\_credential\_list)
 
-Description: A list of credentials.
+Description: A list of credentials, where each item has eceSecretName, secretLocation, and secretName.
 
-Type: `list(any)`
+Type:
+
+```hcl
+list(object({
+    eceSecretName  = string
+    secretLocation = string
+    secretName     = string
+  }))
+```
 
 Default: `[]`
 
@@ -644,9 +652,16 @@ Default: `false`
 
 ### <a name="input_partner_properties"></a> [partner\_properties](#input\_partner\_properties)
 
-Description: List of partner properties
+Description: A list of SBE partner properties, where each item has a name and a value.
 
-Type: `list(any)`
+Type:
+
+```hcl
+list(object({
+    name  = string
+    value = string
+  }))
+```
 
 Default: `[]`
 
@@ -758,7 +773,7 @@ Description: SBE deployment information family.
 
 Type: `string`
 
-Default: `""`
+Default: `null`
 
 ### <a name="input_sbe_deployment_info_publisher"></a> [sbe\_deployment\_info\_publisher](#input\_sbe\_deployment\_info\_publisher)
 
@@ -766,7 +781,7 @@ Description: SBE deployment information publisher.
 
 Type: `string`
 
-Default: `""`
+Default: `null`
 
 ### <a name="input_sbe_deployment_info_sbe_manifest_creation_date"></a> [sbe\_deployment\_info\_sbe\_manifest\_creation\_date](#input\_sbe\_deployment\_info\_sbe\_manifest\_creation\_date)
 
@@ -774,7 +789,7 @@ Description: SBE deployment information sbe manifest creation date.
 
 Type: `string`
 
-Default: `""`
+Default: `null`
 
 ### <a name="input_sbe_deployment_info_sbe_manifest_source"></a> [sbe\_deployment\_info\_sbe\_manifest\_source](#input\_sbe\_deployment\_info\_sbe\_manifest\_source)
 
@@ -782,7 +797,7 @@ Description: SBE deployment information sbe manifest source.
 
 Type: `string`
 
-Default: `""`
+Default: `null`
 
 ### <a name="input_sbe_deployment_info_version"></a> [sbe\_deployment\_info\_version](#input\_sbe\_deployment\_info\_version)
 
@@ -790,7 +805,7 @@ Description: SBE deployment information version.
 
 Type: `string`
 
-Default: `""`
+Default: `null`
 
 ### <a name="input_secrets_location"></a> [secrets\_location](#input\_secrets\_location)
 

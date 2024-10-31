@@ -280,9 +280,13 @@ variable "credential_guard_enforced" {
 }
 
 variable "credential_list" {
-  type        = list(any)
+  type = list(object({
+    eceSecretName  = string
+    secretLocation = string
+    secretName     = string
+  }))
   default     = []
-  description = "A list of credentials."
+  description = "A list of credentials, where each item has eceSecretName, secretLocation, and secretName."
 }
 
 variable "cross_tenant_replication_enabled" {
@@ -477,9 +481,12 @@ variable "override_qos_policy" {
 }
 
 variable "partner_properties" {
-  type        = list(any)
+  type = list(object({
+    name  = string
+    value = string
+  }))
   default     = []
-  description = "List of partner properties"
+  description = "A list of SBE partner properties, where each item has a name and a value."
 }
 
 variable "qos_policy_overrides" {
@@ -561,31 +568,31 @@ variable "rp_service_principal_object_id" {
 
 variable "sbe_deployment_info_family" {
   type        = string
-  default     = ""
+  default     = null
   description = "SBE deployment information family."
 }
 
 variable "sbe_deployment_info_publisher" {
   type        = string
-  default     = ""
+  default     = null
   description = "SBE deployment information publisher."
 }
 
 variable "sbe_deployment_info_sbe_manifest_creation_date" {
   type        = string
-  default     = ""
+  default     = null
   description = "SBE deployment information sbe manifest creation date."
 }
 
 variable "sbe_deployment_info_sbe_manifest_source" {
   type        = string
-  default     = ""
+  default     = null
   description = "SBE deployment information sbe manifest source."
 }
 
 variable "sbe_deployment_info_version" {
   type        = string
-  default     = ""
+  default     = null
   description = "SBE deployment information version."
 }
 
