@@ -303,6 +303,12 @@ variable "default_arb_application_tags" {
   description = "(Optional) Tags of the default arb application."
 }
 
+variable "deployment_configuration_version" {
+  type        = string
+  default     = null
+  description = "The version of deployment configuration. Latest version will be used if not specified."
+}
+
 variable "drift_control_enforced" {
   type        = bool
   default     = true

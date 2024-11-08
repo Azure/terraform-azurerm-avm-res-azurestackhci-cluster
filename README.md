@@ -439,6 +439,14 @@ Type: `map(string)`
 
 Default: `null`
 
+### <a name="input_deployment_configuration_version"></a> [deployment\_configuration\_version](#input\_deployment\_configuration\_version)
+
+Description: The version of deployment configuration. Latest version will be used if not specified.
+
+Type: `string`
+
+Default: `null`
+
 ### <a name="input_drift_control_enforced"></a> [drift\_control\_enforced](#input\_drift\_control\_enforced)
 
 Description: When set to true, the security baseline is re-applied regularly.
