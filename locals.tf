@@ -64,15 +64,10 @@ locals {
     domainFqdn            = var.domain_fqdn
     infrastructureNetwork = local.infrastructure_network
     physicalNodes         = flatten(var.servers)
-    hostNetwork = {
-      enableStorageAutoIp           = true
-      intents                       = local.converged ? local.converged_intents : local.seperate_intents
-      storageNetworks               = local.storage_networks
-      storageConnectivitySwitchless = var.storage_connectivity_switchless
-    }
-    adouPath        = var.adou_path
-    secretsLocation = var.use_legacy_key_vault_model ? local.secrets_location : (var.secrets_location == "" ? null : var.secrets_location)
-    secrets         = var.use_legacy_key_vault_model ? null : local.keyvault_secrets
+    hostNetwork           = local.host_network
+    adouPath              = var.adou_path
+    secretsLocation       = var.use_legacy_key_vault_model ? local.secrets_location : (var.secrets_location == "" ? null : var.secrets_location)
+    secrets               = var.use_legacy_key_vault_model ? null : local.keyvault_secrets
     optionalServices = {
       customLocation = var.custom_location_name
     }
@@ -92,6 +87,12 @@ locals {
     }
   }
   deployment_setting_properties_omit_null = { for k, v in local.deployment_setting_properties : k => v if v != null }
+  host_network = var.operation_type == "ClusterUpgrade" ? null : {
+    enableStorageAutoIp           = true
+    intents                       = local.converged ? local.converged_intents : local.seperate_intents
+    storageNetworks               = local.storage_networks
+    storageConnectivitySwitchless = var.storage_connectivity_switchless
+  }
   infrastructure_network = [{
     useDhcp    = false
     subnetMask = var.subnet_mask
