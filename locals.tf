@@ -92,7 +92,7 @@ locals {
     }
   }
   deployment_setting_properties_omit_null = { for k, v in local.deployment_setting_properties : k => v if v != null }
-  infrastructure_network = var.operation_type == "ClusterUpgrade" ? null : [{
+  infrastructure_network = flatten(var.operation_type == "ClusterUpgrade" ? [] : [{
     useDhcp    = false
     subnetMask = var.subnet_mask
     gateway    = var.default_gateway
@@ -103,7 +103,7 @@ locals {
       }
     ]
     dnsServers = flatten(var.dns_servers)
-  }]
+  }])
   key_vault = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
   keyvault_secret_names = var.use_legacy_key_vault_model ? {
     "AzureStackLCMUserCredential" = "AzureStackLCMUserCredential"
