@@ -74,7 +74,7 @@ variable "name" {
   description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
 
   validation {
-    condition     = length(var.name) < 16 && length(var.name) > 0
+    condition     = length(var.name) <= 40 && length(var.name) > 0
     error_message = "value of name should be less than 16 characters and greater than 0 characters"
   }
 }
