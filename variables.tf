@@ -256,6 +256,12 @@ variable "configuration_mode" {
   description = "The configuration mode for the storage."
 }
 
+variable "create_hci_rp_role_assignments" {
+  type        = bool
+  default     = false
+  description = "Indicates whether to create role assignments for the HCI resource provider service principal."
+}
+
 variable "create_key_vault" {
   type        = bool
   default     = true

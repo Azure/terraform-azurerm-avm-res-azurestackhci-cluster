@@ -383,6 +383,14 @@ Type: `string`
 
 Default: `"Express"`
 
+### <a name="input_create_hci_rp_role_assignments"></a> [create\_hci\_rp\_role\_assignments](#input\_create\_hci\_rp\_role\_assignments)
+
+Description: Indicates whether to create role assignments for the HCI resource provider service principal.
+
+Type: `bool`
+
+Default: `false`
+
 ### <a name="input_create_key_vault"></a> [create\_key\_vault](#input\_create\_key\_vault)
 
 Description: Set to true to create the key vault, or false to skip it

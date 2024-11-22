@@ -146,9 +146,9 @@ locals {
   roles = {
     KVSU = "Key Vault Secrets User",
   }
-  rp_roles = {
+  rp_roles = var.create_hci_rp_role_assignments ? {
     ACMRM = "Azure Connected Machine Resource Manager",
-  }
+  } : {}
   secrets_location = var.secrets_location == "" ? local.key_vault.vault_uri : var.secrets_location
   security_settings = var.operation_type == "ClusterUpgrade" ? null : {
     hvciProtection                = var.hvci_protection
