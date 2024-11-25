@@ -66,7 +66,7 @@ variable "location" {
 variable "management_adapters" {
   type        = list(string)
   description = "A list of management adapters."
-  default = null
+  default = []
 }
 
 variable "name" {
