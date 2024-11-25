@@ -66,7 +66,7 @@ variable "location" {
 variable "management_adapters" {
   type        = list(string)
   description = "A list of management adapters."
-  nullable    = false
+  default = null
 }
 
 variable "name" {
@@ -120,6 +120,7 @@ variable "starting_address" {
 variable "storage_connectivity_switchless" {
   type        = bool
   description = "Indicates whether storage connectivity is switchless."
+  default = false
 }
 
 variable "storage_networks" {
@@ -128,6 +129,7 @@ variable "storage_networks" {
     networkAdapterName = string
     vlanId             = string
   }))
+  default = []
   description = "A list of storage networks."
 }
 
