@@ -66,6 +66,7 @@ variable "location" {
 variable "management_adapters" {
   type        = list(string)
   description = "A list of management adapters."
+  default     = []
   nullable    = false
 }
 
@@ -74,8 +75,8 @@ variable "name" {
   description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
 
   validation {
-    condition     = length(var.name) <= 40 && length(var.name) > 0
-    error_message = "value of name should be less than 16 characters and greater than 0 characters"
+    condition     = var.cluster_name != "" || (length(var.name) <= 16 && length(var.name) > 0)
+    error_message = "If 'cluster_name' is empty, 'name' must be between 1 and 16 characters."
   }
 }
 
@@ -119,7 +120,9 @@ variable "starting_address" {
 
 variable "storage_connectivity_switchless" {
   type        = bool
+  default     = false
   description = "Indicates whether storage connectivity is switchless."
+
 }
 
 variable "storage_networks" {
@@ -128,6 +131,7 @@ variable "storage_networks" {
     networkAdapterName = string
     vlanId             = string
   }))
+  default     = []
   description = "A list of storage networks."
 }
 
@@ -183,6 +187,11 @@ variable "cluster_name" {
   type        = string
   default     = ""
   description = "The name of the HCI cluster."
+
+  validation {
+    condition     = length(var.cluster_name) <= 16
+    error_message = "The value of 'cluster_name' must be 16 characters or less."
+  }
 }
 
 variable "cluster_tags" {
