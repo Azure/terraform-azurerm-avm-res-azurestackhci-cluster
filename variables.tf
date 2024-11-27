@@ -63,13 +63,6 @@ variable "location" {
   nullable    = false
 }
 
-variable "management_adapters" {
-  type        = list(string)
-  description = "A list of management adapters."
-  default     = []
-  nullable    = false
-}
-
 variable "name" {
   type        = string
   description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
@@ -116,23 +109,6 @@ variable "site_id" {
 variable "starting_address" {
   type        = string
   description = "The starting IP address of the IP address range."
-}
-
-variable "storage_connectivity_switchless" {
-  type        = bool
-  default     = false
-  description = "Indicates whether storage connectivity is switchless."
-
-}
-
-variable "storage_networks" {
-  type = list(object({
-    name               = string
-    networkAdapterName = string
-    vlanId             = string
-  }))
-  default     = []
-  description = "A list of storage networks."
 }
 
 variable "account_replication_type" {
@@ -456,6 +432,13 @@ DESCRIPTION
   }
 }
 
+variable "management_adapters" {
+  type        = list(string)
+  default     = []
+  description = "A list of management adapters."
+  nullable    = false
+}
+
 variable "min_tls_version" {
   type        = string
   default     = "TLS1_2"
@@ -602,10 +585,26 @@ variable "storage_adapter_ip_info" {
   description = "The IP information for the storage networks. Key is the storage network name."
 }
 
+variable "storage_connectivity_switchless" {
+  type        = bool
+  default     = false
+  description = "Indicates whether storage connectivity is switchless."
+}
+
 variable "storage_intent_name" {
   type        = string
   default     = "Storage"
   description = "The name of storage intent."
+}
+
+variable "storage_networks" {
+  type = list(object({
+    name               = string
+    networkAdapterName = string
+    vlanId             = string
+  }))
+  default     = []
+  description = "A list of storage networks."
 }
 
 variable "storage_override_adapter_property" {
