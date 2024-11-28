@@ -169,8 +169,8 @@ variable "cluster_name" {
   description = "The name of the HCI cluster."
 
   validation {
-    condition     = length(var.cluster_name) <= 16
-    error_message = "The value of 'cluster_name' must be 16 characters or less."
+    condition     = length(var.cluster_name) < 16
+    error_message = "The value of 'cluster_name' must be less than 16 characters"
   }
 }
 
