@@ -71,6 +71,11 @@ variable "name" {
     condition     = var.cluster_name != "" || (length(var.name) <= 16 && length(var.name) > 0)
     error_message = "If 'cluster_name' is empty, 'name' must be between 1 and 16 characters."
   }
+
+  validation {
+    condition     = length(var.name) <= 40 && length(var.name) > 0
+    error_message = "value of name should be less than 40 characters and greater than 0 characters"
+  }
 }
 
 variable "resource_group_id" {
@@ -165,8 +170,8 @@ variable "cluster_name" {
   description = "The name of the HCI cluster."
 
   validation {
-    condition     = length(var.cluster_name) <= 16
-    error_message = "The value of 'cluster_name' must be 16 characters or less."
+    condition     = (var.cluster_name != "" && length(var.cluster_name) < 16) || var.cluster_name == ""
+    error_message = "value of cluster_name should be less than 16 characters"
   }
 }
 
