@@ -68,7 +68,7 @@ variable "name" {
   description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
 
   validation {
-    condition     = var.cluster_name != "" || (length(var.name) <= 16 && length(var.name) > 0)
+    condition     = var.cluster_name != "" || (length(var.name) < 16 && length(var.name) > 0)
     error_message = "If 'cluster_name' is empty, 'name' must be between 1 and 16 characters."
   }
   validation {
@@ -169,7 +169,7 @@ variable "cluster_name" {
   description = "The name of the HCI cluster."
 
   validation {
-    condition     = length(var.cluster_name) < 16
+    condition     = length(var.cluster_name) < 16 && length(var.cluster_name) >= 0
     error_message = "The value of 'cluster_name' must be less than 16 characters"
   }
 }
