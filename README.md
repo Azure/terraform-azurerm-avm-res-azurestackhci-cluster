@@ -129,12 +129,6 @@ Description: Azure region where the resource should be deployed.
 
 Type: `string`
 
-### <a name="input_management_adapters"></a> [management\_adapters](#input\_management\_adapters)
-
-Description: A list of management adapters.
-
-Type: `list(string)`
-
 ### <a name="input_name"></a> [name](#input\_name)
 
 Description: The name of the HCI cluster. Must be the same as the name when preparing AD.
@@ -183,26 +177,6 @@ Type: `string`
 Description: The starting IP address of the IP address range.
 
 Type: `string`
-
-### <a name="input_storage_connectivity_switchless"></a> [storage\_connectivity\_switchless](#input\_storage\_connectivity\_switchless)
-
-Description: Indicates whether storage connectivity is switchless.
-
-Type: `bool`
-
-### <a name="input_storage_networks"></a> [storage\_networks](#input\_storage\_networks)
-
-Description: A list of storage networks.
-
-Type:
-
-```hcl
-list(object({
-    name               = string
-    networkAdapterName = string
-    vlanId             = string
-  }))
-```
 
 ## Optional Inputs
 
@@ -447,6 +421,14 @@ Type: `map(string)`
 
 Default: `null`
 
+### <a name="input_deployment_configuration_version"></a> [deployment\_configuration\_version](#input\_deployment\_configuration\_version)
+
+Description: The version of deployment configuration. Latest version will be used if not specified.
+
+Type: `string`
+
+Default: `null`
+
 ### <a name="input_drift_control_enforced"></a> [drift\_control\_enforced](#input\_drift\_control\_enforced)
 
 Description: When set to true, the security baseline is re-applied regularly.
@@ -601,6 +583,14 @@ object({
 ```
 
 Default: `null`
+
+### <a name="input_management_adapters"></a> [management\_adapters](#input\_management\_adapters)
+
+Description: A list of management adapters.
+
+Type: `list(string)`
+
+Default: `[]`
 
 ### <a name="input_min_tls_version"></a> [min\_tls\_version](#input\_min\_tls\_version)
 
@@ -792,6 +782,14 @@ map(list(object({
 
 Default: `null`
 
+### <a name="input_storage_connectivity_switchless"></a> [storage\_connectivity\_switchless](#input\_storage\_connectivity\_switchless)
+
+Description: Indicates whether storage connectivity is switchless.
+
+Type: `bool`
+
+Default: `false`
+
 ### <a name="input_storage_intent_name"></a> [storage\_intent\_name](#input\_storage\_intent\_name)
 
 Description: The name of storage intent.
@@ -799,6 +797,22 @@ Description: The name of storage intent.
 Type: `string`
 
 Default: `"Storage"`
+
+### <a name="input_storage_networks"></a> [storage\_networks](#input\_storage\_networks)
+
+Description: A list of storage networks.
+
+Type:
+
+```hcl
+list(object({
+    name               = string
+    networkAdapterName = string
+    vlanId             = string
+  }))
+```
+
+Default: `[]`
 
 ### <a name="input_storage_override_adapter_property"></a> [storage\_override\_adapter\_property](#input\_storage\_override\_adapter\_property)
 

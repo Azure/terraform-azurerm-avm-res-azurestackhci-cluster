@@ -63,19 +63,17 @@ variable "location" {
   nullable    = false
 }
 
-variable "management_adapters" {
-  type        = list(string)
-  description = "A list of management adapters."
-  nullable    = false
-}
-
 variable "name" {
   type        = string
   description = "The name of the HCI cluster. Must be the same as the name when preparing AD."
 
   validation {
-    condition     = length(var.name) < 16 && length(var.name) > 0
-    error_message = "value of name should be less than 16 characters and greater than 0 characters"
+    condition     = var.cluster_name != "" || (length(var.name) < 16 && length(var.name) > 0)
+    error_message = "If 'cluster_name' is empty, 'name' must be between 1 and 16 characters."
+  }
+  validation {
+    condition     = length(var.name) <= 40 && length(var.name) > 0
+    error_message = "value of name should be less than 40 characters and greater than 0 characters"
   }
 }
 
@@ -115,20 +113,6 @@ variable "site_id" {
 variable "starting_address" {
   type        = string
   description = "The starting IP address of the IP address range."
-}
-
-variable "storage_connectivity_switchless" {
-  type        = bool
-  description = "Indicates whether storage connectivity is switchless."
-}
-
-variable "storage_networks" {
-  type = list(object({
-    name               = string
-    networkAdapterName = string
-    vlanId             = string
-  }))
-  description = "A list of storage networks."
 }
 
 variable "account_replication_type" {
@@ -183,6 +167,11 @@ variable "cluster_name" {
   type        = string
   default     = ""
   description = "The name of the HCI cluster."
+
+  validation {
+    condition     = length(var.cluster_name) < 16 && length(var.cluster_name) >= 0
+    error_message = "The value of 'cluster_name' must be less than 16 characters"
+  }
 }
 
 variable "cluster_tags" {
@@ -307,6 +296,12 @@ variable "default_arb_application_tags" {
   type        = map(string)
   default     = null
   description = "(Optional) Tags of the default arb application."
+}
+
+variable "deployment_configuration_version" {
+  type        = string
+  default     = null
+  description = "The version of deployment configuration. Latest version will be used if not specified."
 }
 
 variable "drift_control_enforced" {
@@ -439,6 +434,13 @@ DESCRIPTION
     condition     = var.lock != null ? contains(["CanNotDelete", "ReadOnly"], var.lock.kind) : true
     error_message = "The lock level must be one of: 'None', 'CanNotDelete', or 'ReadOnly'."
   }
+}
+
+variable "management_adapters" {
+  type        = list(string)
+  default     = []
+  description = "A list of management adapters."
+  nullable    = false
 }
 
 variable "min_tls_version" {
@@ -587,10 +589,26 @@ variable "storage_adapter_ip_info" {
   description = "The IP information for the storage networks. Key is the storage network name."
 }
 
+variable "storage_connectivity_switchless" {
+  type        = bool
+  default     = false
+  description = "Indicates whether storage connectivity is switchless."
+}
+
 variable "storage_intent_name" {
   type        = string
   default     = "Storage"
   description = "The name of storage intent."
+}
+
+variable "storage_networks" {
+  type = list(object({
+    name               = string
+    networkAdapterName = string
+    vlanId             = string
+  }))
+  default     = []
+  description = "A list of storage networks."
 }
 
 variable "storage_override_adapter_property" {

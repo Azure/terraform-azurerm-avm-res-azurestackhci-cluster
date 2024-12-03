@@ -41,20 +41,10 @@ locals {
     overrideAdapterProperty  = var.override_adapter_property,
     adapterPropertyOverrides = var.rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
   }]
-  decoded_user_storages = jsondecode(data.azapi_resource_list.user_storages.output).value
+  decoded_user_storages            = jsondecode(data.azapi_resource_list.user_storages.output).value
+  deployment_configuration_version = var.deployment_configuration_version != null ? var.deployment_configuration_version : (var.operation_type == "ClusterUpgrade" ? "10.1.0.0" : "10.0.0.0")
   deployment_data = {
-    securitySettings = {
-      hvciProtection                = var.hvci_protection
-      drtmProtection                = var.drtm_protection
-      driftControlEnforced          = var.drift_control_enforced
-      credentialGuardEnforced       = var.credential_guard_enforced
-      smbSigningEnforced            = var.smb_signing_enforced
-      smbClusterEncryption          = var.smb_cluster_encryption
-      sideChannelMitigationEnforced = var.side_channel_mitigation_enforced
-      bitlockerBootVolume           = var.bitlocker_boot_volume
-      bitlockerDataVolumes          = var.bitlocker_data_volumes
-      wdacEnforced                  = var.wdac_enforced
-    }
+    securitySettings = local.security_settings
     observability = {
       streamingDataClient = true
       euLocation          = var.eu_location
@@ -70,30 +60,14 @@ locals {
     storage = {
       configurationMode = var.configuration_mode
     }
-    namingPrefix = var.naming_prefix == "" ? var.site_id : var.naming_prefix
-    domainFqdn   = var.domain_fqdn
-    infrastructureNetwork = [{
-      useDhcp    = false
-      subnetMask = var.subnet_mask
-      gateway    = var.default_gateway
-      ipPools = [
-        {
-          startingAddress = var.starting_address
-          endingAddress   = var.ending_address
-        }
-      ]
-      dnsServers = flatten(var.dns_servers)
-    }]
-    physicalNodes = flatten(var.servers)
-    hostNetwork = {
-      enableStorageAutoIp           = true
-      intents                       = local.converged ? local.converged_intents : local.seperate_intents
-      storageNetworks               = local.storage_networks
-      storageConnectivitySwitchless = var.storage_connectivity_switchless
-    }
-    adouPath        = var.adou_path
-    secretsLocation = var.use_legacy_key_vault_model ? local.secrets_location : (var.secrets_location == "" ? null : var.secrets_location)
-    secrets         = var.use_legacy_key_vault_model ? null : local.keyvault_secrets
+    namingPrefix          = var.naming_prefix == "" ? var.site_id : var.naming_prefix
+    domainFqdn            = var.domain_fqdn
+    infrastructureNetwork = local.infrastructure_network
+    physicalNodes         = flatten(var.servers)
+    hostNetwork           = local.host_network
+    adouPath              = var.adou_path
+    secretsLocation       = var.use_legacy_key_vault_model ? local.secrets_location : (var.secrets_location == "" ? null : var.secrets_location)
+    secrets               = var.use_legacy_key_vault_model ? null : local.keyvault_secrets
     optionalServices = {
       customLocation = var.custom_location_name
     }
@@ -104,7 +78,7 @@ locals {
     deploymentMode     = var.is_exported ? "Deploy" : "Validate"
     operationType      = var.operation_type
     deploymentConfiguration = {
-      version = "10.0.0.0"
+      version = local.deployment_configuration_version
       scaleUnits = [
         {
           deploymentData = local.deployment_data_omit_null
@@ -113,7 +87,25 @@ locals {
     }
   }
   deployment_setting_properties_omit_null = { for k, v in local.deployment_setting_properties : k => v if v != null }
-  key_vault                               = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
+  host_network = var.operation_type == "ClusterUpgrade" ? null : {
+    enableStorageAutoIp           = true
+    intents                       = local.converged ? local.converged_intents : local.seperate_intents
+    storageNetworks               = local.storage_networks
+    storageConnectivitySwitchless = var.storage_connectivity_switchless
+  }
+  infrastructure_network = [{
+    useDhcp    = false
+    subnetMask = var.subnet_mask
+    gateway    = var.default_gateway
+    ipPools = [
+      {
+        startingAddress = var.starting_address
+        endingAddress   = var.ending_address
+      }
+    ]
+    dnsServers = flatten(var.dns_servers)
+  }]
+  key_vault = var.create_key_vault ? azurerm_key_vault.deployment_keyvault[0] : data.azurerm_key_vault.key_vault[0]
   keyvault_secret_names = var.use_legacy_key_vault_model ? {
     "AzureStackLCMUserCredential" = "AzureStackLCMUserCredential"
     "LocalAdminCredential"        = "LocalAdminCredential"
@@ -158,6 +150,18 @@ locals {
     ACMRM = "Azure Connected Machine Resource Manager",
   } : {}
   secrets_location = var.secrets_location == "" ? local.key_vault.vault_uri : var.secrets_location
+  security_settings = var.operation_type == "ClusterUpgrade" ? null : {
+    hvciProtection                = var.hvci_protection
+    drtmProtection                = var.drtm_protection
+    driftControlEnforced          = var.drift_control_enforced
+    credentialGuardEnforced       = var.credential_guard_enforced
+    smbSigningEnforced            = var.smb_signing_enforced
+    smbClusterEncryption          = var.smb_cluster_encryption
+    sideChannelMitigationEnforced = var.side_channel_mitigation_enforced
+    bitlockerBootVolume           = var.bitlocker_boot_volume
+    bitlockerDataVolumes          = var.bitlocker_data_volumes
+    wdacEnforced                  = var.wdac_enforced
+  }
   seperate_intents = [{
     name                               = var.compute_intent_name,
     trafficType                        = var.compute_traffic_type,
