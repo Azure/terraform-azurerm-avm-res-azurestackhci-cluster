@@ -51,6 +51,8 @@ resource "azapi_resource" "cluster" {
       body.properties,
       identity[0]
     ]
+
+    prevent_destroy = true
   }
 }
 
