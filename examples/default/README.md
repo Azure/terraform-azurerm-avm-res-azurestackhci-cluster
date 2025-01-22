@@ -9,12 +9,13 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.74"
+      version = "~> 4.0"
     }
   }
 }
 
 provider "azurerm" {
+  subscription_id = "0000000-0000-00000-000000"
   features {
     resource_group {
       prevent_deletion_if_contains_resources = false
@@ -95,7 +96,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.74)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
 
 ## Resources
 
