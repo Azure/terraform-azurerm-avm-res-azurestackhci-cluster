@@ -76,7 +76,6 @@ locals {
   deployment_setting_properties = {
     arcNodeResourceIds = flatten([for server in data.azurerm_arc_machine.arcservers : server.id])
     deploymentMode     = var.is_exported ? "Deploy" : "Validate"
-    operationType      = var.operation_type
     deploymentConfiguration = {
       version = local.deployment_configuration_version
       scaleUnits = [
