@@ -41,7 +41,7 @@ locals {
     overrideAdapterProperty  = var.override_adapter_property,
     adapterPropertyOverrides = var.rdma_enabled ? local.rdma_adapter_properties : local.adapter_properties
   }]
-  decoded_user_storages            = jsondecode(data.azapi_resource_list.user_storages.output).value
+  decoded_user_storages            = data.azapi_resource_list.user_storages.output.value
   deployment_configuration_version = var.deployment_configuration_version != null ? var.deployment_configuration_version : (var.operation_type == "ClusterUpgrade" ? "10.1.0.0" : "10.0.0.0")
   deployment_data = {
     securitySettings = local.security_settings
