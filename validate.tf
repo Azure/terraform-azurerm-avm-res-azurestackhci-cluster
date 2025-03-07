@@ -9,7 +9,7 @@ data "azurerm_arc_machine" "arcservers" {
 }
 
 resource "azapi_resource" "validatedeploymentsetting" {
-  type = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2024-01-01"
+  type = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2024-02-15-preview"
   body = {
     properties = local.deployment_setting_properties_omit_null
   }

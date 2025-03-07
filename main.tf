@@ -31,7 +31,7 @@ data "azapi_resource" "arc_settings" {
 }
 
 resource "azapi_resource" "cluster" {
-  type = "Microsoft.AzureStackHCI/clusters@2024-01-01"
+  type = "Microsoft.AzureStackHCI/clusters@2024-02-15-preview"
   body = {
     properties = {}
   }
