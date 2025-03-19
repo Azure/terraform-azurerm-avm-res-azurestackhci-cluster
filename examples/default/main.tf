@@ -21,6 +21,22 @@ data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }
 
+# Per https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-arc-register-server-permissions?view=azloc-24112&tabs=powershell#assign-required-permissions-for-deployment
+# Please grant the following permissions before running this module:
+# Subscription level:
+# Azure Stack HCI Administrator
+# Reader
+# Resource Group level:
+# Key Vault Data Access Administrator
+# Key Vault Secrets Officer
+# Key Vault Contributor
+# Storage Account Contributor
+# Microsoft Entra Roles and Administrators:
+# Cloud Application Administrator
+# In the ARM template: https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-azure-resource-manager-template?view=azloc-24112
+# You should assign the following permissions to the service principal:
+# Key Vault Secrets User
+# Azure Stack HCI Connected InfraVMs
 # This is the module call
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
