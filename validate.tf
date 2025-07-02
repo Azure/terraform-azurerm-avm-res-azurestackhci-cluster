@@ -9,12 +9,12 @@ data "azurerm_arc_machine" "arcservers" {
 }
 
 resource "azapi_resource" "validatedeploymentsetting" {
-  type = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2024-02-15-preview"
+  name      = "default"
+  parent_id = azapi_resource.cluster.id
+  type      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2024-02-15-preview"
   body = {
     properties = local.deployment_setting_properties_omit_null
   }
-  name      = "default"
-  parent_id = azapi_resource.cluster.id
 
   depends_on = [
     azurerm_key_vault_secret.default_arb_application,

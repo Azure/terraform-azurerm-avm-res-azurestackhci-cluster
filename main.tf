@@ -1,15 +1,15 @@
 data "azapi_resource" "arcbridge" {
-  type      = "Microsoft.ResourceConnector/appliances@2022-10-27"
   name      = "${var.name}-arcbridge"
   parent_id = var.resource_group_id
+  type      = "Microsoft.ResourceConnector/appliances@2022-10-27"
 
   depends_on = [azapi_update_resource.deploymentsetting]
 }
 
 data "azapi_resource" "customlocation" {
-  type      = "Microsoft.ExtendedLocation/customLocations@2021-08-15"
   name      = var.custom_location_name
   parent_id = var.resource_group_id
+  type      = "Microsoft.ExtendedLocation/customLocations@2021-08-15"
 
   depends_on = [azapi_update_resource.deploymentsetting]
 }
@@ -23,22 +23,22 @@ data "azapi_resource_list" "user_storages" {
 }
 
 data "azapi_resource" "arc_settings" {
-  type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2024-04-01"
   name      = "default"
   parent_id = azapi_resource.cluster.id
+  type      = "Microsoft.AzureStackHCI/clusters/ArcSettings@2024-04-01"
 
   depends_on = [azapi_update_resource.deploymentsetting]
 }
 
 resource "azapi_resource" "cluster" {
-  type = "Microsoft.AzureStackHCI/clusters@2024-02-15-preview"
-  body = {
-    properties = {}
-  }
   location  = var.location
   name      = var.name
   parent_id = var.resource_group_id
-  tags      = var.cluster_tags
+  type      = "Microsoft.AzureStackHCI/clusters@2024-02-15-preview"
+  body = {
+    properties = {}
+  }
+  tags = var.cluster_tags
 
   identity {
     type = "SystemAssigned"
