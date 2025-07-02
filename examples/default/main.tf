@@ -1,5 +1,6 @@
 terraform {
   required_version = ">= 1.9, < 2.0"
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -43,24 +44,21 @@ data "azurerm_resource_group" "rg" {
 # with a data source.
 module "test" {
   source = "../../"
-  # source             = "Azure/avm-res-azurestackhci-cluster/azurerm"
-  # version = "~> 0.1.0"
 
-  location                = data.azurerm_resource_group.rg.location
-  name                    = local.name
-  resource_group_id       = data.azurerm_resource_group.rg.id
-  resource_group_location = data.azurerm_resource_group.rg.location
-
-  enable_telemetry = var.enable_telemetry # see variables.tf
-
-  site_id          = var.site_id
-  domain_fqdn      = "jumpstart.local"
-  starting_address = "192.168.1.55"
-  ending_address   = "192.168.1.65"
-  subnet_mask      = var.subnet_mask
-  default_gateway  = "192.168.1.1"
-  dns_servers      = ["192.168.1.254"]
-  adou_path        = local.adou_path
+  adou_path                = local.adou_path
+  custom_location_name     = local.custom_location_name
+  default_gateway          = "192.168.1.1"
+  deployment_user          = var.deployment_user
+  deployment_user_password = var.deployment_user_password
+  dns_servers              = ["192.168.1.254"]
+  domain_fqdn              = "jumpstart.local"
+  ending_address           = "192.168.1.65"
+  keyvault_name            = local.keyvault_name
+  local_admin_password     = var.local_admin_password
+  local_admin_user         = var.local_admin_user
+  location                 = data.azurerm_resource_group.rg.location
+  name                     = local.name
+  resource_group_id        = data.azurerm_resource_group.rg.id
   servers = [
     {
       name        = "AzSHOST1",
@@ -71,7 +69,16 @@ module "test" {
       ipv4Address = "192.168.1.13"
     }
   ]
-  management_adapters = ["FABRIC", "FABRIC2"]
+  service_principal_id            = var.service_principal_id
+  service_principal_secret        = var.service_principal_secret
+  site_id                         = var.site_id
+  starting_address                = "192.168.1.55"
+  enable_telemetry                = var.enable_telemetry # see variables.tf
+  management_adapters             = ["FABRIC", "FABRIC2"]
+  random_suffix                   = true
+  resource_group_location         = data.azurerm_resource_group.rg.location
+  rp_service_principal_object_id  = var.rp_service_principal_object_id
+  storage_connectivity_switchless = false
   storage_networks = [
     {
       name               = "Storage1Network",
@@ -84,16 +91,6 @@ module "test" {
       vlanId             = "712"
     }
   ]
-  storage_connectivity_switchless = false
-  custom_location_name            = local.custom_location_name
-  witness_storage_account_name    = local.witness_storage_account_name
-  keyvault_name                   = local.keyvault_name
-  random_suffix                   = true
-  deployment_user                 = var.deployment_user
-  deployment_user_password        = var.deployment_user_password
-  local_admin_user                = var.local_admin_user
-  local_admin_password            = var.local_admin_password
-  service_principal_id            = var.service_principal_id
-  service_principal_secret        = var.service_principal_secret
-  rp_service_principal_object_id  = var.rp_service_principal_object_id
+  subnet_mask                  = var.subnet_mask
+  witness_storage_account_name = local.witness_storage_account_name
 }

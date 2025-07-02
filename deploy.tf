@@ -1,14 +1,14 @@
 resource "azapi_update_resource" "deploymentsetting" {
   count = var.is_exported ? 0 : 1
 
-  type = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2024-02-15-preview"
+  name      = "default"
+  parent_id = azapi_resource.cluster.id
+  type      = "Microsoft.AzureStackHCI/clusters/deploymentSettings@2024-02-15-preview"
   body = {
     properties = {
       deploymentMode = "Deploy"
     }
   }
-  name      = "default"
-  parent_id = azapi_resource.cluster.id
 
   timeouts {
     create = "24h"

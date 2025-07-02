@@ -31,10 +31,10 @@ data "azurerm_key_vault" "key_vault" {
 resource "azurerm_key_vault_secret" "azure_stack_lcm_user_credential" {
   key_vault_id    = local.key_vault.id
   name            = local.keyvault_secret_names["AzureStackLCMUserCredential"]
-  value           = base64encode("${var.deployment_user}:${var.deployment_user_password}")
   content_type    = one(flatten([var.azure_stack_lcm_user_credential_content_type]))
   expiration_date = var.azure_stack_lcm_user_credential_expiration_date
   tags            = var.azure_stack_lcm_user_credential_tags
+  value           = base64encode("${var.deployment_user}:${var.deployment_user_password}")
 
   depends_on = [
     azurerm_key_vault.deployment_keyvault,
@@ -45,10 +45,10 @@ resource "azurerm_key_vault_secret" "azure_stack_lcm_user_credential" {
 resource "azurerm_key_vault_secret" "local_admin_credential" {
   key_vault_id    = local.key_vault.id
   name            = local.keyvault_secret_names["LocalAdminCredential"]
-  value           = base64encode("${var.local_admin_user}:${var.local_admin_password}")
   content_type    = one(flatten([var.local_admin_credential_content_type]))
   expiration_date = var.local_admin_credential_expiration_date
   tags            = var.local_admin_credential_tags
+  value           = base64encode("${var.local_admin_user}:${var.local_admin_password}")
 
   depends_on = [
     azurerm_key_vault.deployment_keyvault,
@@ -59,10 +59,10 @@ resource "azurerm_key_vault_secret" "local_admin_credential" {
 resource "azurerm_key_vault_secret" "default_arb_application" {
   key_vault_id    = local.key_vault.id
   name            = local.keyvault_secret_names["DefaultARBApplication"]
-  value           = base64encode("${var.service_principal_id}:${var.service_principal_secret}")
   content_type    = one(flatten([var.default_arb_application_content_type]))
   expiration_date = var.default_arb_application_expiration_date
   tags            = var.default_arb_application_tags
+  value           = base64encode("${var.service_principal_id}:${var.service_principal_secret}")
 
   depends_on = [
     azurerm_key_vault.deployment_keyvault,
@@ -75,10 +75,10 @@ resource "azurerm_key_vault_secret" "witness_storage_key" {
 
   key_vault_id    = local.key_vault.id
   name            = local.keyvault_secret_names["WitnessStorageKey"]
-  value           = base64encode(var.create_witness_storage_account ? azurerm_storage_account.witness[0].primary_access_key : data.azurerm_storage_account.witness[0].primary_access_key)
   content_type    = one(flatten([var.witness_storage_key_content_type]))
   expiration_date = var.witness_storage_key_expiration_date
   tags            = var.witness_storage_key_tags
+  value           = base64encode(var.create_witness_storage_account ? azurerm_storage_account.witness[0].primary_access_key : data.azurerm_storage_account.witness[0].primary_access_key)
 
   depends_on = [
     azurerm_key_vault.deployment_keyvault,
