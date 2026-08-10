@@ -20,6 +20,11 @@ resource "azapi_resource" "validatedeploymentsetting" {
   read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 
+  lifecycle {
+    ignore_changes = [
+      body.properties.deploymentMode
+    ]
+  }
   depends_on = [
     azurerm_key_vault_secret.default_arb_application,
     azurerm_key_vault_secret.azure_stack_lcm_user_credential,
@@ -28,10 +33,4 @@ resource "azapi_resource" "validatedeploymentsetting" {
     azapi_resource.cluster,
     azurerm_role_assignment.service_principal_role_assign,
   ]
-
-  lifecycle {
-    ignore_changes = [
-      body.properties.deploymentMode
-    ]
-  }
 }

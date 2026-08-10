@@ -48,14 +48,13 @@ resource "azapi_resource" "cluster" {
     type = "SystemAssigned"
   }
 
-  depends_on = [azurerm_role_assignment.service_principal_role_assign]
-
   lifecycle {
     ignore_changes = [
       body.properties,
       identity[0]
     ]
   }
+  depends_on = [azurerm_role_assignment.service_principal_role_assign]
 }
 
 # Generate random integer suffix for storage account and key vault
