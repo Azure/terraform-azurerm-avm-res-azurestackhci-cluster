@@ -13,7 +13,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.4)
 
-- <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) (~> 2.50.0)
+- <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) (~> 3.9.0)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
 
