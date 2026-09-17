@@ -80,7 +80,7 @@ module "test" {
   service_principal_secret        = var.service_principal_secret
   site_id                         = var.site_id
   starting_address                = "192.168.1.55"
-  enable_telemetry                = var.enable_telemetry # see variables.tf
+  enable_telemetry                = false # see variables.tf
   management_adapters             = ["FABRIC", "FABRIC2"]
   random_suffix                   = true
   resource_group_location         = data.azurerm_resource_group.rg.location
