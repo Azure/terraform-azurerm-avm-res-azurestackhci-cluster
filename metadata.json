@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/azure-verified-modules-tools/main/src/Avm.Authoring/Resources/Schemas/v1/avm-module-metadata.schema.json",
+  "moduleDisplayName": "Azure Stack HCI Cluster",
+  "moduleDescription": "AVM Resource Module for Azure Stack HCI Cluster",
+  "canonicalType": "Microsoft.AzureStackHCI/clusters",
+  "owners": [
+    "chirag1603"
+  ],
+  "telemetryIdPrefix": "46d3xtrf.res.ac6489c"
+}
